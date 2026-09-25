@@ -12,7 +12,7 @@ export default function CartPage() {
   const { settingNumber } = useStore()
   const [couponCode, setCouponCode] = useState('')
 
-  const freeShippingThreshold = settingNumber('checkout.free-shipping-threshold', 300)
+  const freeShippingThreshold = settingNumber('checkout.free-shipping-threshold', 500)
   const minimumOrder = settingNumber('checkout.min-order-amount', 0)
 
   if (isLoading) {

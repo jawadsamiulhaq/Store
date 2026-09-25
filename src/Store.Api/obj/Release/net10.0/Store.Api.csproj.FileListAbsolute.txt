@@ -187,3 +187,4 @@ D:\Projects\Store\src\Store.Api\obj\Release\net10.0\refint\Store.Api.dll
 D:\Projects\Store\src\Store.Api\obj\Release\net10.0\Store.Api.pdb
 D:\Projects\Store\src\Store.Api\obj\Release\net10.0\Store.Api.genruntimeconfig.cache
 D:\Projects\Store\src\Store.Api\obj\Release\net10.0\ref\Store.Api.dll
+D:\Projects\Store\src\Store.Api\obj\Release\net10.0\Store.Api.sourcelink.json

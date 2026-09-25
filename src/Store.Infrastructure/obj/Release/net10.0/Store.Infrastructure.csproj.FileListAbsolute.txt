@@ -17,3 +17,4 @@ D:\Projects\Store\src\Store.Infrastructure\obj\Release\net10.0\refint\Store.Infr
 D:\Projects\Store\src\Store.Infrastructure\obj\Release\net10.0\Store.Infrastructure.pdb
 D:\Projects\Store\src\Store.Infrastructure\obj\Release\net10.0\Store.Infrastructure.genruntimeconfig.cache
 D:\Projects\Store\src\Store.Infrastructure\obj\Release\net10.0\ref\Store.Infrastructure.dll
+D:\Projects\Store\src\Store.Infrastructure\obj\Release\net10.0\Store.Infrastructure.sourcelink.json

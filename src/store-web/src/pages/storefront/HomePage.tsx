@@ -53,7 +53,7 @@ export default function HomePage() {
   // are above the fold on every size, where a scroll-triggered reveal would never fire.
   const editorial = useReveal<HTMLElement>()
 
-  const freeOver = settingNumber('checkout.free-shipping-threshold', 300)
+  const freeOver = settingNumber('checkout.free-shipping-threshold', 500)
   const offerCount = onSale.data?.products.totalCount ?? 0
 
   return (
@@ -99,9 +99,17 @@ export default function HomePage() {
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="text-3xl font-bold tracking-tight sm:text-4xl">{formatPrice(freeOver)}</p>
-              <p className="mt-1 text-sm font-medium text-saffron-50">Free delivery over this, in Kowloon</p>
+              {/*
+                The shop's actual terms, not plausible-sounding ones: next-day across Kowloon and
+                Hong Kong Island on orders placed before 16:00. This tile answers the most-asked
+                question on the first screen, so getting the cut-off or the area wrong here is a
+                promise the shop then has to break.
+              */}
+              <p className="mt-1 text-sm font-medium text-saffron-50">
+                Free delivery over this, across Kowloon &amp; Hong Kong Island
+              </p>
               <p className="mt-3 text-xs leading-relaxed text-saffron-100/90">
-                Order before 14:00 for same-day. Or collect in store at Ngau Chi Wan Market.
+                Order before 16:00 for next-day delivery. Or collect in store at Ngau Chi Wan Market.
               </p>
             </div>
 

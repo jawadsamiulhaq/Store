@@ -25,15 +25,24 @@ public sealed class PlatformSeeder(StoreDbContext db, ILogger<PlatformSeeder> lo
 
     private async Task SeedSettingsAsync(CancellationToken ct)
     {
+        /*
+            Values taken from the live legacy site (waqasprovisionstore.com), so the rebuild
+            presents the same shop to the same customers rather than a set of plausible
+            placeholders. The previous defaults included "+852 0000 0000", which would have gone
+            out on a real invoice.
+
+            These are DEFAULTS. Seeding inserts only missing keys, so editing a value in the admin
+            Settings screen is permanent and a later deploy will not reset it.
+        */
         var defaults = new[]
         {
             // ---- Store identity ----
             S("store.name", "Waqas Provision Store", "Store", isPublic: true, display: "Store name"),
-            S("store.tagline", "Your neighbourhood pantry, delivered across Hong Kong", "Store", isPublic: true, display: "Tagline"),
-            S("store.email", "hello@waqasprovisionstore.com", "Store", isPublic: true, display: "Contact email"),
-            S("store.phone", "+852 0000 0000", "Store", isPublic: true, display: "Contact phone"),
-            S("store.address", "Ngau Chi Wan Market, Choi Hung, Kowloon, Hong Kong", "Store", isPublic: true, display: "Shop address"),
-            S("store.opening-hours", "Mon–Sun, 09:00–21:00", "Store", isPublic: true, display: "Opening hours"),
+            S("store.tagline", "Bringing authentic flavours and trusted grocery delivery across Hong Kong", "Store", isPublic: true, display: "Tagline"),
+            S("store.email", "info@waqas.com.hk", "Store", isPublic: true, display: "Contact email"),
+            S("store.phone", "+852 9029 1454", "Store", isPublic: true, display: "Contact phone"),
+            S("store.address", "Stall S201, 1/F, Ngau Chi Wan Market, Clear Water Bay Rd (MTR exit B), Choi Hung, Hong Kong", "Store", isPublic: true, display: "Shop address"),
+            S("store.opening-hours", "Open 7 days, 10:00–22:00", "Store", isPublic: true, display: "Opening hours"),
 
             // ---- Commerce ----
             S("store.currency", "HKD", "Store", isPublic: true, display: "Currency"),
@@ -42,7 +51,7 @@ public sealed class PlatformSeeder(StoreDbContext db, ILogger<PlatformSeeder> lo
 
             // ---- Checkout rules ----
             S("checkout.min-order-amount", "50", "Checkout", "number", isPublic: true, display: "Minimum order amount"),
-            S("checkout.free-shipping-threshold", "300", "Checkout", "number", isPublic: true, display: "Free shipping over"),
+            S("checkout.free-shipping-threshold", "500", "Checkout", "number", isPublic: true, display: "Free shipping over"),
             S("checkout.guest-enabled", "true", "Checkout", "boolean", isPublic: true, display: "Allow guest checkout"),
             S("checkout.cod-enabled", "true", "Checkout", "boolean", isPublic: true, display: "Cash on delivery"),
 
@@ -53,9 +62,9 @@ public sealed class PlatformSeeder(StoreDbContext db, ILogger<PlatformSeeder> lo
             S("catalog.reviews-require-purchase", "false", "Catalog", "boolean", display: "Only verified buyers may review"),
 
             // ---- Social ----
-            S("social.facebook", "", "Social", isPublic: true, display: "Facebook URL"),
+            S("social.facebook", "https://www.facebook.com/share/18w3391ea6/", "Social", isPublic: true, display: "Facebook URL"),
             S("social.instagram", "", "Social", isPublic: true, display: "Instagram URL"),
-            S("social.whatsapp", "", "Social", isPublic: true, display: "WhatsApp number"),
+            S("social.whatsapp", "+852 9029 1454", "Social", isPublic: true, display: "WhatsApp number"),
 
             // ---- Email (never public: these reach the storefront bootstrap payload otherwise) ----
             S("email.from-name", "Waqas Provision Store", "Email", display: "Sender name"),

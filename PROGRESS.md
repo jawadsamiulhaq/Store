@@ -675,6 +675,52 @@ System role; the last active System user cannot be demoted or deactivated) were 
   table is not something SQL Server accepts), so deleting an option value has to remove its
   variant links explicitly first.
 
+## Real store details, taken from the live legacy site  (2026-09-25)
+
+The seeded settings were plausible placeholders — including `store.phone = "+852 0000 0000"`,
+which would eventually have gone out on a real invoice. The client wants the rebuild to present
+the same shop, so the details now come from waqasprovisionstore.com.
+
+Fetching the page returns only a `<title>`: the legacy store renders an empty `<div id="root">`
+with no fallback (the same fact this file already records as an SEO failure). The values were read
+out of its JS bundle instead — `/assets/index-DBy2BCtW.js`, **1,003,445 bytes**, matching the
+single-chunk figure recorded above exactly.
+
+| Setting | Was | Now |
+|---|---|---|
+| `store.phone` | `+852 0000 0000` | `+852 9029 1454` |
+| `store.email` | `hello@waqasprovisionstore.com` | `info@waqas.com.hk` |
+| `store.address` | Ngau Chi Wan Market, Choi Hung, Kowloon | Stall S201, 1/F, Ngau Chi Wan Market, Clear Water Bay Rd (MTR exit B), Choi Hung |
+| `store.opening-hours` | Mon–Sun, 09:00–21:00 | Open 7 days, 10:00–22:00 |
+| `checkout.free-shipping-threshold` | 300 | **500** |
+| `store.tagline` | "Your neighbourhood pantry…" | "Bringing authentic flavours and trusted grocery delivery across Hong Kong" |
+| `social.facebook` | *(empty)* | facebook.com/share/18w3391ea6/ |
+| `social.whatsapp` | *(empty)* | +852 9029 1454 |
+
+Applied in **two places, deliberately**: the seeder defaults (so a fresh install is correct) and
+the live database over `PUT /api/admin/settings` (so the running store is correct now). Seeding
+inserts only missing keys — by design, so it never overwrites an operator's edit — which means
+changing a default alone would have had no effect on this database.
+
+Hard-coded copy that contradicted the real terms was corrected too: the announcement bar and the
+home page's delivery tile said "in Kowloon" and "before 14:00 for same-day", where the shop
+actually offers **next-day delivery across Kowloon and Hong Kong Island on orders before 16:00**.
+The `index.html` description also claimed the New Territories, which the shop does not serve.
+
+`social.*` settings existed and **nothing read them**, so the shop's Facebook page and WhatsApp
+number appeared nowhere. `SiteFooter` now renders them, each only when set.
+
+Deliberately *not* taken from the bundle: `admin@freshmarketgrocery.com`, `john@freshmarket.com`,
+`hello@thedesi.co.uk` and similar — template boilerplate, not this shop's.
+
+**Needs the client to confirm:** that WhatsApp is the same number as the phone (the bundle stores
+it dynamically, so only the one phone number is recoverable), and a `maps.google.com` link in the
+bundle pointing at *65–67 South Wall Road, Kowloon City* — either a second location or leftover
+template data. Not used.
+
+Other facts recovered, available when the content pages are written: payment is Cash, PayMe, FPS,
+Octopus and major cards in store, PayMe or FPS for delivery, plus COD; delivery runs via Gogo Van.
+
 ## Motion system  (2026-09-25)
 
 CSS-first, **no animation library**. Framer Motion would have cost ~34–50 KB gzip to do what

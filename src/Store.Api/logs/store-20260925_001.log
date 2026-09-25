@@ -45,3 +45,49 @@
 2026-09-25 14:41:55.545 +05:00 [INF] Application started. Press Ctrl+C to shut down.
 2026-09-25 14:41:55.546 +05:00 [INF] Hosting environment: Development
 2026-09-25 14:41:55.547 +05:00 [INF] Content root path: D:\Projects\Store\src\Store.Api
+2026-09-25 14:53:53.453 +05:00 [WRN] Entity 'Product' has a global query filter defined and is the required end of a relationship with the entity 'ProductImage'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-25 14:53:53.515 +05:00 [WRN] Entity 'Product' has a global query filter defined and is the required end of a relationship with the entity 'ProductOption'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-25 14:53:53.516 +05:00 [WRN] Entity 'Product' has a global query filter defined and is the required end of a relationship with the entity 'ProductTag'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-25 14:53:53.516 +05:00 [WRN] Entity 'Product' has a global query filter defined and is the required end of a relationship with the entity 'ProductVariant'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-25 14:53:55.231 +05:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-09-25 14:53:55.525 +05:00 [INF] No migrations were applied. The database is already up to date.
+2026-09-25 14:53:56.907 +05:00 [INF] Catalogue already seeded; skipping
+2026-09-25 14:53:57.061 +05:00 [INF] Now listening on: http://localhost:5080
+2026-09-25 14:53:57.061 +05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-09-25 14:53:57.062 +05:00 [INF] Hosting environment: Development
+2026-09-25 14:53:57.062 +05:00 [INF] Content root path: D:\Projects\Store\src\Store.Api
+2026-09-25 14:53:58.190 +05:00 [WRN] Failed to determine the https port for redirect.
+2026-09-25 14:54:00.448 +05:00 [WRN] Slow request: GET /api/storefront/bootstrap took 2256 ms (budget 300 ms) → 200
+2026-09-25 14:54:38.905 +05:00 [WRN] Slow request: POST /api/auth/login took 823 ms (budget 300 ms) → 200
+2026-09-25 14:54:39.680 +05:00 [INF] Created a storefront profile for user "469307c1-62c0-41fa-112b-08df199968ee" on first commerce action
+2026-09-25 14:54:50.614 +05:00 [WRN] Slow request: GET /api/cart took 555 ms (budget 300 ms) → 200
+2026-09-25 14:54:50.653 +05:00 [WRN] Slow request: GET /api/catalog/products took 334 ms (budget 300 ms) → 200
+2026-09-25 14:54:50.767 +05:00 [WRN] Slow request: GET /api/catalog/products took 447 ms (budget 300 ms) → 200
+2026-09-25 14:54:50.794 +05:00 [WRN] Slow request: GET /api/catalog/products took 483 ms (budget 300 ms) → 200
+2026-09-25 14:55:55.374 +05:00 [WRN] Slow request: GET /api/catalog/products took 549 ms (budget 300 ms) → 200
+2026-09-25 14:55:55.378 +05:00 [WRN] Slow request: GET /api/catalog/products took 699 ms (budget 300 ms) → 200
+2026-09-25 14:55:55.430 +05:00 [WRN] Slow request: GET /api/catalog/products took 731 ms (budget 300 ms) → 200
+2026-09-25 14:56:50.278 +05:00 [WRN] Slow request: GET /api/catalog/products took 374 ms (budget 300 ms) → 200
+2026-09-25 14:59:49.854 +05:00 [WRN] Refresh token reuse detected for user "469307c1-62c0-41fa-112b-08df199968ee" from ::1. Revoking token family "01a0d7f1-8d02-7e9f-b56e-a92317ac41a2".
+2026-09-25 15:03:21.711 +05:00 [WRN] Slow request: GET /api/cart took 638 ms (budget 300 ms) → 200
+2026-09-25 15:03:30.264 +05:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-09-25 15:03:30.550 +05:00 [WRN] Slow request: GET /api/catalog/products/lee-kum-kee-pure-canola-oil took 383 ms (budget 300 ms) → 200
+2026-09-25 15:03:49.815 +05:00 [WRN] Slow request: GET /api/orders took 489 ms (budget 300 ms) → 200
+2026-09-25 15:04:50.378 +05:00 [WRN] Slow request: GET /api/catalog/products took 311 ms (budget 300 ms) → 200
+2026-09-25 15:04:50.522 +05:00 [WRN] Slow request: GET /api/catalog/products took 494 ms (budget 300 ms) → 200
+2026-09-25 15:07:47.368 +05:00 [WRN] Slow request: GET /api/catalog/products took 379 ms (budget 300 ms) → 200
+2026-09-25 15:07:47.486 +05:00 [WRN] Slow request: GET /api/catalog/products took 497 ms (budget 300 ms) → 200
+2026-09-25 15:08:20.474 +05:00 [WRN] Refresh token reuse detected for user "469307c1-62c0-41fa-112b-08df199968ee" from ::1. Revoking token family "01a0d804-fe56-70b9-b358-c0c724d9d381".
+2026-09-25 15:14:42.036 +05:00 [WRN] Slow request: GET /api/catalog/products took 308 ms (budget 300 ms) → 200
+2026-09-25 15:14:42.157 +05:00 [WRN] Slow request: GET /api/catalog/products took 432 ms (budget 300 ms) → 200
+2026-09-25 15:48:51.471 +05:00 [WRN] Slow request: GET /api/catalog/products took 577 ms (budget 300 ms) → 200
+2026-09-25 15:48:51.526 +05:00 [WRN] Slow request: GET /api/catalog/products took 619 ms (budget 300 ms) → 200
+2026-09-25 15:48:51.637 +05:00 [WRN] Slow request: GET /api/catalog/products took 730 ms (budget 300 ms) → 200
+2026-09-25 16:06:11.796 +05:00 [WRN] Slow request: GET /api/catalog/products took 340 ms (budget 300 ms) → 200
+2026-09-25 16:06:11.942 +05:00 [WRN] Slow request: GET /api/catalog/products took 486 ms (budget 300 ms) → 200
+2026-09-25 16:14:43.467 +05:00 [WRN] Slow request: GET /api/catalog/products took 351 ms (budget 300 ms) → 200
+2026-09-25 16:16:50.085 +05:00 [WRN] Slow request: GET /api/catalog/products took 359 ms (budget 300 ms) → 200
+2026-09-25 16:24:48.641 +05:00 [WRN] Slow request: GET /api/catalog/products took 321 ms (budget 300 ms) → 200
+2026-09-25 16:24:48.769 +05:00 [WRN] Slow request: GET /api/catalog/products took 446 ms (budget 300 ms) → 200
+2026-09-25 16:33:50.356 +05:00 [WRN] Slow request: GET /api/catalog/products took 356 ms (budget 300 ms) → 200
+2026-09-25 16:33:50.360 +05:00 [WRN] Slow request: GET /api/catalog/products took 349 ms (budget 300 ms) → 200

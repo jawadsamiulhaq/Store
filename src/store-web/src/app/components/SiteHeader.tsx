@@ -28,10 +28,17 @@ export function SiteHeader() {
       */}
       <div className="hidden bg-saffron-600 text-white sm:block">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-1.5 text-xs sm:px-6 lg:px-8">
+          {/*
+            "Kowloon and Hong Kong Island", not just Kowloon — the shop delivers to both, and
+            under-stating the area on the one line every visitor reads turns away half the people
+            it is there to reach. The fallbacks match the seeded defaults so a settings row that
+            has not loaded yet never contradicts one that has.
+          */}
           <span className="font-medium">
-            Free delivery over {formatPrice(Number(setting('checkout.free-shipping-threshold', '300')))} in Kowloon
+            Free delivery over {formatPrice(Number(setting('checkout.free-shipping-threshold', '500')))} across
+            Kowloon &amp; Hong Kong Island
           </span>
-          <span className="text-saffron-100">{setting('store.opening-hours', 'Mon–Sun, 09:00–21:00')}</span>
+          <span className="text-saffron-100">{setting('store.opening-hours', 'Open 7 days, 10:00–22:00')}</span>
         </div>
       </div>
 

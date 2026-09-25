@@ -23,22 +23,29 @@ export function SiteFooter() {
             </div>
 
             <p className="mt-3 text-sm leading-relaxed text-ink-500">
-              {setting('store.tagline', 'Your neighbourhood pantry, delivered across Hong Kong.')}
+              {setting('store.tagline', 'Bringing authentic flavours and trusted grocery delivery across Hong Kong')}
             </p>
 
             <address className="mt-4 space-y-1 text-sm not-italic text-ink-500">
-              <p>{setting('store.address', 'Ngau Chi Wan Market, Choi Hung, Kowloon')}</p>
+              <p>{setting('store.address', 'Stall S201, 1/F, Ngau Chi Wan Market, Clear Water Bay Rd (MTR exit B), Choi Hung, Hong Kong')}</p>
               <p>
                 <a href={`tel:${setting('store.phone')}`} className="hover:text-saffron-600">
-                  {setting('store.phone', '+852 0000 0000')}
+                  {setting('store.phone', '+852 9029 1454')}
                 </a>
               </p>
               <p>
                 <a href={`mailto:${setting('store.email')}`} className="hover:text-saffron-600">
-                  {setting('store.email', 'hello@waqasprovisionstore.com')}
+                  {setting('store.email', 'info@waqas.com.hk')}
                 </a>
               </p>
+              <p>{setting('store.opening-hours', 'Open 7 days, 10:00–22:00')}</p>
             </address>
+
+            <SocialLinks
+              facebook={setting('social.facebook')}
+              instagram={setting('social.instagram')}
+              whatsapp={setting('social.whatsapp')}
+            />
           </div>
 
           <FooterColumn title="Shop">
@@ -89,6 +96,62 @@ export function SiteFooter() {
         </div>
       </div>
     </footer>
+  )
+}
+
+/**
+ * Social and messaging links, each rendered only when the shop has actually set one.
+ *
+ * These settings existed and nothing read them, so the shop's Facebook page and its WhatsApp
+ * number appeared nowhere on the site — and WhatsApp in particular is how a lot of Hong Kong
+ * grocery customers place an order in the first place.
+ *
+ * An unset value renders nothing rather than a dead icon: a link to an empty string looks like a
+ * broken page, which is worse than the absence it is trying to hide.
+ */
+function SocialLinks({
+  facebook,
+  instagram,
+  whatsapp,
+}: {
+  facebook?: string
+  instagram?: string
+  whatsapp?: string
+}) {
+  // wa.me takes digits only — no plus, no spaces, no punctuation.
+  const whatsappDigits = whatsapp?.replace(/\D/g, '')
+
+  const links = [
+    facebook && { href: facebook, label: 'Facebook', path: 'M14 8.5h2.5V5.2h-2.6c-2.5 0-4 1.6-4 4.2V12H7.5v3.3h2.4V21h3.4v-5.7h2.5l.4-3.3h-2.9V9.8c0-.9.3-1.3 1.2-1.3Z' },
+    instagram && { href: instagram, label: 'Instagram', path: 'M7.5 3.5h9a4 4 0 0 1 4 4v9a4 4 0 0 1-4 4h-9a4 4 0 0 1-4-4v-9a4 4 0 0 1 4-4ZM12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8ZM17.1 6.6h.01' },
+    whatsappDigits && {
+      href: `https://wa.me/${whatsappDigits}`,
+      label: 'WhatsApp',
+      path: 'M3.5 20.5 4.9 16a8 8 0 1 1 3.1 3.1ZM9 9.2c.3-.7.5-.7.8-.7h.6c.2 0 .5 0 .7.6l.8 1.9c.1.3 0 .5-.1.7l-.4.5c-.2.2-.3.4-.1.7a7 7 0 0 0 3.1 2.6c.3.1.5.1.7-.1l.6-.7c.2-.2.4-.2.6-.1l1.8.9c.3.1.4.3.4.5a2 2 0 0 1-1.3 1.6c-.5.2-1.3.3-3.4-.6a10 10 0 0 1-4.5-4.2c-.5-1-.7-1.9-.5-2.6Z',
+    },
+  ].filter(Boolean) as { href: string; label: string; path: string }[]
+
+  if (links.length === 0) {
+    return null
+  }
+
+  return (
+    <div className="mt-4 flex items-center gap-2">
+      {links.map((link) => (
+        <a
+          key={link.label}
+          href={link.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={link.label}
+          className="grid h-9 w-9 place-items-center rounded-full border border-ink-200 text-ink-500 transition-colors hover:border-saffron-300 hover:text-saffron-600"
+        >
+          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d={link.path} />
+          </svg>
+        </a>
+      ))}
+    </div>
   )
 }
 
