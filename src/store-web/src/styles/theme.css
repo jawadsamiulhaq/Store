@@ -1,0 +1,384 @@
+@import "tailwindcss";
+
+/*
+  Waqas Provision Store — design system
+  =====================================
+
+  Deliberately unlike the legacy store, which was Inter on a #5CB349 supermarket green. That
+  palette reads as generic Western supermarket; this shop is a South Asian provision store in
+  Kowloon, and the identity should say so.
+
+  The direction here is "spice pantry": a warm paper ground rather than clinical white, a deep
+  saffron/turmeric primary, a grounding ink, and a muted cardamom green used only as a support
+  colour — never as the brand colour, which is precisely what the old site did.
+*/
+
+@theme {
+  /* ---- Brand -------------------------------------------------------------------------
+     "Fresh market": bright, airy, food-forward.
+
+     The green is a deep jade, NOT the legacy store's #5CB349. That one is a yellow-shifted
+     supermarket green that reads cheap and dated; this sits cooler and darker, closer to herbs
+     and produce than to signage, and it holds white text at accessible contrast (which #5CB349
+     does not).
+
+     Token names are kept as `saffron-*` / `cardamom-*` / `chilli-*` deliberately. Several hundred
+     class usages across ~45 files reference them, and renaming every one for cosmetic tidiness
+     would be a large diff with real regression risk and no user-visible benefit. `saffron` is now
+     the primary green; the comments below say what each one actually is.
+  */
+
+  /* PRIMARY — jade green. Brand colour, buttons, links, active states. */
+  --color-saffron-50: #eefaf4;
+  --color-saffron-100: #d4f2e4;
+  --color-saffron-200: #a9e5cb;
+  --color-saffron-300: #71d0ac;
+  --color-saffron-400: #3db98c;
+  --color-saffron-500: #189b6e;   /* primary */
+  --color-saffron-600: #0f7d58;
+  --color-saffron-700: #0e6347;
+  --color-saffron-800: #0f4e3a;
+  --color-saffron-900: #0c3a2c;
+
+  /* Ink. Green-shifted near-black, so text sits in the same family as the brand rather than
+     looking like a pure grey pasted on top. */
+  --color-ink-50: #f5f8f6;
+  --color-ink-100: #e6ece9;
+  --color-ink-200: #ccd8d2;
+  --color-ink-300: #a3b5ad;
+  --color-ink-400: #758880;
+  --color-ink-500: #566862;
+  --color-ink-600: #41504b;
+  --color-ink-700: #2f3b37;
+  --color-ink-800: #1f2926;
+  --color-ink-900: #131b19;
+
+  /* SECONDARY — warm apricot. The counterweight that stops an all-green page feeling clinical:
+     used for highlights, "new" flags and the occasional accent tile. */
+  --color-cardamom-50: #fff7ed;
+  --color-cardamom-100: #ffeacf;
+  --color-cardamom-200: #fed2a0;
+  --color-cardamom-300: #fdb567;
+  --color-cardamom-400: #fb9740;
+  --color-cardamom-500: #ef7a1a;
+  --color-cardamom-600: #d05f0f;
+  --color-cardamom-700: #a34710;
+
+  /* Berry. Sale flashes, destructive actions, errors — reads clearly against green. */
+  --color-chilli-50: #fef2f4;
+  --color-chilli-100: #fde3e8;
+  --color-chilli-200: #fbccd6;
+  --color-chilli-300: #f79fb2;
+  --color-chilli-400: #ef6588;
+  --color-chilli-500: #e03a63;
+  --color-chilli-600: #c02551;
+  --color-chilli-700: #9d1c44;
+
+  /* Ground. Bright and airy — the "fresh" half of the brief. */
+  --color-paper: #f8faf8;
+  --color-paper-raised: #ffffff;
+  --color-paper-sunken: #eef4f0;
+
+  /* ---- Type ---------------------------------------------------------------------------
+     Body text uses the system UI stack: zero font bytes downloaded, zero render-blocking
+     request, and no FOUT. On a grocery catalogue read mostly on mid-range phones over mobile
+     data, that is worth more than a bespoke body face.
+
+     Headings get ONE self-hosted variable display face, preloaded and subset, with a
+     metric-compatible fallback so the swap does not reflow.
+  */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+               "Noto Sans", "Noto Sans HK", "PingFang HK", "Microsoft JhengHei",
+               Arial, sans-serif;
+  --font-display: "Bricolage Grotesque Variable", "Bricolage Grotesque",
+                  var(--font-sans);
+  --font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, monospace;
+
+  /* ---- Motion -------------------------------------------------------------------------
+     Durations kept short. Anything past ~250ms on a list interaction reads as lag, not polish.
+  */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ---- Elevation ----------------------------------------------------------------------
+     Green-tinted shadows. A neutral black shadow over a tinted ground reads as dirt.
+     Softer and more diffuse than before, which is what makes an airy layout feel light rather
+     than like cards stamped onto a page.
+  */
+  --shadow-card: 0 1px 2px rgb(19 27 25 / 0.03), 0 2px 10px rgb(19 27 25 / 0.04);
+  --shadow-raised: 0 2px 6px rgb(19 27 25 / 0.04), 0 12px 28px rgb(19 27 25 / 0.07);
+  --shadow-overlay: 0 8px 20px rgb(19 27 25 / 0.08), 0 28px 56px rgb(19 27 25 / 0.14);
+
+  /* ---- Radii ---------------------------------------------------------------------------
+     Rounder than the previous pass. "Friendly and food-forward" is carried as much by corner
+     radius as by colour — tight 8px corners read corporate, these read approachable.
+  */
+  --radius-tile: 1.25rem;
+  --radius-panel: 1.75rem;
+}
+
+/* ==========================================================================================
+   Base
+   ========================================================================================== */
+
+/*
+  EVERYTHING HERE MUST STAY INSIDE `@layer base`.
+
+  Tailwind v4 emits its utilities inside cascade layers, and unlayered CSS outranks *any* layered
+  CSS regardless of specificity. An earlier version of this file declared these element rules
+  outside a layer, so `h1 { color: ink-900 }` silently beat `class="text-paper"` on every heading
+  in the app — which rendered the dark-hero headline as near-black on near-black.
+
+  Putting base rules in `@layer base` restores the normal order: element defaults lose to
+  utilities, which is the whole contract Tailwind depends on.
+*/
+@layer base {
+  :root {
+    color-scheme: light;
+    --header-height: 4rem;
+  }
+
+  html {
+    /* Scroll anchoring for in-page links under the sticky header. */
+    scroll-padding-top: calc(var(--header-height) + 1rem);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink-800);
+    font-family: var(--font-sans);
+    /* Grotesque numerals line up in price columns. */
+    font-variant-numeric: tabular-nums lining-nums;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    color: var(--color-ink-900);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Visible, branded focus ring. Never removed — keyboard users need to see where they are. */
+  :focus-visible {
+    outline: 2px solid var(--color-saffron-500);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+/* ==========================================================================================
+   Motion
+   ========================================================================================== */
+
+/*
+  Every animation in this app is transform/opacity only — both are composited on the GPU and
+  neither triggers layout. Animating width, height, top or margin would cause reflow on every
+  frame, which is exactly the "animation that hurts performance and shifts layout" to avoid.
+*/
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes fade-rise {
+  from { opacity: 0; transform: translate3d(0, 8px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes shimmer {
+  from { transform: translate3d(-100%, 0, 0); }
+  to   { transform: translate3d(100%, 0, 0); }
+}
+
+@keyframes pop {
+  0%   { transform: scale(1); }
+  45%  { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+
+@utility animate-fade-rise {
+  animation: fade-rise 0.32s var(--ease-out-soft) both;
+}
+
+@utility animate-fade-in {
+  animation: fade-in 0.24s var(--ease-out-soft) both;
+}
+
+@utility animate-pop {
+  animation: pop 0.3s var(--ease-spring);
+}
+
+/*
+  Skeleton placeholder. The shimmer is a transform on a pseudo-element, so it never repaints
+  the element's box — and the skeleton must be given the SAME dimensions as the content it
+  stands in for, which is what keeps CLS at zero when the real content arrives.
+*/
+@utility skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-paper-sunken);
+  border-radius: 0.5rem;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(
+      90deg,
+      transparent,
+      rgb(255 255 255 / 0.55),
+      transparent
+    );
+    animation: shimmer 1.4s infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton::after { animation: none; }
+}
+
+/* ==========================================================================================
+   Components
+   ========================================================================================== */
+
+@utility card-surface {
+  background-color: var(--color-paper-raised);
+  border: 1px solid var(--color-ink-100);
+  border-radius: var(--radius-tile);
+  box-shadow: var(--shadow-card);
+}
+
+/*
+  Bento tile.
+
+  The home page is built from mixed-size tiles rather than the usual hero-slab-then-uniform-rails
+  arrangement. This is the shared base for them: a soft rounded panel that can hold a headline, a
+  category, a product or a promo without each one inventing its own treatment.
+*/
+@utility bento {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--color-ink-100);
+  background-color: var(--color-paper-raised);
+}
+
+/* Soft organic blobs used behind bento tiles — produce-like, and free (no image request). */
+@utility bento-wash-leaf {
+  background-image:
+    radial-gradient(28rem 18rem at 12% 0%, rgb(24 155 110 / 0.16), transparent 62%),
+    radial-gradient(22rem 14rem at 95% 100%, rgb(61 185 140 / 0.14), transparent 60%);
+}
+
+@utility bento-wash-apricot {
+  background-image:
+    radial-gradient(24rem 16rem at 90% 0%, rgb(251 151 64 / 0.20), transparent 62%),
+    radial-gradient(18rem 12rem at 0% 100%, rgb(253 181 103 / 0.16), transparent 60%);
+}
+
+/*
+  Horizontal product rail with "peek".
+
+  Deliberately a scroller rather than a 4-up grid row: the cut-off fifth card is what tells a
+  shopper there is more to see, and it is what makes the page feel like a market stall rather
+  than a spreadsheet. Snap points keep it from feeling loose on touch.
+*/
+@utility rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(11rem, 1fr);
+  /* Stretch, so every card in the rail is the height of the tallest one. Without this a card
+     whose price wraps to two lines ("HK$42 – HK$193.20") is taller than its neighbours and the
+     row looks collapsed and ragged. */
+  align-items: stretch;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding-bottom: 0.25rem;
+
+  & > * {
+    scroll-snap-align: start;
+  }
+}
+
+/*
+  Hides a scroll container's scrollbar while keeping it scrollable.
+
+  Used on the rails and the header's category strip. A permanently-visible grey scrollbar under
+  the navigation is the single most obvious "unfinished" tell on a page, and these containers
+  already signal their scrollability by clipping the next item mid-card.
+*/
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+}
+
+/*
+  Product-card lift. `transform` only — no box-shadow animation (which forces a repaint of the
+  whole shadow region) and no size change (which would shift neighbouring cards).
+*/
+@utility lift-on-hover {
+  transition: transform 0.22s var(--ease-out-soft);
+  will-change: transform;
+
+  &:hover {
+    transform: translate3d(0, -3px, 0);
+  }
+}
+
+/* Clamp helpers — product names must not reflow the grid when they wrap differently. */
+@utility line-clamp-2-fixed {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  /* Height is fixed, not just clamped, so a one-line and a two-line name occupy the same box. */
+  min-height: 2.75rem;
+}
+
+/* Hides content visually while leaving it available to screen readers. */
+@utility sr-only-focusable {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+
+  &:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip-path: none;
+    white-space: normal;
+  }
+}

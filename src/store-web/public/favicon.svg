@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Waqas Provision Store">
+  <!--
+    Shopping basket mark on the brand saffron. Inline SVG favicon: one small file, scales to every
+    size the browser asks for, and needs no PNG variants.
+  -->
+  <rect width="32" height="32" rx="8" fill="#d4861a"/>
+  <path d="M7 11h18l-1.6 13.2a2.4 2.4 0 0 1-2.4 2.1H11a2.4 2.4 0 0 1-2.4-2.1Z"
+        fill="none" stroke="#fff" stroke-width="2.1" stroke-linejoin="round"/>
+  <path d="M12 11V8.6a4 4 0 0 1 8 0V11"
+        fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round"/>
+</svg>

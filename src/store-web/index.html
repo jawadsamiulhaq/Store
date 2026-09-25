@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Waqas Provision Store — Groceries delivered across Hong Kong</title>
+    <meta
+      name="description"
+      content="Rice, spices, lentils, cooking oil, frozen food and everyday groceries delivered across Kowloon, Hong Kong Island and the New Territories. Collect in store at Ngau Chi Wan Market, Choi Hung."
+    />
+
+    <!-- Saffron, matching the design system's primary. Deliberately not the legacy store's green. -->
+    <meta name="theme-color" content="#d4861a" />
+    <meta name="color-scheme" content="light" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Waqas Provision Store — Hong Kong grocery delivery" />
+    <meta
+      property="og:description"
+      content="Rice, spices, lentils, cooking oil and frozen food delivered across Hong Kong."
+    />
+    <meta property="og:locale" content="en_HK" />
+
+    <!--
+      No `preconnect` here.
+      =====================
+
+      The API is served from this same origin (proxied in development, behind the same nginx in
+      production), so there is no second origin to warm up — the connection is already open by the
+      time the first request goes out. A preconnect to a cross-origin API host would belong here
+      if the deployment ever splits them.
+    -->
+
+    <!--
+      No web-font <link> here on purpose.
+      ==================================
+
+      The legacy store blocked rendering on a Google Fonts stylesheet for Inter across six weights.
+      Body text here uses the system UI stack — zero bytes, zero requests, no FOUT — and the single
+      display face is self-hosted, subset and loaded from CSS with font-display: swap, so it can
+      never block first paint.
+    -->
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!--
+      This is the one <noscript> that matters: the legacy store rendered an empty <div id="root">
+      with no fallback at all, so a crawler or a visitor with script blocked saw a blank page.
+    -->
+    <noscript>
+      <div style="padding: 2rem; font-family: system-ui, sans-serif; text-align: center">
+        <h1>Waqas Provision Store</h1>
+        <p>This shop needs JavaScript enabled. Please turn it on and reload the page.</p>
+        <p>
+          You can also reach us at Ngau Chi Wan Market, Choi Hung, Kowloon, Hong Kong.
+        </p>
+      </div>
+    </noscript>
+
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

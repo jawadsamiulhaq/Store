@@ -1,0 +1,1024 @@
+2026-09-23 22:33:57.256 +05:00 [FTL] Database initialisation failed
+System.InvalidOperationException: Cannot resolve scoped service 'Store.Infrastructure.Persistence.Interceptors.AuditingInterceptor' from root provider.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteValidator.ValidateResolution(ServiceCallSite callSite, IServiceScope scope, IServiceScope rootScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+   at Store.Infrastructure.DependencyInjection.<>c__DisplayClass1_0.<AddPersistence>b__0(IServiceProvider provider, DbContextOptionsBuilder options) in D:\Projects\Store\src\Store.Infrastructure\DependencyInjection.cs:line 73
+   at Microsoft.Extensions.DependencyInjection.EntityFrameworkServiceCollectionExtensions.<>c__DisplayClass6_0`1.<AddPoolingOptions>b__0(IServiceProvider sp, DbContextOptionsBuilder ob)
+   at Microsoft.EntityFrameworkCore.Infrastructure.Internal.DbContextOptionsConfiguration`1.Configure(IServiceProvider serviceProvider, DbContextOptionsBuilder optionsBuilder)
+   at Microsoft.Extensions.DependencyInjection.EntityFrameworkServiceCollectionExtensions.CreateDbContextOptions[TContext](IServiceProvider applicationServiceProvider)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitCache(ServiceCallSite callSite, RuntimeResolverContext context, ServiceProviderEngineScope serviceProviderEngine, RuntimeResolverLock lockType)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitScopeCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+   at Microsoft.Extensions.DependencyInjection.EntityFrameworkServiceCollectionExtensions.<>c__5`2.<AddDbContextPool>b__5_0(IServiceProvider sp)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitCache(ServiceCallSite callSite, RuntimeResolverContext context, ServiceProviderEngineScope serviceProviderEngine, RuntimeResolverLock lockType)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitScopeCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+   at Store.Infrastructure.DependencyInjection.InitialiseDatabaseAsync(IServiceProvider services, Boolean applyMigrations, CancellationToken ct) in D:\Projects\Store\src\Store.Infrastructure\DependencyInjection.cs:line 176
+   at Store.Infrastructure.DependencyInjection.InitialiseDatabaseAsync(IServiceProvider services, Boolean applyMigrations, CancellationToken ct) in D:\Projects\Store\src\Store.Infrastructure\DependencyInjection.cs:line 181
+   at Program.<Main>$(String[] args) in D:\Projects\Store\src\Store.Api\Program.cs:line 289
+2026-09-23 22:37:45.577 +05:00 [WRN] Entity 'ProductVariant' has a global query filter defined and is the required end of a relationship with the entity 'CartItem'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-23 22:37:51.611 +05:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-09-23 22:37:52.633 +05:00 [INF] No migrations were applied. The database is already up to date.
+2026-09-23 22:37:55.058 +05:00 [INF] Seeding 61 new permissions
+2026-09-23 22:37:57.279 +05:00 [INF] Created role System
+2026-09-23 22:37:57.324 +05:00 [INF] Created role Admin
+2026-09-23 22:37:57.340 +05:00 [INF] Created role Customer
+2026-09-23 22:37:58.394 +05:00 [INF] Granted 53 default permissions to the Admin role
+2026-09-23 22:38:00.151 +05:00 [INF] Created the System user system@waqasprovisionstore.com
+2026-09-23 22:38:00.460 +05:00 [INF] Seeded 24 settings
+2026-09-23 22:38:01.287 +05:00 [INF] Seeded 3 shipping zones
+2026-09-23 22:38:01.695 +05:00 [INF] Seeded 7 content pages
+2026-09-23 22:38:02.373 +05:00 [INF] Now listening on: http://localhost:5080
+2026-09-23 22:38:02.373 +05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-09-23 22:38:02.373 +05:00 [INF] Hosting environment: Development
+2026-09-23 22:38:02.374 +05:00 [INF] Content root path: D:\Projects\Store\src\Store.Api
+2026-09-23 22:38:42.503 +05:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 22:38:48.992 +05:00 [WRN] Slow request: POST /api/auth/login took 6478 ms (budget 300 ms) → 200
+2026-09-23 22:38:49.722 +05:00 [WRN] Failed sign-in for system@waqasprovisionstore.com from ::1
+2026-09-23 22:38:49.790 +05:00 [WRN] Slow request: POST /api/auth/login took 617 ms (budget 300 ms) → 401
+2026-09-23 22:39:23.956 +05:00 [WRN] Slow request: POST /api/auth/login took 600 ms (budget 300 ms) → 200
+2026-09-23 22:39:24.424 +05:00 [WRN] Slow request: GET /api/auth/me took 350 ms (budget 300 ms) → 200
+2026-09-23 22:39:48.550 +05:00 [WRN] Slow request: POST /api/auth/login took 523 ms (budget 300 ms) → 200
+2026-09-23 22:40:14.626 +05:00 [WRN] Slow request: POST /api/auth/login took 933 ms (budget 300 ms) → 200
+2026-09-23 22:40:15.647 +05:00 [WRN] Slow request: POST /api/auth/refresh took 375 ms (budget 300 ms) → 200
+2026-09-23 22:41:12.169 +05:00 [ERR] Unhandled BadHttpRequestException on POST /api/auth/login (correlation 00-574da5683c9e72bf479b9f48a0252408-f736057dd4f736a0-00)
+Microsoft.AspNetCore.Http.BadHttpRequestException: Failed to read parameter "LoginRequest request" from the request body as JSON.
+ ---> System.Text.Json.JsonException: 'e' is an invalid start of a property name. Expected a '"'. Path: $ | LineNumber: 0 | BytePositionInLine: 1.
+ ---> System.Text.Json.JsonReaderException: 'e' is an invalid start of a property name. Expected a '"'. LineNumber: 0 | BytePositionInLine: 1.
+   at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+   at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+   at System.Text.Json.Utf8JsonReader.Read()
+   at System.Text.Json.Serialization.Converters.ObjectWithParameterizedConstructorConverter`1.ReadConstructorArgumentsWithContinuation(ReadStack& state, Utf8JsonReader& reader, JsonSerializerOptions options)
+   at System.Text.Json.Serialization.Converters.ObjectWithParameterizedConstructorConverter`1.OnTryRead(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options, ReadStack& state, T& value)
+   at System.Text.Json.Serialization.JsonConverter`1.TryRead(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options, ReadStack& state, T& value, Boolean& isPopulatedValue)
+   at System.Text.Json.Serialization.JsonConverter`1.ReadCore(Utf8JsonReader& reader, T& value, JsonSerializerOptions options, ReadStack& state)
+   --- End of inner exception stack trace ---
+   at System.Text.Json.ThrowHelper.ReThrowWithPath(ReadStack& state, JsonReaderException ex)
+   at System.Text.Json.Serialization.JsonConverter`1.ReadCore(Utf8JsonReader& reader, T& value, JsonSerializerOptions options, ReadStack& state)
+   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.ContinueDeserialize[TReadBufferState,TStream](TReadBufferState& bufferState, JsonReaderState& jsonReaderState, ReadStack& readStack, T& value)
+   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.DeserializeAsync[TReadBufferState,TStream](TStream utf8Json, TReadBufferState bufferState, CancellationToken cancellationToken)
+   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.DeserializeAsObjectAsync(PipeReader utf8Json, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Http.HttpRequestJsonExtensions.ReadFromJsonAsync(HttpRequest request, JsonTypeInfo jsonTypeInfo, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Http.HttpRequestJsonExtensions.ReadFromJsonAsync(HttpRequest request, JsonTypeInfo jsonTypeInfo, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.<HandleRequestBodyAndCompileRequestDelegateForJson>g__TryReadBodyAsync|102_0(HttpContext httpContext, Type bodyType, String parameterTypeName, String parameterName, Boolean allowEmptyRequestBody, Boolean throwOnBadRequest, JsonTypeInfo jsonTypeInfo)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.Log.InvalidJsonRequestBody(HttpContext httpContext, String parameterTypeName, String parameterName, Exception exception, Boolean shouldThrow)
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.<HandleRequestBodyAndCompileRequestDelegateForJson>g__TryReadBodyAsync|102_0(HttpContext httpContext, Type bodyType, String parameterTypeName, String parameterName, Boolean allowEmptyRequestBody, Boolean throwOnBadRequest, JsonTypeInfo jsonTypeInfo)
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.<>c__DisplayClass102_2.<<HandleRequestBodyAndCompileRequestDelegateForJson>b__2>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at Program.<>c.<<<Main>$>b__0_12>d.MoveNext() in D:\Projects\Store\src\Store.Api\Program.cs:line 264
+--- End of stack trace from previous location ---
+   at Store.Api.Middleware.RequestTrackingMiddleware.InvokeAsync(HttpContext context) in D:\Projects\Store\src\Store.Api\Middleware\RequestTrackingMiddleware.cs:line 70
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+2026-09-23 22:41:53.253 +05:00 [ERR] Unhandled BadHttpRequestException on POST /api/auth/login (correlation 00-552cee870be2e92f72dcf966d119a6e7-424e4f29693cca6d-00)
+Microsoft.AspNetCore.Http.BadHttpRequestException: Failed to read parameter "LoginRequest request" from the request body as JSON.
+ ---> System.Text.Json.JsonException: 'e' is an invalid start of a property name. Expected a '"'. Path: $ | LineNumber: 0 | BytePositionInLine: 1.
+ ---> System.Text.Json.JsonReaderException: 'e' is an invalid start of a property name. Expected a '"'. LineNumber: 0 | BytePositionInLine: 1.
+   at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+   at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+   at System.Text.Json.Utf8JsonReader.Read()
+   at System.Text.Json.Serialization.Converters.ObjectWithParameterizedConstructorConverter`1.ReadConstructorArgumentsWithContinuation(ReadStack& state, Utf8JsonReader& reader, JsonSerializerOptions options)
+   at System.Text.Json.Serialization.Converters.ObjectWithParameterizedConstructorConverter`1.OnTryRead(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options, ReadStack& state, T& value)
+   at System.Text.Json.Serialization.JsonConverter`1.TryRead(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options, ReadStack& state, T& value, Boolean& isPopulatedValue)
+   at System.Text.Json.Serialization.JsonConverter`1.ReadCore(Utf8JsonReader& reader, T& value, JsonSerializerOptions options, ReadStack& state)
+   --- End of inner exception stack trace ---
+   at System.Text.Json.ThrowHelper.ReThrowWithPath(ReadStack& state, JsonReaderException ex)
+   at System.Text.Json.Serialization.JsonConverter`1.ReadCore(Utf8JsonReader& reader, T& value, JsonSerializerOptions options, ReadStack& state)
+   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.ContinueDeserialize[TReadBufferState,TStream](TReadBufferState& bufferState, JsonReaderState& jsonReaderState, ReadStack& readStack, T& value)
+   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.DeserializeAsync[TReadBufferState,TStream](TStream utf8Json, TReadBufferState bufferState, CancellationToken cancellationToken)
+   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.DeserializeAsObjectAsync(PipeReader utf8Json, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Http.HttpRequestJsonExtensions.ReadFromJsonAsync(HttpRequest request, JsonTypeInfo jsonTypeInfo, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Http.HttpRequestJsonExtensions.ReadFromJsonAsync(HttpRequest request, JsonTypeInfo jsonTypeInfo, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.<HandleRequestBodyAndCompileRequestDelegateForJson>g__TryReadBodyAsync|102_0(HttpContext httpContext, Type bodyType, String parameterTypeName, String parameterName, Boolean allowEmptyRequestBody, Boolean throwOnBadRequest, JsonTypeInfo jsonTypeInfo)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.Log.InvalidJsonRequestBody(HttpContext httpContext, String parameterTypeName, String parameterName, Exception exception, Boolean shouldThrow)
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.<HandleRequestBodyAndCompileRequestDelegateForJson>g__TryReadBodyAsync|102_0(HttpContext httpContext, Type bodyType, String parameterTypeName, String parameterName, Boolean allowEmptyRequestBody, Boolean throwOnBadRequest, JsonTypeInfo jsonTypeInfo)
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.<>c__DisplayClass102_2.<<HandleRequestBodyAndCompileRequestDelegateForJson>b__2>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at Program.<>c.<<<Main>$>b__0_12>d.MoveNext() in D:\Projects\Store\src\Store.Api\Program.cs:line 264
+--- End of stack trace from previous location ---
+   at Store.Api.Middleware.RequestTrackingMiddleware.InvokeAsync(HttpContext context) in D:\Projects\Store\src\Store.Api\Middleware\RequestTrackingMiddleware.cs:line 70
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+2026-09-23 22:45:07.884 +05:00 [WRN] Entity 'ProductVariant' has a global query filter defined and is the required end of a relationship with the entity 'CartItem'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-23 22:45:13.479 +05:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-09-23 22:45:14.516 +05:00 [INF] No migrations were applied. The database is already up to date.
+2026-09-23 22:45:18.101 +05:00 [INF] Now listening on: http://localhost:5080
+2026-09-23 22:45:18.110 +05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-09-23 22:45:18.111 +05:00 [INF] Hosting environment: Development
+2026-09-23 22:45:18.111 +05:00 [INF] Content root path: D:\Projects\Store\src\Store.Api
+2026-09-23 22:45:39.998 +05:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 22:45:41.213 +05:00 [WRN] Slow request: POST /api/auth/login took 1210 ms (budget 300 ms) → 200
+2026-09-23 22:45:41.255 +05:00 [WRN] BadHttpRequestException on POST /api/auth/login → 400 (correlation 00-7427e71b1876eeb9f5d6ce6cc39d5d62-df69188adc026401-00)
+Microsoft.AspNetCore.Http.BadHttpRequestException: Failed to read parameter "LoginRequest request" from the request body as JSON.
+ ---> System.Text.Json.JsonException: 'e' is an invalid start of a property name. Expected a '"'. Path: $ | LineNumber: 0 | BytePositionInLine: 1.
+ ---> System.Text.Json.JsonReaderException: 'e' is an invalid start of a property name. Expected a '"'. LineNumber: 0 | BytePositionInLine: 1.
+   at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+   at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+   at System.Text.Json.Utf8JsonReader.Read()
+   at System.Text.Json.Serialization.Converters.ObjectWithParameterizedConstructorConverter`1.ReadConstructorArgumentsWithContinuation(ReadStack& state, Utf8JsonReader& reader, JsonSerializerOptions options)
+   at System.Text.Json.Serialization.Converters.ObjectWithParameterizedConstructorConverter`1.OnTryRead(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options, ReadStack& state, T& value)
+   at System.Text.Json.Serialization.JsonConverter`1.TryRead(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options, ReadStack& state, T& value, Boolean& isPopulatedValue)
+   at System.Text.Json.Serialization.JsonConverter`1.ReadCore(Utf8JsonReader& reader, T& value, JsonSerializerOptions options, ReadStack& state)
+   --- End of inner exception stack trace ---
+   at System.Text.Json.ThrowHelper.ReThrowWithPath(ReadStack& state, JsonReaderException ex)
+   at System.Text.Json.Serialization.JsonConverter`1.ReadCore(Utf8JsonReader& reader, T& value, JsonSerializerOptions options, ReadStack& state)
+   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.ContinueDeserialize[TReadBufferState,TStream](TReadBufferState& bufferState, JsonReaderState& jsonReaderState, ReadStack& readStack, T& value)
+   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.DeserializeAsync[TReadBufferState,TStream](TStream utf8Json, TReadBufferState bufferState, CancellationToken cancellationToken)
+   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.DeserializeAsObjectAsync(PipeReader utf8Json, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Http.HttpRequestJsonExtensions.ReadFromJsonAsync(HttpRequest request, JsonTypeInfo jsonTypeInfo, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Http.HttpRequestJsonExtensions.ReadFromJsonAsync(HttpRequest request, JsonTypeInfo jsonTypeInfo, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.<HandleRequestBodyAndCompileRequestDelegateForJson>g__TryReadBodyAsync|102_0(HttpContext httpContext, Type bodyType, String parameterTypeName, String parameterName, Boolean allowEmptyRequestBody, Boolean throwOnBadRequest, JsonTypeInfo jsonTypeInfo)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.Log.InvalidJsonRequestBody(HttpContext httpContext, String parameterTypeName, String parameterName, Exception exception, Boolean shouldThrow)
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.<HandleRequestBodyAndCompileRequestDelegateForJson>g__TryReadBodyAsync|102_0(HttpContext httpContext, Type bodyType, String parameterTypeName, String parameterName, Boolean allowEmptyRequestBody, Boolean throwOnBadRequest, JsonTypeInfo jsonTypeInfo)
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.<>c__DisplayClass102_2.<<HandleRequestBodyAndCompileRequestDelegateForJson>b__2>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at Program.<>c.<<<Main>$>b__0_12>d.MoveNext() in D:\Projects\Store\src\Store.Api\Program.cs:line 264
+--- End of stack trace from previous location ---
+   at Store.Api.Middleware.RequestTrackingMiddleware.InvokeAsync(HttpContext context) in D:\Projects\Store\src\Store.Api\Middleware\RequestTrackingMiddleware.cs:line 70
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+2026-09-23 22:45:53.057 +05:00 [WRN] Slow request: POST /api/auth/login took 6490 ms (budget 300 ms) → 200
+2026-09-23 22:45:54.986 +05:00 [WRN] Slow request: POST /api/auth/refresh took 930 ms (budget 300 ms) → 200
+2026-09-23 22:48:20.231 +05:00 [WRN] Entity 'ProductVariant' has a global query filter defined and is the required end of a relationship with the entity 'CartItem'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-23 22:48:24.652 +05:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-09-23 22:48:25.427 +05:00 [INF] No migrations were applied. The database is already up to date.
+2026-09-23 22:48:29.257 +05:00 [INF] Now listening on: http://localhost:5080
+2026-09-23 22:48:29.266 +05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-09-23 22:48:29.268 +05:00 [INF] Hosting environment: Development
+2026-09-23 22:48:29.268 +05:00 [INF] Content root path: D:\Projects\Store\src\Store.Api
+2026-09-23 22:50:44.363 +05:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 22:50:47.936 +05:00 [WRN] Slow request: POST /api/auth/login took 3598 ms (budget 300 ms) → 200
+2026-09-23 22:50:49.755 +05:00 [WRN] Slow request: POST /api/auth/refresh took 457 ms (budget 300 ms) → 200
+2026-09-23 22:50:50.723 +05:00 [WRN] Refresh token reuse detected for user "469307c1-62c0-41fa-112b-08df199968ee" from ::1. Revoking token family "01a0cf64-39ff-71d9-ad06-c254d797acd5".
+2026-09-23 22:50:50.972 +05:00 [WRN] Slow request: POST /api/auth/refresh took 330 ms (budget 300 ms) → 401
+2026-09-23 22:50:51.916 +05:00 [WRN] Refresh token reuse detected for user "469307c1-62c0-41fa-112b-08df199968ee" from ::1. Revoking token family "01a0cf64-39ff-71d9-ad06-c254d797acd5".
+2026-09-23 22:56:58.727 +05:00 [WRN] Entity 'ProductVariant' has a global query filter defined and is the required end of a relationship with the entity 'CartItem'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-23 22:57:04.288 +05:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-09-23 22:57:05.214 +05:00 [INF] No migrations were applied. The database is already up to date.
+2026-09-23 22:57:09.778 +05:00 [INF] Now listening on: http://localhost:5080
+2026-09-23 22:57:09.789 +05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-09-23 22:57:09.791 +05:00 [INF] Hosting environment: Development
+2026-09-23 22:57:09.791 +05:00 [INF] Content root path: D:\Projects\Store\src\Store.Api
+2026-09-23 22:57:12.422 +05:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 22:57:15.325 +05:00 [WRN] Slow request: POST /api/auth/login took 2905 ms (budget 300 ms) → 200
+2026-09-23 22:57:15.952 +05:00 [WRN] BadHttpRequestException on GET /api/admin/users → 400 (correlation 00-6980ef92bcd6791ebdf679c6d6f0a871-eeaf060357ed525a-00)
+Microsoft.AspNetCore.Http.BadHttpRequestException: Required parameter "bool Descending" was not provided from query string.
+   at lambda_method498(Closure, Object, HttpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at Program.<>c.<<<Main>$>b__0_12>d.MoveNext() in D:\Projects\Store\src\Store.Api\Program.cs:line 264
+--- End of stack trace from previous location ---
+   at Store.Api.Middleware.RequestTrackingMiddleware.InvokeAsync(HttpContext context) in D:\Projects\Store\src\Store.Api\Middleware\RequestTrackingMiddleware.cs:line 70
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+2026-09-23 22:57:19.277 +05:00 [INF] Set 2 permissions on role Catalogue Viewer by "469307c1-62c0-41fa-112b-08df199968ee"
+2026-09-23 22:57:19.744 +05:00 [INF] Created role Catalogue Viewer with 2 permissions
+2026-09-23 22:57:19.763 +05:00 [WRN] Slow request: POST /api/admin/roles took 1055 ms (budget 300 ms) → 201
+2026-09-23 22:59:10.173 +05:00 [WRN] Entity 'ProductVariant' has a global query filter defined and is the required end of a relationship with the entity 'CartItem'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-23 22:59:17.325 +05:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-09-23 22:59:18.542 +05:00 [INF] No migrations were applied. The database is already up to date.
+2026-09-23 22:59:24.807 +05:00 [INF] Now listening on: http://localhost:5080
+2026-09-23 22:59:24.817 +05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-09-23 22:59:24.819 +05:00 [INF] Hosting environment: Development
+2026-09-23 22:59:24.819 +05:00 [INF] Content root path: D:\Projects\Store\src\Store.Api
+2026-09-23 22:59:27.124 +05:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 22:59:29.933 +05:00 [WRN] Slow request: POST /api/auth/login took 2805 ms (budget 300 ms) → 200
+2026-09-23 22:59:31.348 +05:00 [WRN] Slow request: GET /api/admin/users took 1062 ms (budget 300 ms) → 200
+2026-09-23 22:59:33.453 +05:00 [INF] Created user "38ecd409-afb9-4584-2cd7-08df199c6c25" with roles Catalogue Viewer
+2026-09-23 22:59:33.541 +05:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-09-23 22:59:33.929 +05:00 [WRN] Slow request: POST /api/admin/users took 1724 ms (budget 300 ms) → 201
+2026-09-23 22:59:51.588 +05:00 [WRN] Slow request: POST /api/auth/login took 610 ms (budget 300 ms) → 200
+2026-09-23 23:00:29.561 +05:00 [WRN] Slow request: POST /api/auth/login took 666 ms (budget 300 ms) → 200
+2026-09-23 23:00:30.750 +05:00 [WRN] Slow request: POST /api/auth/login took 651 ms (budget 300 ms) → 200
+2026-09-23 23:00:32.779 +05:00 [INF] Set 3 permissions on role Catalogue Viewer by "469307c1-62c0-41fa-112b-08df199968ee"
+2026-09-23 23:00:33.018 +05:00 [WRN] Slow request: PUT /api/admin/roles/0507d44c-47d6-4100-179c-08df199c1c2a/permissions took 525 ms (budget 300 ms) → 200
+2026-09-23 23:00:34.046 +05:00 [INF] Set 1 permission overrides on user "38ecd409-afb9-4584-2cd7-08df199c6c25" by "469307c1-62c0-41fa-112b-08df199968ee"
+2026-09-23 23:00:34.854 +05:00 [INF] Set 1 permissions on role Catalogue Viewer by "469307c1-62c0-41fa-112b-08df199968ee"
+2026-09-23 23:01:07.757 +05:00 [WRN] Slow request: POST /api/auth/login took 531 ms (budget 300 ms) → 200
+2026-09-23 23:01:09.542 +05:00 [INF] Set 6 permissions on role Catalogue Viewer by "469307c1-62c0-41fa-112b-08df199968ee"
+2026-09-23 23:01:09.902 +05:00 [INF] Set 0 permission overrides on user "38ecd409-afb9-4584-2cd7-08df199c6c25" by "469307c1-62c0-41fa-112b-08df199968ee"
+2026-09-23 23:01:11.432 +05:00 [WRN] Slow request: POST /api/auth/login took 948 ms (budget 300 ms) → 200
+2026-09-23 23:24:42.512 +05:00 [WRN] Entity 'ProductVariant' has a global query filter defined and is the required end of a relationship with the entity 'CartItem'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-23 23:24:47.936 +05:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-09-23 23:24:48.800 +05:00 [INF] No migrations were applied. The database is already up to date.
+2026-09-23 23:24:56.822 +05:00 [INF] Seeded 80 categories
+2026-09-23 23:24:57.490 +05:00 [INF] Seeded 40 brands
+2026-09-23 23:25:15.297 +05:00 [INF] Seeded 400/4200 products
+2026-09-23 23:25:25.037 +05:00 [INF] Seeded 800/4200 products
+2026-09-23 23:25:32.277 +05:00 [INF] Seeded 1200/4200 products
+2026-09-23 23:25:39.372 +05:00 [INF] Seeded 1600/4200 products
+2026-09-23 23:25:56.840 +05:00 [INF] Seeded 2000/4200 products
+2026-09-23 23:26:04.936 +05:00 [INF] Seeded 2400/4200 products
+2026-09-23 23:26:11.591 +05:00 [INF] Seeded 2800/4200 products
+2026-09-23 23:26:18.153 +05:00 [INF] Seeded 3200/4200 products
+2026-09-23 23:26:23.645 +05:00 [INF] Seeded 3600/4200 products
+2026-09-23 23:26:29.746 +05:00 [INF] Seeded 4000/4200 products
+2026-09-23 23:26:34.537 +05:00 [INF] Seeded 4200/4200 products
+2026-09-23 23:26:35.086 +05:00 [INF] Catalogue seeded: 4200 products, 8187 variants
+2026-09-23 23:26:35.524 +05:00 [INF] Now listening on: http://localhost:5080
+2026-09-23 23:26:35.524 +05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-09-23 23:26:35.524 +05:00 [INF] Hosting environment: Development
+2026-09-23 23:26:35.525 +05:00 [INF] Content root path: D:\Projects\Store\src\Store.Api
+2026-09-23 23:26:55.996 +05:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 23:27:03.790 +05:00 [WRN] Slow request: GET /api/catalog/products took 7790 ms (budget 300 ms) → 200
+2026-09-23 23:27:08.948 +05:00 [WRN] Slow request: GET /api/catalog/products took 319 ms (budget 300 ms) → 200
+2026-09-23 23:27:34.025 +05:00 [WRN] Slow request: GET /api/catalog/categories took 379 ms (budget 300 ms) → 200
+2026-09-23 23:27:36.355 +05:00 [WRN] Slow request: GET /api/catalog/products took 749 ms (budget 300 ms) → 200
+2026-09-23 23:27:38.480 +05:00 [WRN] Slow request: GET /api/catalog/products took 1890 ms (budget 300 ms) → 200
+2026-09-23 23:27:39.906 +05:00 [WRN] Slow request: GET /api/catalog/products took 1176 ms (budget 300 ms) → 200
+2026-09-23 23:27:41.433 +05:00 [WRN] Slow request: GET /api/catalog/products took 1192 ms (budget 300 ms) → 200
+2026-09-23 23:27:42.431 +05:00 [WRN] Slow request: GET /api/catalog/products took 739 ms (budget 300 ms) → 200
+2026-09-23 23:27:43.533 +05:00 [WRN] Slow request: GET /api/catalog/products took 822 ms (budget 300 ms) → 200
+2026-09-23 23:27:44.469 +05:00 [WRN] Slow request: GET /api/catalog/products took 665 ms (budget 300 ms) → 200
+2026-09-23 23:27:45.340 +05:00 [WRN] Slow request: GET /api/catalog/products took 332 ms (budget 300 ms) → 200
+2026-09-23 23:27:45.352 +05:00 [WRN] InvalidOperationException on GET /api/catalog/products → 400 (correlation 00-1ef5ac155842781825828cf5ad4ddf90-f9d7bbeeb85237d6-00)
+System.InvalidOperationException: The LINQ expression 'DbSet<Product>()
+    .Where(p => p.DeletedAt == null)
+    .Where(p => (int)p.Status == 1)
+    .Where(p => p.CategoryId != null)
+    .LeftJoin(
+        inner: DbSet<Category>()
+            .Where(c => c.DeletedAt == null), 
+        outerKeySelector: p => EF.Property<Guid?>(p, "CategoryId"), 
+        innerKeySelector: c => EF.Property<Guid?>(c, "Id"), 
+        resultSelector: (o, i) => new TransparentIdentifier<Product, Category>(
+            Outer = o, 
+            Inner = i
+        ))
+    .GroupBy(p => new { 
+        Id = p.Inner.Id, 
+        Name = p.Inner.Name, 
+        Slug = p.Inner.Slug
+     })
+    .Select(g => new FacetItemDto(
+        g.Key.Id, 
+        g.Key.Name, 
+        g.Key.Slug, 
+        g
+            .AsQueryable()
+            .Count()
+    ))
+    .OrderByDescending(e0 => e0.Count)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutorExpression[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass11_0`1.<ExecuteCore>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteCore[TResult](Expression query, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.ExecuteAsync[TResult](Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable`1.GetAsyncEnumerator()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Store.Infrastructure.Catalog.ProductService.BuildFacetsAsync(IQueryable`1 filtered, CancellationToken ct) in D:\Projects\Store\src\Store.Infrastructure\Catalog\ProductService.cs:line 231
+   at Store.Infrastructure.Catalog.ProductService.SearchAsync(ProductQuery query, Boolean includeFacets, CancellationToken ct) in D:\Projects\Store\src\Store.Infrastructure\Catalog\ProductService.cs:line 70
+   at Store.Api.Endpoints.CatalogEndpoints.<>c.<<MapPublicCatalog>b__1_3>d.MoveNext() in D:\Projects\Store\src\Store.Api\Endpoints\CatalogEndpoints.cs:line 71
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.ExecuteTaskResult[T](Task`1 task, HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.OutputCaching.OutputCacheMiddleware.<>c__DisplayClass11_0.<<InvokeAwaited>g__ExecuteResponseAsync|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.OutputCaching.WorkDispatcher`2.ScheduleAsync(TKey key, Func`2 valueFactory)
+   at Microsoft.AspNetCore.OutputCaching.OutputCacheMiddleware.InvokeAwaited(HttpContext httpContext, IReadOnlyList`1 policies)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at Program.<>c.<<<Main>$>b__0_12>d.MoveNext() in D:\Projects\Store\src\Store.Api\Program.cs:line 264
+--- End of stack trace from previous location ---
+   at Store.Api.Middleware.RequestTrackingMiddleware.InvokeAsync(HttpContext context) in D:\Projects\Store\src\Store.Api\Middleware\RequestTrackingMiddleware.cs:line 70
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+2026-09-23 23:28:03.462 +05:00 [WRN] InvalidOperationException on GET /api/catalog/products → 400 (correlation 00-b1dfa74ff1f987fe6354bf2efe2b4582-624b326a219d82b3-00)
+System.InvalidOperationException: The LINQ expression 'DbSet<Product>()
+    .Where(p => p.DeletedAt == null)
+    .Where(p => (int)p.Status == 1)
+    .Where(p => p.CategoryId != null)
+    .LeftJoin(
+        inner: DbSet<Category>()
+            .Where(c => c.DeletedAt == null), 
+        outerKeySelector: p => EF.Property<Guid?>(p, "CategoryId"), 
+        innerKeySelector: c => EF.Property<Guid?>(c, "Id"), 
+        resultSelector: (o, i) => new TransparentIdentifier<Product, Category>(
+            Outer = o, 
+            Inner = i
+        ))
+    .GroupBy(p => new { 
+        Id = p.Inner.Id, 
+        Name = p.Inner.Name, 
+        Slug = p.Inner.Slug
+     })
+    .Select(g => new FacetItemDto(
+        g.Key.Id, 
+        g.Key.Name, 
+        g.Key.Slug, 
+        g
+            .AsQueryable()
+            .Count()
+    ))
+    .OrderByDescending(e0 => e0.Count)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutorExpression[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass11_0`1.<ExecuteCore>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteCore[TResult](Expression query, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.ExecuteAsync[TResult](Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable`1.GetAsyncEnumerator()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Store.Infrastructure.Catalog.ProductService.BuildFacetsAsync(IQueryable`1 filtered, CancellationToken ct) in D:\Projects\Store\src\Store.Infrastructure\Catalog\ProductService.cs:line 231
+   at Store.Infrastructure.Catalog.ProductService.SearchAsync(ProductQuery query, Boolean includeFacets, CancellationToken ct) in D:\Projects\Store\src\Store.Infrastructure\Catalog\ProductService.cs:line 70
+   at Store.Api.Endpoints.CatalogEndpoints.<>c.<<MapPublicCatalog>b__1_3>d.MoveNext() in D:\Projects\Store\src\Store.Api\Endpoints\CatalogEndpoints.cs:line 71
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.ExecuteTaskResult[T](Task`1 task, HttpContext httpContext)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.OutputCaching.OutputCacheMiddleware.<>c__DisplayClass11_0.<<InvokeAwaited>g__ExecuteResponseAsync|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.OutputCaching.WorkDispatcher`2.ScheduleAsync(TKey key, Func`2 valueFactory)
+   at Microsoft.AspNetCore.OutputCaching.OutputCacheMiddleware.InvokeAwaited(HttpContext httpContext, IReadOnlyList`1 policies)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at Program.<>c.<<<Main>$>b__0_12>d.MoveNext() in D:\Projects\Store\src\Store.Api\Program.cs:line 264
+--- End of stack trace from previous location ---
+   at Store.Api.Middleware.RequestTrackingMiddleware.InvokeAsync(HttpContext context) in D:\Projects\Store\src\Store.Api\Middleware\RequestTrackingMiddleware.cs:line 70
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+2026-09-23 23:30:10.883 +05:00 [WRN] Entity 'ProductVariant' has a global query filter defined and is the required end of a relationship with the entity 'CartItem'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-23 23:30:17.588 +05:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-09-23 23:30:18.634 +05:00 [INF] No migrations were applied. The database is already up to date.
+2026-09-23 23:30:23.229 +05:00 [INF] Now listening on: http://localhost:5080
+2026-09-23 23:30:23.242 +05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-09-23 23:30:23.243 +05:00 [INF] Hosting environment: Development
+2026-09-23 23:30:23.243 +05:00 [INF] Content root path: D:\Projects\Store\src\Store.Api
+2026-09-23 23:30:34.575 +05:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 23:30:36.598 +05:00 [WRN] Slow request: GET /api/catalog/products took 2024 ms (budget 300 ms) → 200
+2026-09-23 23:30:41.860 +05:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-09-23 23:30:42.053 +05:00 [WRN] Slow request: GET /api/catalog/products took 1263 ms (budget 300 ms) → 200
+2026-09-23 23:30:47.441 +05:00 [WRN] Slow request: GET /api/catalog/products took 1018 ms (budget 300 ms) → 200
+2026-09-23 23:30:58.190 +05:00 [WRN] Slow request: GET /api/catalog/products took 979 ms (budget 300 ms) → 200
+2026-09-23 23:31:03.558 +05:00 [WRN] Slow request: GET /api/catalog/products took 2263 ms (budget 300 ms) → 200
+2026-09-23 23:31:04.688 +05:00 [WRN] Slow request: GET /api/catalog/products took 912 ms (budget 300 ms) → 200
+2026-09-23 23:31:06.205 +05:00 [WRN] Slow request: GET /api/catalog/products took 1233 ms (budget 300 ms) → 200
+2026-09-23 23:31:08.215 +05:00 [WRN] Slow request: GET /api/catalog/products took 1548 ms (budget 300 ms) → 200
+2026-09-23 23:31:09.691 +05:00 [WRN] Slow request: GET /api/catalog/products took 1075 ms (budget 300 ms) → 200
+2026-09-23 23:31:11.479 +05:00 [WRN] Slow request: GET /api/catalog/products took 1395 ms (budget 300 ms) → 200
+2026-09-23 23:31:13.108 +05:00 [WRN] Slow request: GET /api/catalog/products took 1238 ms (budget 300 ms) → 200
+2026-09-23 23:31:14.472 +05:00 [WRN] Slow request: GET /api/catalog/products took 976 ms (budget 300 ms) → 200
+2026-09-23 23:31:19.528 +05:00 [WRN] Slow request: GET /api/catalog/products took 1056 ms (budget 300 ms) → 200
+2026-09-23 23:31:24.262 +05:00 [WRN] Slow request: GET /api/catalog/products took 960 ms (budget 300 ms) → 200
+2026-09-23 23:31:29.653 +05:00 [WRN] Slow request: GET /api/catalog/products took 1795 ms (budget 300 ms) → 200
+2026-09-23 23:31:30.367 +05:00 [WRN] Slow request: GET /api/catalog/products took 306 ms (budget 300 ms) → 200
+2026-09-23 23:31:32.779 +05:00 [WRN] Slow request: GET /api/catalog/products took 361 ms (budget 300 ms) → 200
+2026-09-23 23:31:35.381 +05:00 [WRN] Slow request: GET /api/catalog/products took 877 ms (budget 300 ms) → 200
+2026-09-23 23:31:39.970 +05:00 [WRN] Slow request: GET /api/catalog/products took 916 ms (budget 300 ms) → 200
+2026-09-23 23:31:47.907 +05:00 [WRN] Slow request: GET /api/catalog/categories took 476 ms (budget 300 ms) → 200
+2026-09-23 23:34:11.322 +05:00 [WRN] Entity 'ProductVariant' has a global query filter defined and is the required end of a relationship with the entity 'CartItem'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-23 23:34:17.206 +05:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-09-23 23:34:18.150 +05:00 [INF] No migrations were applied. The database is already up to date.
+2026-09-23 23:34:22.821 +05:00 [INF] Now listening on: http://localhost:5080
+2026-09-23 23:34:22.829 +05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-09-23 23:34:22.830 +05:00 [INF] Hosting environment: Development
+2026-09-23 23:34:22.830 +05:00 [INF] Content root path: D:\Projects\Store\src\Store.Api
+2026-09-23 23:34:24.759 +05:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 23:34:27.778 +05:00 [WRN] Slow request: GET /api/catalog/products took 3015 ms (budget 300 ms) → 200
+2026-09-23 23:34:28.476 +05:00 [WRN] Slow request: GET /api/catalog/products took 450 ms (budget 300 ms) → 200
+2026-09-23 23:34:29.311 +05:00 [WRN] Slow request: GET /api/catalog/products took 585 ms (budget 300 ms) → 200
+2026-09-23 23:34:30.447 +05:00 [WRN] Slow request: GET /api/catalog/products took 711 ms (budget 300 ms) → 200
+2026-09-23 23:34:31.433 +05:00 [WRN] Slow request: GET /api/catalog/products took 531 ms (budget 300 ms) → 200
+2026-09-23 23:34:32.401 +05:00 [WRN] Slow request: GET /api/catalog/products took 507 ms (budget 300 ms) → 200
+2026-09-23 23:34:33.372 +05:00 [WRN] Slow request: GET /api/catalog/products took 514 ms (budget 300 ms) → 200
+2026-09-23 23:34:34.371 +05:00 [WRN] Slow request: GET /api/catalog/products took 599 ms (budget 300 ms) → 200
+2026-09-23 23:34:35.490 +05:00 [WRN] Slow request: GET /api/catalog/products took 843 ms (budget 300 ms) → 200
+2026-09-23 23:34:36.383 +05:00 [WRN] Slow request: GET /api/catalog/products took 598 ms (budget 300 ms) → 200
+2026-09-23 23:34:37.719 +05:00 [WRN] Slow request: GET /api/catalog/products took 791 ms (budget 300 ms) → 200
+2026-09-23 23:34:38.624 +05:00 [WRN] Slow request: GET /api/catalog/products took 461 ms (budget 300 ms) → 200
+2026-09-23 23:34:39.731 +05:00 [WRN] Slow request: GET /api/catalog/products took 620 ms (budget 300 ms) → 200
+2026-09-23 23:34:40.885 +05:00 [WRN] Slow request: GET /api/catalog/products took 613 ms (budget 300 ms) → 200
+2026-09-23 23:34:41.924 +05:00 [WRN] Slow request: GET /api/catalog/products took 571 ms (budget 300 ms) → 200
+2026-09-23 23:34:42.744 +05:00 [WRN] Slow request: GET /api/catalog/products took 487 ms (budget 300 ms) → 200
+2026-09-23 23:34:44.099 +05:00 [WRN] Slow request: GET /api/catalog/products took 1063 ms (budget 300 ms) → 200
+2026-09-23 23:34:45.325 +05:00 [WRN] Slow request: GET /api/catalog/products took 830 ms (budget 300 ms) → 200
+2026-09-23 23:34:46.624 +05:00 [WRN] Slow request: GET /api/catalog/products took 868 ms (budget 300 ms) → 200
+2026-09-23 23:34:47.767 +05:00 [WRN] Slow request: GET /api/catalog/products took 624 ms (budget 300 ms) → 200
+2026-09-23 23:34:49.566 +05:00 [WRN] Slow request: GET /api/catalog/products took 1181 ms (budget 300 ms) → 200
+2026-09-23 23:34:51.809 +05:00 [WRN] Slow request: GET /api/catalog/products took 879 ms (budget 300 ms) → 200
+2026-09-23 23:34:53.706 +05:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-09-23 23:34:53.850 +05:00 [WRN] Slow request: GET /api/catalog/products took 1282 ms (budget 300 ms) → 200
+2026-09-23 23:36:52.083 +05:00 [WRN] Entity 'ProductVariant' has a global query filter defined and is the required end of a relationship with the entity 'CartItem'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-23 23:36:58.884 +05:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-09-23 23:37:00.182 +05:00 [INF] No migrations were applied. The database is already up to date.
+2026-09-23 23:37:05.857 +05:00 [INF] Now listening on: http://localhost:5080
+2026-09-23 23:37:05.871 +05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-09-23 23:37:05.873 +05:00 [INF] Hosting environment: Development
+2026-09-23 23:37:05.873 +05:00 [INF] Content root path: D:\Projects\Store\src\Store.Api
+2026-09-23 23:37:07.824 +05:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 23:37:10.740 +05:00 [WRN] Slow request: GET /api/catalog/products took 2907 ms (budget 300 ms) → 200
+2026-09-23 23:37:12.303 +05:00 [WRN] Slow request: GET /api/catalog/products took 798 ms (budget 300 ms) → 200
+2026-09-23 23:38:22.877 +05:00 [WRN] Entity 'ProductVariant' has a global query filter defined and is the required end of a relationship with the entity 'CartItem'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-23 23:38:28.848 +05:00 [INF] Executed DbCommand (192ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2026-09-23 23:38:28.961 +05:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-09-23 23:38:29.197 +05:00 [INF] Executed DbCommand (208ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_getapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session', @LockMode = 'Exclusive';
+SELECT @result
+2026-09-23 23:38:29.788 +05:00 [INF] Executed DbCommand (35ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+BEGIN
+    CREATE TABLE [__EFMigrationsHistory] (
+        [MigrationId] nvarchar(150) NOT NULL,
+        [ProductVersion] nvarchar(32) NOT NULL,
+        CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+    );
+END;
+2026-09-23 23:38:29.948 +05:00 [INF] Executed DbCommand (13ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2026-09-23 23:38:29.961 +05:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2026-09-23 23:38:30.007 +05:00 [INF] Executed DbCommand (18ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2026-09-23 23:38:30.083 +05:00 [INF] No migrations were applied. The database is already up to date.
+2026-09-23 23:38:30.117 +05:00 [INF] Executed DbCommand (18ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_releaseapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session';
+SELECT @result
+2026-09-23 23:38:32.273 +05:00 [INF] Executed DbCommand (14ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Code], [p].[Description], [p].[DisplayName], [p].[DisplayOrder], [p].[Module]
+FROM [Permissions] AS [p]
+2026-09-23 23:38:33.519 +05:00 [INF] Executed DbCommand (97ms) [Parameters=[@normalizedName='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedAt], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName]
+FROM [Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2026-09-23 23:38:33.758 +05:00 [INF] Executed DbCommand (3ms) [Parameters=[@normalizedName='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedAt], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName]
+FROM [Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2026-09-23 23:38:33.762 +05:00 [INF] Executed DbCommand (2ms) [Parameters=[@normalizedName='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedAt], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName]
+FROM [Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2026-09-23 23:38:34.194 +05:00 [INF] Executed DbCommand (20ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedAt], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName]
+FROM [Roles] AS [r]
+WHERE [r].[Name] = N'Admin'
+2026-09-23 23:38:34.404 +05:00 [INF] Executed DbCommand (18ms) [Parameters=[@adminRole_Id='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [RolePermissions] AS [r]
+        WHERE [r].[RoleId] = @adminRole_Id) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2026-09-23 23:38:34.596 +05:00 [INF] Executed DbCommand (14ms) [Parameters=[@normalizedEmail='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [u].[Id], [u].[AccessFailedCount], [u].[AvatarUrl], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginAt], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[PreferredLanguage], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UpdatedAt], [u].[UserName]
+FROM [Users] AS [u]
+WHERE [u].[NormalizedEmail] = @normalizedEmail
+2026-09-23 23:38:35.046 +05:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Key]
+FROM [Settings] AS [s]
+2026-09-23 23:38:35.116 +05:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [ShippingZones] AS [s]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2026-09-23 23:38:35.182 +05:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Slug]
+FROM [ContentPages] AS [c]
+2026-09-23 23:38:35.277 +05:00 [INF] Executed DbCommand (12ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Products] AS [p]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2026-09-23 23:38:35.288 +05:00 [INF] Catalogue already seeded; skipping
+2026-09-23 23:38:35.804 +05:00 [INF] Now listening on: http://localhost:5080
+2026-09-23 23:38:35.805 +05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-09-23 23:38:35.806 +05:00 [INF] Hosting environment: Development
+2026-09-23 23:38:35.807 +05:00 [INF] Content root path: D:\Projects\Store\src\Store.Api
+2026-09-23 23:38:39.028 +05:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 23:38:40.195 +05:00 [INF] Executed DbCommand (351ms) [Parameters=[@term_contains='?' (Size = 400), @term_contains0='?' (Size = 500)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Products] AS [p]
+WHERE [p].[DeletedAt] IS NULL AND [p].[Status] = 1 AND ([p].[Name] LIKE @term_contains ESCAPE N'\' OR [p].[ShortDescription] LIKE @term_contains0 ESCAPE N'\')
+2026-09-23 23:38:41.439 +05:00 [INF] Executed DbCommand (471ms) [Parameters=[@term_contains='?' (Size = 400), @term_contains0='?' (Size = 500), @p='?' (DbType = Int32), @p3='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [p0].[Id], [p0].[Name], [p0].[Slug], [p0].[ShortDescription], COALESCE((
+    SELECT TOP(1) [p1].[Url]
+    FROM [ProductImages] AS [p1]
+    INNER JOIN (
+        SELECT [p2].[Id], [p2].[DeletedAt]
+        FROM [Products] AS [p2]
+        WHERE [p2].[DeletedAt] IS NULL
+    ) AS [p3] ON [p1].[ProductId] = [p3].[Id]
+    WHERE [p3].[DeletedAt] IS NULL AND [p0].[Id] = [p1].[ProductId] AND [p1].[IsPrimary] = CAST(1 AS bit)), (
+    SELECT TOP(1) [p4].[Url]
+    FROM [ProductImages] AS [p4]
+    INNER JOIN (
+        SELECT [p5].[Id], [p5].[DeletedAt]
+        FROM [Products] AS [p5]
+        WHERE [p5].[DeletedAt] IS NULL
+    ) AS [p6] ON [p4].[ProductId] = [p6].[Id]
+    WHERE [p6].[DeletedAt] IS NULL AND [p0].[Id] = [p4].[ProductId]
+    ORDER BY [p4].[DisplayOrder])), COALESCE((
+    SELECT TOP(1) [p7].[ThumbnailUrl]
+    FROM [ProductImages] AS [p7]
+    INNER JOIN (
+        SELECT [p8].[Id], [p8].[DeletedAt]
+        FROM [Products] AS [p8]
+        WHERE [p8].[DeletedAt] IS NULL
+    ) AS [p9] ON [p7].[ProductId] = [p9].[Id]
+    WHERE [p9].[DeletedAt] IS NULL AND [p0].[Id] = [p7].[ProductId] AND [p7].[IsPrimary] = CAST(1 AS bit)), (
+    SELECT TOP(1) [p10].[ThumbnailUrl]
+    FROM [ProductImages] AS [p10]
+    INNER JOIN (
+        SELECT [p11].[Id], [p11].[DeletedAt]
+        FROM [Products] AS [p11]
+        WHERE [p11].[DeletedAt] IS NULL
+    ) AS [p12] ON [p10].[ProductId] = [p12].[Id]
+    WHERE [p12].[DeletedAt] IS NULL AND [p0].[Id] = [p10].[ProductId]
+    ORDER BY [p10].[DisplayOrder])), COALESCE((
+    SELECT TOP(1) [p13].[BlurHash]
+    FROM [ProductImages] AS [p13]
+    INNER JOIN (
+        SELECT [p14].[Id], [p14].[DeletedAt]
+        FROM [Products] AS [p14]
+        WHERE [p14].[DeletedAt] IS NULL
+    ) AS [p15] ON [p13].[ProductId] = [p15].[Id]
+    WHERE [p15].[DeletedAt] IS NULL AND [p0].[Id] = [p13].[ProductId] AND [p13].[IsPrimary] = CAST(1 AS bit)), (
+    SELECT TOP(1) [p16].[BlurHash]
+    FROM [ProductImages] AS [p16]
+    INNER JOIN (
+        SELECT [p17].[Id], [p17].[DeletedAt]
+        FROM [Products] AS [p17]
+        WHERE [p17].[DeletedAt] IS NULL
+    ) AS [p18] ON [p16].[ProductId] = [p18].[Id]
+    WHERE [p18].[DeletedAt] IS NULL AND [p0].[Id] = [p16].[ProductId]
+    ORDER BY [p16].[DisplayOrder])), COALESCE((
+    SELECT TOP(1) [p19].[Width]
+    FROM [ProductImages] AS [p19]
+    INNER JOIN (
+        SELECT [p20].[Id], [p20].[DeletedAt]
+        FROM [Products] AS [p20]
+        WHERE [p20].[DeletedAt] IS NULL
+    ) AS [p21] ON [p19].[ProductId] = [p21].[Id]
+    WHERE [p21].[DeletedAt] IS NULL AND [p0].[Id] = [p19].[ProductId] AND [p19].[IsPrimary] = CAST(1 AS bit)), 0), COALESCE((
+    SELECT TOP(1) [p22].[Height]
+    FROM [ProductImages] AS [p22]
+    INNER JOIN (
+        SELECT [p23].[Id], [p23].[DeletedAt]
+        FROM [Products] AS [p23]
+        WHERE [p23].[DeletedAt] IS NULL
+    ) AS [p24] ON [p22].[ProductId] = [p24].[Id]
+    WHERE [p24].[DeletedAt] IS NULL AND [p0].[Id] = [p22].[ProductId] AND [p22].[IsPrimary] = CAST(1 AS bit)), 0), [p0].[MinPrice], [p0].[MaxPrice], [p0].[MaxCompareAtPrice], [p0].[InStock], [p0].[RatingAverage], [p0].[RatingCount], [p0].[Badge], [b0].[Name], [c0].[Name], [c0].[Slug], (
+    SELECT COUNT(*)
+    FROM [ProductVariants] AS [p25]
+    INNER JOIN (
+        SELECT [p26].[Id], [p26].[DeletedAt]
+        FROM [Products] AS [p26]
+        WHERE [p26].[DeletedAt] IS NULL
+    ) AS [p27] ON [p25].[ProductId] = [p27].[Id]
+    WHERE [p27].[DeletedAt] IS NULL AND [p0].[Id] = [p25].[ProductId] AND [p25].[IsActive] = CAST(1 AS bit)), COALESCE((
+    SELECT TOP(1) [p28].[Unit]
+    FROM [ProductVariants] AS [p28]
+    INNER JOIN (
+        SELECT [p29].[Id], [p29].[DeletedAt]
+        FROM [Products] AS [p29]
+        WHERE [p29].[DeletedAt] IS NULL
+    ) AS [p30] ON [p28].[ProductId] = [p30].[Id]
+    WHERE [p30].[DeletedAt] IS NULL AND [p0].[Id] = [p28].[ProductId] AND [p28].[IsDefault] = CAST(1 AS bit)), N'piece')
+FROM (
+    SELECT [p].[Id], [p].[Badge], [p].[BrandId], [p].[CategoryId], [p].[CreatedAt], [p].[InStock], [p].[IsFeatured], [p].[MaxCompareAtPrice], [p].[MaxPrice], [p].[MinPrice], [p].[Name], [p].[RatingAverage], [p].[RatingCount], [p].[SalesCount], [p].[ShortDescription], [p].[Slug]
+    FROM [Products] AS [p]
+    WHERE [p].[DeletedAt] IS NULL AND [p].[Status] = 1 AND ([p].[Name] LIKE @term_contains ESCAPE N'\' OR [p].[ShortDescription] LIKE @term_contains0 ESCAPE N'\')
+    ORDER BY [p].[InStock] DESC, [p].[IsFeatured] DESC, [p].[SalesCount] DESC, [p].[CreatedAt] DESC
+    OFFSET @p ROWS FETCH NEXT @p3 ROWS ONLY
+) AS [p0]
+LEFT JOIN (
+    SELECT [b].[Id], [b].[Name]
+    FROM [Brands] AS [b]
+    WHERE [b].[DeletedAt] IS NULL
+) AS [b0] ON [p0].[BrandId] = [b0].[Id]
+LEFT JOIN (
+    SELECT [c].[Id], [c].[Name], [c].[Slug]
+    FROM [Categories] AS [c]
+    WHERE [c].[DeletedAt] IS NULL
+) AS [c0] ON [p0].[CategoryId] = [c0].[Id]
+ORDER BY [p0].[InStock] DESC, [p0].[IsFeatured] DESC, [p0].[SalesCount] DESC, [p0].[CreatedAt] DESC
+2026-09-23 23:38:41.859 +05:00 [WRN] Slow request: GET /api/catalog/products took 2825 ms (budget 300 ms) → 200
+2026-09-23 23:38:44.279 +05:00 [INF] Executed DbCommand (389ms) [Parameters=[@term_contains='?' (Size = 400), @term_contains0='?' (Size = 500)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Products] AS [p]
+WHERE [p].[DeletedAt] IS NULL AND [p].[Status] = 1 AND ([p].[Name] LIKE @term_contains ESCAPE N'\' OR [p].[ShortDescription] LIKE @term_contains0 ESCAPE N'\')
+2026-09-23 23:38:44.704 +05:00 [INF] Executed DbCommand (410ms) [Parameters=[@term_contains='?' (Size = 400), @term_contains0='?' (Size = 500), @p='?' (DbType = Int32), @p3='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [p0].[Id], [p0].[Name], [p0].[Slug], [p0].[ShortDescription], COALESCE((
+    SELECT TOP(1) [p1].[Url]
+    FROM [ProductImages] AS [p1]
+    INNER JOIN (
+        SELECT [p2].[Id], [p2].[DeletedAt]
+        FROM [Products] AS [p2]
+        WHERE [p2].[DeletedAt] IS NULL
+    ) AS [p3] ON [p1].[ProductId] = [p3].[Id]
+    WHERE [p3].[DeletedAt] IS NULL AND [p0].[Id] = [p1].[ProductId] AND [p1].[IsPrimary] = CAST(1 AS bit)), (
+    SELECT TOP(1) [p4].[Url]
+    FROM [ProductImages] AS [p4]
+    INNER JOIN (
+        SELECT [p5].[Id], [p5].[DeletedAt]
+        FROM [Products] AS [p5]
+        WHERE [p5].[DeletedAt] IS NULL
+    ) AS [p6] ON [p4].[ProductId] = [p6].[Id]
+    WHERE [p6].[DeletedAt] IS NULL AND [p0].[Id] = [p4].[ProductId]
+    ORDER BY [p4].[DisplayOrder])), COALESCE((
+    SELECT TOP(1) [p7].[ThumbnailUrl]
+    FROM [ProductImages] AS [p7]
+    INNER JOIN (
+        SELECT [p8].[Id], [p8].[DeletedAt]
+        FROM [Products] AS [p8]
+        WHERE [p8].[DeletedAt] IS NULL
+    ) AS [p9] ON [p7].[ProductId] = [p9].[Id]
+    WHERE [p9].[DeletedAt] IS NULL AND [p0].[Id] = [p7].[ProductId] AND [p7].[IsPrimary] = CAST(1 AS bit)), (
+    SELECT TOP(1) [p10].[ThumbnailUrl]
+    FROM [ProductImages] AS [p10]
+    INNER JOIN (
+        SELECT [p11].[Id], [p11].[DeletedAt]
+        FROM [Products] AS [p11]
+        WHERE [p11].[DeletedAt] IS NULL
+    ) AS [p12] ON [p10].[ProductId] = [p12].[Id]
+    WHERE [p12].[DeletedAt] IS NULL AND [p0].[Id] = [p10].[ProductId]
+    ORDER BY [p10].[DisplayOrder])), COALESCE((
+    SELECT TOP(1) [p13].[BlurHash]
+    FROM [ProductImages] AS [p13]
+    INNER JOIN (
+        SELECT [p14].[Id], [p14].[DeletedAt]
+        FROM [Products] AS [p14]
+        WHERE [p14].[DeletedAt] IS NULL
+    ) AS [p15] ON [p13].[ProductId] = [p15].[Id]
+    WHERE [p15].[DeletedAt] IS NULL AND [p0].[Id] = [p13].[ProductId] AND [p13].[IsPrimary] = CAST(1 AS bit)), (
+    SELECT TOP(1) [p16].[BlurHash]
+    FROM [ProductImages] AS [p16]
+    INNER JOIN (
+        SELECT [p17].[Id], [p17].[DeletedAt]
+        FROM [Products] AS [p17]
+        WHERE [p17].[DeletedAt] IS NULL
+    ) AS [p18] ON [p16].[ProductId] = [p18].[Id]
+    WHERE [p18].[DeletedAt] IS NULL AND [p0].[Id] = [p16].[ProductId]
+    ORDER BY [p16].[DisplayOrder])), COALESCE((
+    SELECT TOP(1) [p19].[Width]
+    FROM [ProductImages] AS [p19]
+    INNER JOIN (
+        SELECT [p20].[Id], [p20].[DeletedAt]
+        FROM [Products] AS [p20]
+        WHERE [p20].[DeletedAt] IS NULL
+    ) AS [p21] ON [p19].[ProductId] = [p21].[Id]
+    WHERE [p21].[DeletedAt] IS NULL AND [p0].[Id] = [p19].[ProductId] AND [p19].[IsPrimary] = CAST(1 AS bit)), 0), COALESCE((
+    SELECT TOP(1) [p22].[Height]
+    FROM [ProductImages] AS [p22]
+    INNER JOIN (
+        SELECT [p23].[Id], [p23].[DeletedAt]
+        FROM [Products] AS [p23]
+        WHERE [p23].[DeletedAt] IS NULL
+    ) AS [p24] ON [p22].[ProductId] = [p24].[Id]
+    WHERE [p24].[DeletedAt] IS NULL AND [p0].[Id] = [p22].[ProductId] AND [p22].[IsPrimary] = CAST(1 AS bit)), 0), [p0].[MinPrice], [p0].[MaxPrice], [p0].[MaxCompareAtPrice], [p0].[InStock], [p0].[RatingAverage], [p0].[RatingCount], [p0].[Badge], [b0].[Name], [c0].[Name], [c0].[Slug], (
+    SELECT COUNT(*)
+    FROM [ProductVariants] AS [p25]
+    INNER JOIN (
+        SELECT [p26].[Id], [p26].[DeletedAt]
+        FROM [Products] AS [p26]
+        WHERE [p26].[DeletedAt] IS NULL
+    ) AS [p27] ON [p25].[ProductId] = [p27].[Id]
+    WHERE [p27].[DeletedAt] IS NULL AND [p0].[Id] = [p25].[ProductId] AND [p25].[IsActive] = CAST(1 AS bit)), COALESCE((
+    SELECT TOP(1) [p28].[Unit]
+    FROM [ProductVariants] AS [p28]
+    INNER JOIN (
+        SELECT [p29].[Id], [p29].[DeletedAt]
+        FROM [Products] AS [p29]
+        WHERE [p29].[DeletedAt] IS NULL
+    ) AS [p30] ON [p28].[ProductId] = [p30].[Id]
+    WHERE [p30].[DeletedAt] IS NULL AND [p0].[Id] = [p28].[ProductId] AND [p28].[IsDefault] = CAST(1 AS bit)), N'piece')
+FROM (
+    SELECT [p].[Id], [p].[Badge], [p].[BrandId], [p].[CategoryId], [p].[CreatedAt], [p].[InStock], [p].[IsFeatured], [p].[MaxCompareAtPrice], [p].[MaxPrice], [p].[MinPrice], [p].[Name], [p].[RatingAverage], [p].[RatingCount], [p].[SalesCount], [p].[ShortDescription], [p].[Slug]
+    FROM [Products] AS [p]
+    WHERE [p].[DeletedAt] IS NULL AND [p].[Status] = 1 AND ([p].[Name] LIKE @term_contains ESCAPE N'\' OR [p].[ShortDescription] LIKE @term_contains0 ESCAPE N'\')
+    ORDER BY [p].[InStock] DESC, [p].[IsFeatured] DESC, [p].[SalesCount] DESC, [p].[CreatedAt] DESC
+    OFFSET @p ROWS FETCH NEXT @p3 ROWS ONLY
+) AS [p0]
+LEFT JOIN (
+    SELECT [b].[Id], [b].[Name]
+    FROM [Brands] AS [b]
+    WHERE [b].[DeletedAt] IS NULL
+) AS [b0] ON [p0].[BrandId] = [b0].[Id]
+LEFT JOIN (
+    SELECT [c].[Id], [c].[Name], [c].[Slug]
+    FROM [Categories] AS [c]
+    WHERE [c].[DeletedAt] IS NULL
+) AS [c0] ON [p0].[CategoryId] = [c0].[Id]
+ORDER BY [p0].[InStock] DESC, [p0].[IsFeatured] DESC, [p0].[SalesCount] DESC, [p0].[CreatedAt] DESC
+2026-09-23 23:38:44.730 +05:00 [WRN] Slow request: GET /api/catalog/products took 866 ms (budget 300 ms) → 200
+2026-09-23 23:45:31.119 +05:00 [WRN] Entity 'Product' has a global query filter defined and is the required end of a relationship with the entity 'ProductImage'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-23 23:45:31.445 +05:00 [WRN] Entity 'Product' has a global query filter defined and is the required end of a relationship with the entity 'ProductOption'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-23 23:45:31.452 +05:00 [WRN] Entity 'Product' has a global query filter defined and is the required end of a relationship with the entity 'ProductTag'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-23 23:45:31.500 +05:00 [WRN] Entity 'Product' has a global query filter defined and is the required end of a relationship with the entity 'ProductVariant'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-23 23:45:36.760 +05:00 [INF] Executed DbCommand (172ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2026-09-23 23:45:36.853 +05:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-09-23 23:45:37.098 +05:00 [INF] Executed DbCommand (223ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_getapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session', @LockMode = 'Exclusive';
+SELECT @result
+2026-09-23 23:45:38.131 +05:00 [INF] Executed DbCommand (138ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+BEGIN
+    CREATE TABLE [__EFMigrationsHistory] (
+        [MigrationId] nvarchar(150) NOT NULL,
+        [ProductVersion] nvarchar(32) NOT NULL,
+        CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+    );
+END;
+2026-09-23 23:45:38.866 +05:00 [INF] Executed DbCommand (232ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2026-09-23 23:45:39.124 +05:00 [INF] Executed DbCommand (252ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2026-09-23 23:45:39.384 +05:00 [INF] Executed DbCommand (234ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2026-09-23 23:45:39.595 +05:00 [INF] No migrations were applied. The database is already up to date.
+2026-09-23 23:45:39.870 +05:00 [INF] Executed DbCommand (115ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_releaseapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session';
+SELECT @result
+2026-09-23 23:45:47.665 +05:00 [INF] Executed DbCommand (247ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Code], [p].[Description], [p].[DisplayName], [p].[DisplayOrder], [p].[Module]
+FROM [Permissions] AS [p]
+2026-09-23 23:45:50.687 +05:00 [INF] Executed DbCommand (294ms) [Parameters=[@normalizedName='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedAt], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName]
+FROM [Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2026-09-23 23:45:51.314 +05:00 [INF] Executed DbCommand (190ms) [Parameters=[@normalizedName='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedAt], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName]
+FROM [Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2026-09-23 23:45:51.476 +05:00 [INF] Executed DbCommand (158ms) [Parameters=[@normalizedName='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedAt], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName]
+FROM [Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2026-09-23 23:45:52.699 +05:00 [INF] Executed DbCommand (71ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedAt], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName]
+FROM [Roles] AS [r]
+WHERE [r].[Name] = N'Admin'
+2026-09-23 23:45:52.981 +05:00 [INF] Executed DbCommand (20ms) [Parameters=[@adminRole_Id='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [RolePermissions] AS [r]
+        WHERE [r].[RoleId] = @adminRole_Id) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2026-09-23 23:45:53.252 +05:00 [INF] Executed DbCommand (21ms) [Parameters=[@normalizedEmail='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [u].[Id], [u].[AccessFailedCount], [u].[AvatarUrl], [u].[ConcurrencyStamp], [u].[CreatedAt], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginAt], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[PreferredLanguage], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UpdatedAt], [u].[UserName]
+FROM [Users] AS [u]
+WHERE [u].[NormalizedEmail] = @normalizedEmail
+2026-09-23 23:45:53.698 +05:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Key]
+FROM [Settings] AS [s]
+2026-09-23 23:45:53.792 +05:00 [INF] Executed DbCommand (22ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [ShippingZones] AS [s]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2026-09-23 23:45:53.864 +05:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Slug]
+FROM [ContentPages] AS [c]
+2026-09-23 23:45:53.985 +05:00 [INF] Executed DbCommand (17ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Products] AS [p]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2026-09-23 23:45:53.997 +05:00 [INF] Catalogue already seeded; skipping
+2026-09-23 23:45:54.512 +05:00 [INF] Now listening on: http://localhost:5080
+2026-09-23 23:45:54.514 +05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-09-23 23:45:54.515 +05:00 [INF] Hosting environment: Development
+2026-09-23 23:45:54.515 +05:00 [INF] Content root path: D:\Projects\Store\src\Store.Api
+2026-09-23 23:45:57.790 +05:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 23:45:59.173 +05:00 [INF] Executed DbCommand (471ms) [Parameters=[@term_contains='?' (Size = 400), @term_contains0='?' (Size = 500)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Products] AS [p]
+WHERE [p].[DeletedAt] IS NULL AND [p].[Status] = 1 AND ([p].[Name] LIKE @term_contains ESCAPE N'\' OR [p].[ShortDescription] LIKE @term_contains0 ESCAPE N'\')
+2026-09-23 23:46:01.241 +05:00 [INF] Executed DbCommand (1,288ms) [Parameters=[@term_contains='?' (Size = 400), @term_contains0='?' (Size = 500), @p='?' (DbType = Int32), @p3='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [p0].[Id], [p0].[Name], [p0].[Slug], [p0].[ShortDescription], (
+    SELECT TOP(1) [p1].[Url]
+    FROM [ProductImages] AS [p1]
+    WHERE [p0].[Id] = [p1].[ProductId]
+    ORDER BY [p1].[IsPrimary] DESC, [p1].[DisplayOrder]), (
+    SELECT TOP(1) [p2].[ThumbnailUrl]
+    FROM [ProductImages] AS [p2]
+    WHERE [p0].[Id] = [p2].[ProductId]
+    ORDER BY [p2].[IsPrimary] DESC, [p2].[DisplayOrder]), (
+    SELECT TOP(1) [p3].[BlurHash]
+    FROM [ProductImages] AS [p3]
+    WHERE [p0].[Id] = [p3].[ProductId]
+    ORDER BY [p3].[IsPrimary] DESC, [p3].[DisplayOrder]), COALESCE((
+    SELECT TOP(1) [p4].[Width]
+    FROM [ProductImages] AS [p4]
+    WHERE [p0].[Id] = [p4].[ProductId]
+    ORDER BY [p4].[IsPrimary] DESC, [p4].[DisplayOrder]), 0), COALESCE((
+    SELECT TOP(1) [p5].[Height]
+    FROM [ProductImages] AS [p5]
+    WHERE [p0].[Id] = [p5].[ProductId]
+    ORDER BY [p5].[IsPrimary] DESC, [p5].[DisplayOrder]), 0), [p0].[MinPrice], [p0].[MaxPrice], [p0].[MaxCompareAtPrice], [p0].[InStock], [p0].[RatingAverage], [p0].[RatingCount], [p0].[Badge], [b0].[Name], [c0].[Name], [c0].[Slug], (
+    SELECT COUNT(*)
+    FROM [ProductVariants] AS [p6]
+    WHERE [p0].[Id] = [p6].[ProductId] AND [p6].[IsActive] = CAST(1 AS bit)), COALESCE((
+    SELECT TOP(1) [p7].[Unit]
+    FROM [ProductVariants] AS [p7]
+    WHERE [p0].[Id] = [p7].[ProductId] AND [p7].[IsDefault] = CAST(1 AS bit)), N'piece')
+FROM (
+    SELECT [p].[Id], [p].[Badge], [p].[BrandId], [p].[CategoryId], [p].[CreatedAt], [p].[InStock], [p].[IsFeatured], [p].[MaxCompareAtPrice], [p].[MaxPrice], [p].[MinPrice], [p].[Name], [p].[RatingAverage], [p].[RatingCount], [p].[SalesCount], [p].[ShortDescription], [p].[Slug]
+    FROM [Products] AS [p]
+    WHERE [p].[DeletedAt] IS NULL AND [p].[Status] = 1 AND ([p].[Name] LIKE @term_contains ESCAPE N'\' OR [p].[ShortDescription] LIKE @term_contains0 ESCAPE N'\')
+    ORDER BY [p].[InStock] DESC, [p].[IsFeatured] DESC, [p].[SalesCount] DESC, [p].[CreatedAt] DESC
+    OFFSET @p ROWS FETCH NEXT @p3 ROWS ONLY
+) AS [p0]
+LEFT JOIN (
+    SELECT [b].[Id], [b].[Name]
+    FROM [Brands] AS [b]
+    WHERE [b].[DeletedAt] IS NULL
+) AS [b0] ON [p0].[BrandId] = [b0].[Id]
+LEFT JOIN (
+    SELECT [c].[Id], [c].[Name], [c].[Slug]
+    FROM [Categories] AS [c]
+    WHERE [c].[DeletedAt] IS NULL
+) AS [c0] ON [p0].[CategoryId] = [c0].[Id]
+ORDER BY [p0].[InStock] DESC, [p0].[IsFeatured] DESC, [p0].[SalesCount] DESC, [p0].[CreatedAt] DESC
+2026-09-23 23:46:03.393 +05:00 [WRN] Slow request: GET /api/catalog/products took 5591 ms (budget 300 ms) → 200
+2026-09-23 23:46:06.375 +05:00 [INF] Executed DbCommand (558ms) [Parameters=[@term_contains='?' (Size = 400), @term_contains0='?' (Size = 500)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Products] AS [p]
+WHERE [p].[DeletedAt] IS NULL AND [p].[Status] = 1 AND ([p].[Name] LIKE @term_contains ESCAPE N'\' OR [p].[ShortDescription] LIKE @term_contains0 ESCAPE N'\')
+2026-09-23 23:46:07.018 +05:00 [INF] Executed DbCommand (625ms) [Parameters=[@term_contains='?' (Size = 400), @term_contains0='?' (Size = 500), @p='?' (DbType = Int32), @p3='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [p0].[Id], [p0].[Name], [p0].[Slug], [p0].[ShortDescription], (
+    SELECT TOP(1) [p1].[Url]
+    FROM [ProductImages] AS [p1]
+    WHERE [p0].[Id] = [p1].[ProductId]
+    ORDER BY [p1].[IsPrimary] DESC, [p1].[DisplayOrder]), (
+    SELECT TOP(1) [p2].[ThumbnailUrl]
+    FROM [ProductImages] AS [p2]
+    WHERE [p0].[Id] = [p2].[ProductId]
+    ORDER BY [p2].[IsPrimary] DESC, [p2].[DisplayOrder]), (
+    SELECT TOP(1) [p3].[BlurHash]
+    FROM [ProductImages] AS [p3]
+    WHERE [p0].[Id] = [p3].[ProductId]
+    ORDER BY [p3].[IsPrimary] DESC, [p3].[DisplayOrder]), COALESCE((
+    SELECT TOP(1) [p4].[Width]
+    FROM [ProductImages] AS [p4]
+    WHERE [p0].[Id] = [p4].[ProductId]
+    ORDER BY [p4].[IsPrimary] DESC, [p4].[DisplayOrder]), 0), COALESCE((
+    SELECT TOP(1) [p5].[Height]
+    FROM [ProductImages] AS [p5]
+    WHERE [p0].[Id] = [p5].[ProductId]
+    ORDER BY [p5].[IsPrimary] DESC, [p5].[DisplayOrder]), 0), [p0].[MinPrice], [p0].[MaxPrice], [p0].[MaxCompareAtPrice], [p0].[InStock], [p0].[RatingAverage], [p0].[RatingCount], [p0].[Badge], [b0].[Name], [c0].[Name], [c0].[Slug], (
+    SELECT COUNT(*)
+    FROM [ProductVariants] AS [p6]
+    WHERE [p0].[Id] = [p6].[ProductId] AND [p6].[IsActive] = CAST(1 AS bit)), COALESCE((
+    SELECT TOP(1) [p7].[Unit]
+    FROM [ProductVariants] AS [p7]
+    WHERE [p0].[Id] = [p7].[ProductId] AND [p7].[IsDefault] = CAST(1 AS bit)), N'piece')
+FROM (
+    SELECT [p].[Id], [p].[Badge], [p].[BrandId], [p].[CategoryId], [p].[CreatedAt], [p].[InStock], [p].[IsFeatured], [p].[MaxCompareAtPrice], [p].[MaxPrice], [p].[MinPrice], [p].[Name], [p].[RatingAverage], [p].[RatingCount], [p].[SalesCount], [p].[ShortDescription], [p].[Slug]
+    FROM [Products] AS [p]
+    WHERE [p].[DeletedAt] IS NULL AND [p].[Status] = 1 AND ([p].[Name] LIKE @term_contains ESCAPE N'\' OR [p].[ShortDescription] LIKE @term_contains0 ESCAPE N'\')
+    ORDER BY [p].[InStock] DESC, [p].[IsFeatured] DESC, [p].[SalesCount] DESC, [p].[CreatedAt] DESC
+    OFFSET @p ROWS FETCH NEXT @p3 ROWS ONLY
+) AS [p0]
+LEFT JOIN (
+    SELECT [b].[Id], [b].[Name]
+    FROM [Brands] AS [b]
+    WHERE [b].[DeletedAt] IS NULL
+) AS [b0] ON [p0].[BrandId] = [b0].[Id]
+LEFT JOIN (
+    SELECT [c].[Id], [c].[Name], [c].[Slug]
+    FROM [Categories] AS [c]
+    WHERE [c].[DeletedAt] IS NULL
+) AS [c0] ON [p0].[CategoryId] = [c0].[Id]
+ORDER BY [p0].[InStock] DESC, [p0].[IsFeatured] DESC, [p0].[SalesCount] DESC, [p0].[CreatedAt] DESC
+2026-09-23 23:46:07.046 +05:00 [WRN] Slow request: GET /api/catalog/products took 1296 ms (budget 300 ms) → 200
+2026-09-23 23:47:17.143 +05:00 [WRN] Entity 'Product' has a global query filter defined and is the required end of a relationship with the entity 'ProductImage'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-23 23:47:17.352 +05:00 [WRN] Entity 'Product' has a global query filter defined and is the required end of a relationship with the entity 'ProductOption'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-23 23:47:17.355 +05:00 [WRN] Entity 'Product' has a global query filter defined and is the required end of a relationship with the entity 'ProductTag'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-23 23:47:17.356 +05:00 [WRN] Entity 'Product' has a global query filter defined and is the required end of a relationship with the entity 'ProductVariant'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-23 23:47:24.140 +05:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-09-23 23:47:25.175 +05:00 [INF] No migrations were applied. The database is already up to date.
+2026-09-23 23:47:28.733 +05:00 [INF] Catalogue already seeded; skipping
+2026-09-23 23:47:29.141 +05:00 [INF] Now listening on: http://localhost:5080
+2026-09-23 23:47:29.143 +05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-09-23 23:47:29.144 +05:00 [INF] Hosting environment: Development
+2026-09-23 23:47:29.144 +05:00 [INF] Content root path: D:\Projects\Store\src\Store.Api
+2026-09-23 23:47:41.914 +05:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 23:47:42.606 +05:00 [WRN] Slow request: GET /health took 697 ms (budget 300 ms) → 200
+2026-09-23 23:47:44.636 +05:00 [WRN] Slow request: GET /api/catalog/products took 1738 ms (budget 300 ms) → 200
+2026-09-23 23:47:49.448 +05:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-09-23 23:47:49.587 +05:00 [WRN] Slow request: GET /api/catalog/products took 1056 ms (budget 300 ms) → 200
+2026-09-23 23:47:53.158 +05:00 [WRN] Slow request: GET /api/catalog/products took 376 ms (budget 300 ms) → 200
+2026-09-23 23:47:54.305 +05:00 [WRN] Slow request: GET /api/catalog/products took 602 ms (budget 300 ms) → 200
+2026-09-23 23:47:56.109 +05:00 [WRN] Slow request: GET /api/catalog/products took 1312 ms (budget 300 ms) → 200
+2026-09-23 23:47:57.247 +05:00 [WRN] Slow request: GET /api/catalog/products took 772 ms (budget 300 ms) → 200
+2026-09-23 23:47:58.223 +05:00 [WRN] Slow request: GET /api/catalog/products took 748 ms (budget 300 ms) → 200
+2026-09-23 23:47:59.281 +05:00 [WRN] Slow request: GET /api/catalog/products took 750 ms (budget 300 ms) → 200
+2026-09-23 23:48:00.375 +05:00 [WRN] Slow request: GET /api/catalog/products took 702 ms (budget 300 ms) → 200
+2026-09-23 23:48:01.433 +05:00 [WRN] Slow request: GET /api/catalog/products took 664 ms (budget 300 ms) → 200
+2026-09-23 23:48:02.517 +05:00 [WRN] Slow request: GET /api/catalog/products took 671 ms (budget 300 ms) → 200
+2026-09-23 23:48:03.515 +05:00 [WRN] Slow request: GET /api/catalog/products took 595 ms (budget 300 ms) → 200
+2026-09-23 23:48:05.187 +05:00 [WRN] Slow request: GET /api/catalog/products took 1219 ms (budget 300 ms) → 200
+2026-09-23 23:48:06.506 +05:00 [WRN] Slow request: GET /api/catalog/products took 809 ms (budget 300 ms) → 200
+2026-09-23 23:48:07.320 +05:00 [WRN] Slow request: GET /api/catalog/products took 605 ms (budget 300 ms) → 200
+2026-09-23 23:48:08.154 +05:00 [WRN] Slow request: GET /api/catalog/products took 587 ms (budget 300 ms) → 200
+2026-09-23 23:48:09.377 +05:00 [WRN] Slow request: GET /api/catalog/products took 811 ms (budget 300 ms) → 200
+2026-09-23 23:48:10.649 +05:00 [WRN] Slow request: GET /api/catalog/products took 737 ms (budget 300 ms) → 200
+2026-09-23 23:48:11.933 +05:00 [WRN] Slow request: GET /api/catalog/products took 851 ms (budget 300 ms) → 200
+2026-09-23 23:48:13.978 +05:00 [WRN] Slow request: GET /api/catalog/products took 1248 ms (budget 300 ms) → 200
+2026-09-23 23:48:15.876 +05:00 [WRN] Slow request: GET /api/catalog/products took 1027 ms (budget 300 ms) → 200
+2026-09-23 23:48:16.905 +05:00 [WRN] Slow request: GET /api/catalog/products took 803 ms (budget 300 ms) → 200
+2026-09-23 23:48:18.020 +05:00 [WRN] Slow request: GET /api/catalog/products took 792 ms (budget 300 ms) → 200
+2026-09-23 23:48:19.148 +05:00 [WRN] Slow request: GET /api/catalog/products took 883 ms (budget 300 ms) → 200
+2026-09-23 23:48:21.521 +05:00 [WRN] Slow request: GET /api/catalog/products took 1523 ms (budget 300 ms) → 200
+2026-09-23 23:48:23.172 +05:00 [WRN] Slow request: GET /api/catalog/products took 1029 ms (budget 300 ms) → 200
+2026-09-23 23:48:25.514 +05:00 [WRN] Slow request: GET /api/catalog/products took 1173 ms (budget 300 ms) → 200
+2026-09-23 23:48:26.791 +05:00 [WRN] Slow request: GET /api/catalog/products took 762 ms (budget 300 ms) → 200
+2026-09-23 23:48:28.402 +05:00 [WRN] Slow request: GET /api/catalog/products took 1133 ms (budget 300 ms) → 200
+2026-09-23 23:48:32.330 +05:00 [WRN] Slow request: GET /api/catalog/products took 371 ms (budget 300 ms) → 200
+2026-09-23 23:48:34.967 +05:00 [WRN] Slow request: GET /api/catalog/products took 704 ms (budget 300 ms) → 200
+2026-09-23 23:48:39.600 +05:00 [WRN] Slow request: GET /api/catalog/products took 827 ms (budget 300 ms) → 200
+2026-09-23 23:48:44.516 +05:00 [WRN] Slow request: GET /api/catalog/products took 629 ms (budget 300 ms) → 200
+2026-09-23 23:48:49.169 +05:00 [WRN] Slow request: GET /api/catalog/products took 764 ms (budget 300 ms) → 200
+2026-09-23 23:48:54.163 +05:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-09-23 23:48:54.997 +05:00 [WRN] Slow request: GET /api/catalog/products/shan-basmati-rice took 1144 ms (budget 300 ms) → 404
+2026-09-23 23:49:03.420 +05:00 [WRN] Slow request: GET /api/catalog/categories took 709 ms (budget 300 ms) → 200
+2026-09-23 23:53:18.054 +05:00 [WRN] Entity 'Product' has a global query filter defined and is the required end of a relationship with the entity 'ProductImage'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-23 23:53:18.252 +05:00 [WRN] Entity 'Product' has a global query filter defined and is the required end of a relationship with the entity 'ProductOption'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-23 23:53:18.253 +05:00 [WRN] Entity 'Product' has a global query filter defined and is the required end of a relationship with the entity 'ProductTag'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-23 23:53:18.255 +05:00 [WRN] Entity 'Product' has a global query filter defined and is the required end of a relationship with the entity 'ProductVariant'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-09-23 23:53:25.553 +05:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-09-23 23:53:26.889 +05:00 [INF] No migrations were applied. The database is already up to date.
+2026-09-23 23:53:33.132 +05:00 [INF] Catalogue already seeded; skipping
+2026-09-23 23:53:33.894 +05:00 [INF] Now listening on: http://localhost:5080
+2026-09-23 23:53:33.896 +05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-09-23 23:53:33.897 +05:00 [INF] Hosting environment: Development
+2026-09-23 23:53:33.897 +05:00 [INF] Content root path: D:\Projects\Store\src\Store.Api
+2026-09-23 23:53:36.664 +05:00 [WRN] Failed to determine the https port for redirect.
+2026-09-23 23:53:37.042 +05:00 [WRN] Slow request: GET /health took 370 ms (budget 300 ms) → 200
+2026-09-23 23:53:39.675 +05:00 [WRN] Slow request: GET /api/catalog/products took 2182 ms (budget 300 ms) → 200
+2026-09-23 23:53:46.108 +05:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-09-23 23:53:46.330 +05:00 [WRN] Slow request: GET /api/catalog/products took 1504 ms (budget 300 ms) → 200
+2026-09-23 23:53:48.717 +05:00 [WRN] Slow request: GET /api/catalog/products took 304 ms (budget 300 ms) → 200
+2026-09-23 23:53:52.355 +05:00 [WRN] Slow request: GET /api/catalog/products took 798 ms (budget 300 ms) → 200
+2026-09-23 23:53:53.985 +05:00 [WRN] Slow request: GET /api/catalog/products took 336 ms (budget 300 ms) → 200
+2026-09-23 23:53:57.998 +05:00 [WRN] Slow request: GET /api/catalog/products took 308 ms (budget 300 ms) → 200
+2026-09-23 23:54:00.420 +05:00 [WRN] Slow request: GET /api/catalog/products took 475 ms (budget 300 ms) → 200
+2026-09-23 23:54:08.783 +05:00 [WRN] Slow request: GET /api/catalog/products took 370 ms (budget 300 ms) → 200
+2026-09-23 23:54:14.886 +05:00 [WRN] Slow request: GET /api/catalog/products took 819 ms (budget 300 ms) → 200
+2026-09-23 23:54:19.731 +05:00 [WRN] Slow request: GET /api/catalog/products took 624 ms (budget 300 ms) → 200
+2026-09-23 23:54:24.408 +05:00 [WRN] Slow request: GET /api/catalog/products took 762 ms (budget 300 ms) → 200
+2026-09-23 23:54:29.866 +05:00 [WRN] Slow request: GET /api/catalog/products took 870 ms (budget 300 ms) → 200
+2026-09-23 23:54:31.503 +05:00 [WRN] Slow request: GET /api/catalog/products took 382 ms (budget 300 ms) → 200
+2026-09-23 23:54:32.585 +05:00 [WRN] Slow request: GET /api/catalog/products took 443 ms (budget 300 ms) → 200
+2026-09-23 23:54:36.036 +05:00 [WRN] Slow request: GET /api/catalog/products took 581 ms (budget 300 ms) → 200
+2026-09-23 23:54:40.862 +05:00 [WRN] Slow request: GET /api/catalog/products took 663 ms (budget 300 ms) → 200
+2026-09-23 23:54:46.617 +05:00 [WRN] Slow request: GET /api/catalog/products took 349 ms (budget 300 ms) → 200
+2026-09-23 23:54:56.156 +05:00 [WRN] Slow request: GET /api/catalog/categories took 466 ms (budget 300 ms) → 200
+2026-09-23 23:55:00.946 +05:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-09-23 23:55:01.739 +05:00 [WRN] Slow request: GET /api/catalog/products/tata-green-tea-bags took 1095 ms (budget 300 ms) → 200

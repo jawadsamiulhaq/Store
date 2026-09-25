@@ -1,0 +1,15 @@
+D:\Projects\Store\src\Store.Application\bin\Debug\net10.0\Store.Application.deps.json
+D:\Projects\Store\src\Store.Application\bin\Debug\net10.0\Store.Application.dll
+D:\Projects\Store\src\Store.Application\bin\Debug\net10.0\Store.Application.pdb
+D:\Projects\Store\src\Store.Application\bin\Debug\net10.0\Store.Domain.dll
+D:\Projects\Store\src\Store.Application\bin\Debug\net10.0\Store.Domain.pdb
+D:\Projects\Store\src\Store.Application\obj\Debug\net10.0\Store.Application.csproj.AssemblyReference.cache
+D:\Projects\Store\src\Store.Application\obj\Debug\net10.0\Store.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\Store\src\Store.Application\obj\Debug\net10.0\Store.Application.AssemblyInfoInputs.cache
+D:\Projects\Store\src\Store.Application\obj\Debug\net10.0\Store.Application.AssemblyInfo.cs
+D:\Projects\Store\src\Store.Application\obj\Debug\net10.0\Store.Application.csproj.CoreCompileInputs.cache
+D:\Projects\Store\src\Store.Application\obj\Debug\net10.0\Store.Ap.C122FA30.Up2Date
+D:\Projects\Store\src\Store.Application\obj\Debug\net10.0\Store.Application.dll
+D:\Projects\Store\src\Store.Application\obj\Debug\net10.0\refint\Store.Application.dll
+D:\Projects\Store\src\Store.Application\obj\Debug\net10.0\Store.Application.pdb
+D:\Projects\Store\src\Store.Application\obj\Debug\net10.0\ref\Store.Application.dll

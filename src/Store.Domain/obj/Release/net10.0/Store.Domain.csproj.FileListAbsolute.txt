@@ -1,0 +1,12 @@
+D:\Projects\Store\src\Store.Domain\bin\Release\net10.0\Store.Domain.deps.json
+D:\Projects\Store\src\Store.Domain\bin\Release\net10.0\Store.Domain.dll
+D:\Projects\Store\src\Store.Domain\bin\Release\net10.0\Store.Domain.pdb
+D:\Projects\Store\src\Store.Domain\obj\Release\net10.0\Store.Domain.csproj.AssemblyReference.cache
+D:\Projects\Store\src\Store.Domain\obj\Release\net10.0\Store.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\Store\src\Store.Domain\obj\Release\net10.0\Store.Domain.AssemblyInfoInputs.cache
+D:\Projects\Store\src\Store.Domain\obj\Release\net10.0\Store.Domain.AssemblyInfo.cs
+D:\Projects\Store\src\Store.Domain\obj\Release\net10.0\Store.Domain.csproj.CoreCompileInputs.cache
+D:\Projects\Store\src\Store.Domain\obj\Release\net10.0\Store.Domain.dll
+D:\Projects\Store\src\Store.Domain\obj\Release\net10.0\refint\Store.Domain.dll
+D:\Projects\Store\src\Store.Domain\obj\Release\net10.0\Store.Domain.pdb
+D:\Projects\Store\src\Store.Domain\obj\Release\net10.0\ref\Store.Domain.dll
