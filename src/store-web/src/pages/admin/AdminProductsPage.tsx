@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { api, qs } from '../../lib/api'
 import { Image } from '../../ui/Image'
-import { Badge, Input, Select } from '../../ui/primitives'
+import { Badge, ButtonLink, Input, Select } from '../../ui/primitives'
 import { FilterBar, PageHeader, Pager, TableEmpty, TableShell, TableSkeleton, Td, Th } from '../../features/admin/AdminTable'
 import { formatPrice, formatPriceRange } from '../../lib/format'
+import { useAuth } from '../../app/providers/AuthProvider'
 import type { Paged } from '../../lib/types'
 
 interface AdminProductRow {
@@ -29,6 +30,7 @@ interface AdminProductRow {
 const STATUS_LABEL: Record<number, string> = { 0: 'Draft', 1: 'Active', 2: 'Archived' }
 
 export default function AdminProductsPage() {
+  const { can } = useAuth()
   const [search, setSearch] = useState('')
   const [status, setStatus] = useState('')
   const [page, setPage] = useState(1)
@@ -47,6 +49,9 @@ export default function AdminProductsPage() {
       <PageHeader
         title="Products"
         description="The catalogue. Price and stock live on each product's variants."
+        action={
+          can('products.create') ? <ButtonLink to="/admin/products/new">New product</ButtonLink> : undefined
+        }
       />
 
       <FilterBar>
@@ -162,16 +167,26 @@ export default function AdminProductsPage() {
                   </Td>
 
                   <Td align="right">
-                    {/* Opens the public page. A full product editor is the natural next build;
-                        until then this at least lets staff verify what a shopper sees. */}
-                    <Link
-                      to={`/product/${product.slug}`}
-                      target="_blank"
-                      rel="noopener"
-                      className="text-xs font-medium text-saffron-600 hover:text-saffron-700"
-                    >
-                      View ↗
-                    </Link>
+                    <div className="flex items-center justify-end gap-1">
+                      {can('products.update') && (
+                        <Link
+                          to={`/admin/products/${product.id}/edit`}
+                          className="rounded-lg px-2 py-1 text-xs font-medium text-saffron-600 transition-colors hover:bg-ink-100 hover:text-saffron-700"
+                        >
+                          Edit
+                        </Link>
+                      )}
+
+                      {/* Opens the public page so staff can verify what a shopper actually sees. */}
+                      <Link
+                        to={`/product/${product.slug}`}
+                        target="_blank"
+                        rel="noopener"
+                        className="rounded-lg px-2 py-1 text-xs font-medium text-ink-500 transition-colors hover:bg-ink-100 hover:text-ink-700"
+                      >
+                        View ↗
+                      </Link>
+                    </div>
                   </Td>
                 </tr>
               ))}

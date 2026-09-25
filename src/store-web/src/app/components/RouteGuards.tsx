@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Navigate, useLocation } from 'react-router-dom'
+import { Link, Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../providers/AuthProvider'
 import { RouteFallback } from './RouteFallback'
 
@@ -50,6 +50,69 @@ export function RequireStaff({ children }: { children: ReactNode }) {
   }
 
   return <>{children}</>
+}
+
+/**
+ * Gates a whole admin route on one permission.
+ *
+ * `RequireStaff` only establishes that someone belongs in the admin area at all. Without this,
+ * a staff member with, say, only `orders.view` could still open the product editor and the user
+ * matrix — the pages would render, every request inside them would come back 403, and the result
+ * reads as a broken application rather than as a boundary.
+ *
+ * Like the other guards this decides what to *render*. The endpoints behind each page check the
+ * same permission again, which is where the actual enforcement lives.
+ */
+export function RequirePermission({
+  permission,
+  children,
+}: {
+  permission: string
+  children: ReactNode
+}) {
+  const { can, isLoading } = useAuth()
+
+  // The permission set arrives with the session, so deciding before it resolves would bounce
+  // every reload off the user's own pages.
+  if (isLoading) {
+    return <RouteFallback />
+  }
+
+  if (!can(permission)) {
+    return <Forbidden permission={permission} />
+  }
+
+  return <>{children}</>
+}
+
+/**
+ * Shown in place of a page the signed-in user may not open.
+ *
+ * Deliberately not a redirect: bouncing someone to the dashboard from a link a colleague sent
+ * them looks like the link is broken. Naming the missing permission is what lets them ask for
+ * the right thing.
+ */
+function Forbidden({ permission }: { permission: string }) {
+  return (
+    <div className="mx-auto max-w-md py-16 text-center">
+      <h1 className="font-display text-xl font-bold text-ink-900">You don’t have access to this</h1>
+
+      <p className="mt-2 text-sm leading-relaxed text-ink-500">
+        This page needs the{' '}
+        <code className="rounded bg-ink-100 px-1.5 py-0.5 font-mono text-xs text-ink-700">
+          {permission}
+        </code>{' '}
+        permission. Ask someone who can administer roles to grant it.
+      </p>
+
+      <Link
+        to="/admin"
+        className="mt-5 inline-block text-sm font-medium text-saffron-600 hover:text-saffron-700"
+      >
+        Back to the dashboard
+      </Link>
+    </div>
+  )
 }
 
 /**

@@ -15,6 +15,9 @@ public interface IProductService
     Task<IReadOnlyList<ProductCardDto>> GetRelatedAsync(Guid productId, int take = 8, CancellationToken ct = default);
     Task<IReadOnlyList<SearchSuggestionDto>> SuggestAsync(string term, int take = 8, CancellationToken ct = default);
     Task<PagedResult<AdminProductListItemDto>> AdminListAsync(ProductQuery query, CancellationToken ct = default);
+
+    /// <summary>Loads a product in the shape the admin editor round-trips, drafts included.</summary>
+    Task<Result<AdminProductDetailDto>> GetForEditAsync(Guid id, CancellationToken ct = default);
     Task<Result<ProductDetailDto>> CreateAsync(CreateProductRequest request, CancellationToken ct = default);
     Task<Result<ProductDetailDto>> UpdateAsync(Guid id, UpdateProductRequest request, CancellationToken ct = default);
     Task<Result> DeleteAsync(Guid id, CancellationToken ct = default);
@@ -517,6 +520,66 @@ public sealed class ProductService(
         return new PagedResult<AdminProductListItemDto>(items, query.Page, query.PageSize, total);
     }
 
+    /// <summary>
+    /// The editor's read. One query, projected in SQL like every other read in this class.
+    /// </summary>
+    /// <remarks>
+    /// Ignores <see cref="ProductStatus"/> entirely — a draft is precisely the thing an editor
+    /// most needs to open, and the storefront read filters drafts out.
+    /// <para>
+    /// <c>HasHistory</c> is two correlated EXISTS subqueries rather than counts: the editor only
+    /// needs to know <i>whether</i> a variant can still be removed outright, and EXISTS stops at
+    /// the first row where COUNT would scan every order line the variant ever appeared on.
+    /// </para>
+    /// </remarks>
+    public async Task<Result<AdminProductDetailDto>> GetForEditAsync(
+        Guid id, CancellationToken ct = default)
+    {
+        var product = await db.Products
+            .AsNoTracking()
+            .Where(p => p.Id == id)
+            .Select(p => new AdminProductDetailDto(
+                p.Id, p.Name, p.Slug, p.ShortDescription, p.Description,
+                p.CategoryId, p.BrandId, p.Status, p.Badge,
+                p.IsFeatured, p.FeaturedOrder, p.IsTrending, p.TrendingOrder, p.IsHero, p.HeroOrder,
+                p.MetaTitle, p.MetaDescription, p.PublishedAt,
+                p.ProductTags.Select(pt => pt.Tag.Name).ToList(),
+                p.Options
+                    .OrderBy(o => o.DisplayOrder)
+                    .Select(o => new AdminProductOptionDto(
+                        o.Id, o.Name, o.DisplayOrder,
+                        o.Values
+                            .OrderBy(v => v.DisplayOrder)
+                            .Select(v => new AdminProductOptionValueDto(v.Id, v.Value, v.HexColor, v.DisplayOrder))
+                            .ToList()))
+                    .ToList(),
+                p.Variants
+                    .OrderBy(v => v.DisplayOrder)
+                    .Select(v => new AdminVariantDto(
+                        v.Id, v.Name, v.Sku, v.Barcode,
+                        v.Price, v.CompareAtPrice, v.CostPrice,
+                        v.StockQuantity, v.ReservedQuantity, v.LowStockThreshold,
+                        v.TrackInventory, v.AllowBackorder,
+                        v.WeightGrams, v.Unit, v.UnitValue,
+                        v.IsDefault, v.IsActive, v.DisplayOrder,
+                        db.OrderItems.Any(oi => oi.ProductVariantId == v.Id)
+                            || db.InventoryTransactions.Any(t => t.ProductVariantId == v.Id),
+                        v.OptionValues
+                            .Select(ov => new VariantOptionSelection(ov.OptionValue.Option.Name, ov.OptionValue.Value))
+                            .ToList()))
+                    .ToList(),
+                p.Images
+                    .OrderByDescending(i => i.IsPrimary).ThenBy(i => i.DisplayOrder)
+                    .Select(i => new ImageDto(i.Id, i.Url, i.ThumbnailUrl, i.AltText,
+                        i.Width, i.Height, i.BlurHash, i.IsPrimary, i.DisplayOrder))
+                    .ToList()))
+            .FirstOrDefaultAsync(ct);
+
+        return product is null
+            ? Result<AdminProductDetailDto>.NotFound("Product not found.")
+            : Result<AdminProductDetailDto>.Success(product);
+    }
+
     public async Task<Result<ProductDetailDto>> CreateAsync(
         CreateProductRequest request, CancellationToken ct = default)
     {
@@ -589,7 +652,7 @@ public sealed class ProductService(
         db.Products.Add(product);
         await db.SaveChangesAsync(ct);
 
-        await SeedInitialStockLedgerAsync(product, ct);
+        await SeedInitialStockLedgerAsync(product.Variants, "Opening balance on product creation", ct);
         await InvalidateAsync(ct);
 
         logger.LogInformation(
@@ -602,14 +665,25 @@ public sealed class ProductService(
     public async Task<Result<ProductDetailDto>> UpdateAsync(
         Guid id, UpdateProductRequest request, CancellationToken ct = default)
     {
+        // The editor saves the whole product, so the whole graph is loaded. A name-only update
+        // sends null for options/variants/images and pays for these includes without using them,
+        // which is the price of one code path instead of two.
         var product = await db.Products
-            .Include(p => p.Variants)
+            .Include(p => p.Variants).ThenInclude(v => v.OptionValues)
+            .Include(p => p.Options).ThenInclude(o => o.Values)
+            .Include(p => p.Images)
             .Include(p => p.ProductTags)
             .FirstOrDefaultAsync(p => p.Id == id, ct);
 
         if (product is null)
         {
             return Result<ProductDetailDto>.NotFound("Product not found.");
+        }
+
+        if (request.Variants is { Count: 0 })
+        {
+            return Result<ProductDetailDto>.Failure(
+                "A product needs at least one variant, because price and stock live on the variant.");
         }
 
         var slug = await SlugGenerator.GenerateUniqueAsync(
@@ -649,9 +723,44 @@ public sealed class ProductService(
             await AttachTagsAsync(product, request.Tags, ct);
         }
 
+        // Options first: a variant's option selections are resolved against them by label, so the
+        // axes and their values have to exist in the graph before the variants are reconciled.
+        if (request.Options is not null)
+        {
+            SyncOptions(product, request.Options);
+        }
+
+        List<ProductVariant> newVariants = [];
+
+        if (request.Variants is not null)
+        {
+            var sync = await SyncVariantsAsync(product, request.Variants, ct);
+
+            if (!sync.Succeeded)
+            {
+                return Result<ProductDetailDto>.Failure(sync.Error!);
+            }
+
+            newVariants = sync.Required;
+        }
+
+        if (request.Images is not null)
+        {
+            SyncImages(product, request.Images);
+        }
+
         RecalculateAggregates(product);
 
         await db.SaveChangesAsync(ct);
+
+        // Opening balances for variants added in this save. Runs after the insert because the
+        // ledger rows reference variant ids, and it mirrors what CreateAsync does for a new
+        // product — a variant that appears with stock must be explained by the ledger too.
+        if (newVariants.Count > 0)
+        {
+            await SeedInitialStockLedgerAsync(newVariants, "Opening balance on variant creation", ct);
+        }
+
         await InvalidateAsync(ct);
 
         return await GetByIdForAdminAsync(id, ct);
@@ -706,6 +815,328 @@ public sealed class ProductService(
             DisplayOrder = request.DisplayOrder == 0 ? index : request.DisplayOrder,
             IsActive = true
         };
+    }
+
+    // ------------------------------------------------------------------------------------------
+    // Editor reconciliation
+    //
+    // All three follow the same contract: the incoming list is the complete desired state. A row
+    // carrying an id is matched and updated, a row without one is created, and anything the client
+    // did not send is removed. The alternative — separate add/update/delete endpoints per child
+    // collection — would make an editor that changes four things in one screen issue a dozen
+    // requests and have no way to roll them back together.
+    // ------------------------------------------------------------------------------------------
+
+    /// <summary>Reconciles a product's option axes and their values against the desired state.</summary>
+    private void SyncOptions(Product product, IReadOnlyList<SaveProductOptionRequest> incoming)
+    {
+        var keptOptionIds = incoming.Where(o => o.Id is not null).Select(o => o.Id!.Value).ToHashSet();
+
+        foreach (var option in product.Options.Where(o => !keptOptionIds.Contains(o.Id)).ToList())
+        {
+            // The join rows go first: VariantOptionValue → ProductOptionValue is Restrict (two
+            // cascade paths into the join table is not something SQL Server will accept), so the
+            // value delete fails on a foreign key unless its links are removed explicitly.
+            RemoveOptionValues(product, option.Values.ToList());
+            product.Options.Remove(option);
+            db.ProductOptions.Remove(option);
+        }
+
+        foreach (var (request, index) in incoming.Select((o, i) => (o, i)))
+        {
+            var option = request.Id is { } optionId
+                ? product.Options.FirstOrDefault(o => o.Id == optionId)
+                : null;
+
+            if (option is null)
+            {
+                option = new ProductOption { ProductId = product.Id };
+                product.Options.Add(option);
+            }
+
+            option.Name = request.Name.Trim();
+            option.DisplayOrder = request.DisplayOrder == 0 ? index : request.DisplayOrder;
+
+            var keptValueIds = request.Values.Where(v => v.Id is not null).Select(v => v.Id!.Value).ToHashSet();
+
+            RemoveOptionValues(product, option.Values.Where(v => !keptValueIds.Contains(v.Id)).ToList(), option);
+
+            foreach (var (valueRequest, valueIndex) in request.Values.Select((v, i) => (v, i)))
+            {
+                var value = valueRequest.Id is { } valueId
+                    ? option.Values.FirstOrDefault(v => v.Id == valueId)
+                    : null;
+
+                if (value is null)
+                {
+                    value = new ProductOptionValue { OptionId = option.Id };
+                    option.Values.Add(value);
+                }
+
+                value.Value = valueRequest.Value.Trim();
+                value.HexColor = valueRequest.HexColor;
+                value.DisplayOrder = valueRequest.DisplayOrder == 0 ? valueIndex : valueRequest.DisplayOrder;
+            }
+        }
+    }
+
+    private void RemoveOptionValues(
+        Product product, List<ProductOptionValue> values, ProductOption? owner = null)
+    {
+        if (values.Count == 0)
+        {
+            return;
+        }
+
+        var valueIds = values.Select(v => v.Id).ToHashSet();
+
+        // Only this product's variants can link to this product's option values, and all of them
+        // are loaded, so walking the graph finds every link without another round trip.
+        foreach (var variant in product.Variants)
+        {
+            foreach (var link in variant.OptionValues.Where(l => valueIds.Contains(l.OptionValueId)).ToList())
+            {
+                variant.OptionValues.Remove(link);
+                db.VariantOptionValues.Remove(link);
+            }
+        }
+
+        foreach (var value in values)
+        {
+            owner?.Values.Remove(value);
+            db.ProductOptionValues.Remove(value);
+        }
+    }
+
+    /// <summary>
+    /// Reconciles variants. Returns the ones created, so the caller can seed their stock ledger.
+    /// </summary>
+    /// <remarks>
+    /// A variant the client dropped is <b>deactivated rather than deleted</b> once it has any
+    /// history. Order lines and the stock ledger both point at it, and a hard delete would either
+    /// fail on a foreign key or quietly take a customer's order history with it. Deactivating
+    /// removes it from the storefront, which is what the admin actually meant.
+    /// </remarks>
+    private async Task<Result<List<ProductVariant>>> SyncVariantsAsync(
+        Product product, IReadOnlyList<SaveVariantRequest> incoming, CancellationToken ct)
+    {
+        var keptIds = incoming.Where(v => v.Id is not null).Select(v => v.Id!.Value).ToHashSet();
+        var dropped = product.Variants.Where(v => !keptIds.Contains(v.Id)).ToList();
+
+        if (dropped.Count > 0)
+        {
+            var droppedIds = dropped.Select(v => v.Id).ToList();
+
+            var withHistory = await db.OrderItems
+                .Where(oi => oi.ProductVariantId != null && droppedIds.Contains(oi.ProductVariantId!.Value))
+                .Select(oi => oi.ProductVariantId!.Value)
+                .Union(db.InventoryTransactions
+                    .Where(t => droppedIds.Contains(t.ProductVariantId))
+                    .Select(t => t.ProductVariantId))
+                .ToListAsync(ct);
+
+            var historical = withHistory.ToHashSet();
+
+            foreach (var variant in dropped)
+            {
+                if (historical.Contains(variant.Id))
+                {
+                    variant.IsActive = false;
+                    variant.IsDefault = false;
+                }
+                else
+                {
+                    db.VariantOptionValues.RemoveRange(variant.OptionValues);
+                    product.Variants.Remove(variant);
+                    db.ProductVariants.Remove(variant);
+                }
+            }
+        }
+
+        // Option values are addressed by label, so build the lookup once rather than per variant.
+        var valuesByLabel = product.Options
+            .SelectMany(o => o.Values.Select(v => (Option: o.Name, v.Value, Id: v.Id)))
+            .ToDictionary(x => OptionKey(x.Option, x.Value), x => x.Id);
+
+        var created = new List<ProductVariant>();
+
+        foreach (var (request, index) in incoming.Select((v, i) => (v, i)))
+        {
+            var variant = request.Id is { } variantId
+                ? product.Variants.FirstOrDefault(v => v.Id == variantId)
+                : null;
+
+            if (variant is null)
+            {
+                variant = await BuildVariantAsync(
+                    new CreateVariantRequest(
+                        request.Name, request.Sku, request.Barcode, request.Price,
+                        request.CompareAtPrice, request.CostPrice, request.StockQuantity,
+                        request.LowStockThreshold, request.TrackInventory, request.AllowBackorder,
+                        request.WeightGrams, request.Unit, request.UnitValue,
+                        request.IsDefault, request.DisplayOrder),
+                    product.Name, index, ct);
+
+                variant.ProductId = product.Id;
+                product.Variants.Add(variant);
+                created.Add(variant);
+            }
+            else
+            {
+                variant.Name = request.Name;
+                variant.Barcode = request.Barcode;
+                variant.Price = request.Price;
+                variant.CompareAtPrice = request.CompareAtPrice;
+                variant.CostPrice = request.CostPrice;
+                variant.LowStockThreshold = request.LowStockThreshold;
+                variant.TrackInventory = request.TrackInventory;
+                variant.AllowBackorder = request.AllowBackorder;
+                variant.WeightGrams = request.WeightGrams;
+                variant.Unit = string.IsNullOrWhiteSpace(request.Unit) ? "piece" : request.Unit;
+                variant.UnitValue = request.UnitValue;
+                variant.IsActive = request.IsActive;
+                variant.IsDefault = request.IsDefault;
+                variant.DisplayOrder = request.DisplayOrder == 0 ? index : request.DisplayOrder;
+
+                // StockQuantity is deliberately not assigned here. Stock moves through the
+                // inventory endpoints, which write a ledger row saying who moved it and why; a
+                // product form that set it directly would leave the ledger unable to account for
+                // the difference. An editable SKU is refused for the same reason — it is printed
+                // on shelf labels and quoted on past orders.
+                if (!string.IsNullOrWhiteSpace(request.Sku))
+                {
+                    var sku = request.Sku.Trim().ToUpperInvariant();
+
+                    if (!string.Equals(sku, variant.Sku, StringComparison.Ordinal))
+                    {
+                        if (await db.ProductVariants.AnyAsync(v => v.Sku == sku && v.Id != variant.Id, ct))
+                        {
+                            return Result<List<ProductVariant>>.Failure($"The SKU {sku} is already in use.");
+                        }
+
+                        variant.Sku = sku;
+                    }
+                }
+            }
+
+            SyncVariantOptionValues(variant, request.OptionValues, valuesByLabel);
+        }
+
+        var active = product.Variants.Where(v => v.IsActive).ToList();
+
+        if (active.Count == 0)
+        {
+            return Result<List<ProductVariant>>.Failure(
+                "At least one variant must stay active, otherwise the product has no price and cannot be sold.");
+        }
+
+        // Exactly one default, always. More than one and the product page picks arbitrarily;
+        // none and it has nothing to preselect.
+        var defaults = active.Where(v => v.IsDefault).ToList();
+
+        if (defaults.Count != 1)
+        {
+            foreach (var variant in product.Variants)
+            {
+                variant.IsDefault = false;
+            }
+
+            (defaults.FirstOrDefault() ?? active[0]).IsDefault = true;
+        }
+
+        return Result<List<ProductVariant>>.Success(created);
+    }
+
+    private void SyncVariantOptionValues(
+        ProductVariant variant,
+        IReadOnlyList<VariantOptionSelection>? selections,
+        Dictionary<string, Guid> valuesByLabel)
+    {
+        if (selections is null)
+        {
+            return;
+        }
+
+        var desired = selections
+            .Select(s => valuesByLabel.TryGetValue(OptionKey(s.Option, s.Value), out var valueId) ? valueId : (Guid?)null)
+            .Where(valueId => valueId is not null)
+            .Select(valueId => valueId!.Value)
+            .ToHashSet();
+
+        foreach (var link in variant.OptionValues.Where(l => !desired.Contains(l.OptionValueId)).ToList())
+        {
+            variant.OptionValues.Remove(link);
+            db.VariantOptionValues.Remove(link);
+        }
+
+        foreach (var valueId in desired.Where(valueId => variant.OptionValues.All(l => l.OptionValueId != valueId)))
+        {
+            variant.OptionValues.Add(new VariantOptionValue
+            {
+                VariantId = variant.Id,
+                OptionValueId = valueId
+            });
+        }
+    }
+
+    /// <summary>Case- and whitespace-insensitive key for matching an option value by label.</summary>
+    private static string OptionKey(string option, string value) =>
+        $"{option.Trim().ToLowerInvariant()}\u0000{value.Trim().ToLowerInvariant()}";
+
+    /// <summary>Reconciles the image set, guaranteeing exactly one primary.</summary>
+    private void SyncImages(Product product, IReadOnlyList<SaveProductImageRequest> incoming)
+    {
+        var keptIds = incoming.Where(i => i.Id is not null).Select(i => i.Id!.Value).ToHashSet();
+
+        foreach (var image in product.Images.Where(i => !keptIds.Contains(i.Id)).ToList())
+        {
+            product.Images.Remove(image);
+            db.ProductImages.Remove(image);
+        }
+
+        // The entity each request maps to is recorded as we go. Matching them back up afterwards
+        // by id would miss a freshly added image, whose request carries no id — which is exactly
+        // the case where someone uploads a photo and ticks it as the primary one.
+        ProductImage? primary = null;
+        ProductImage? first = null;
+
+        foreach (var (request, index) in incoming.Select((img, i) => (img, i)))
+        {
+            var image = request.Id is { } imageId
+                ? product.Images.FirstOrDefault(i => i.Id == imageId)
+                : null;
+
+            if (image is null)
+            {
+                image = new ProductImage { ProductId = product.Id };
+                product.Images.Add(image);
+            }
+
+            image.Url = request.Url;
+            image.ThumbnailUrl = request.ThumbnailUrl;
+            image.AltText = string.IsNullOrWhiteSpace(request.AltText) ? product.Name : request.AltText;
+            image.Width = request.Width;
+            image.Height = request.Height;
+            image.BlurHash = request.BlurHash;
+            image.DisplayOrder = request.DisplayOrder == 0 ? index : request.DisplayOrder;
+            image.IsPrimary = false;
+
+            first ??= image;
+
+            // First wins, so a payload that marks two primaries resolves rather than being rejected.
+            if (request.IsPrimary)
+            {
+                primary ??= image;
+            }
+        }
+
+        // Falls back to the first image, so a set with no primary still has one.
+        var chosen = primary ?? first;
+
+        if (chosen is not null)
+        {
+            chosen.IsPrimary = true;
+        }
     }
 
     /// <summary>
@@ -774,9 +1205,10 @@ public sealed class ProductService(
     }
 
     /// <summary>Records the opening balance so the stock ledger explains every unit from day one.</summary>
-    private async Task SeedInitialStockLedgerAsync(Product product, CancellationToken ct)
+    private async Task SeedInitialStockLedgerAsync(
+        IEnumerable<ProductVariant> variants, string note, CancellationToken ct)
     {
-        var openings = product.Variants
+        var openings = variants
             .Where(v => v.StockQuantity != 0)
             .Select(v => new Domain.Inventory.InventoryTransaction
             {
@@ -784,7 +1216,7 @@ public sealed class ProductService(
                 Type = InventoryTransactionType.Initial,
                 QuantityChange = v.StockQuantity,
                 QuantityAfter = v.StockQuantity,
-                Note = "Opening balance on product creation"
+                Note = note
             })
             .ToList();
 

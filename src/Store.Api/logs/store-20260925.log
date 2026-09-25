@@ -15,3 +15,71 @@
 2026-09-25 13:06:12.499 +05:00 [WRN] Slow request: GET /api/admin/reports/dashboard took 394 ms (budget 300 ms) → 200
 2026-09-25 13:07:04.022 +05:00 [WRN] Slow request: GET /api/catalog/products took 889 ms (budget 300 ms) → 200
 2026-09-25 13:07:09.996 +05:00 [WRN] Slow request: GET /api/catalog/products took 516 ms (budget 300 ms) → 200
+2026-09-25 13:09:54.596 +05:00 [WRN] Slow request: GET /api/catalog/products took 670 ms (budget 300 ms) → 200
+2026-09-25 13:10:04.486 +05:00 [WRN] Slow request: GET /api/catalog/products took 2362 ms (budget 300 ms) → 200
+2026-09-25 13:19:22.879 +05:00 [WRN] Slow request: GET /api/catalog/products took 391 ms (budget 300 ms) → 200
+2026-09-25 13:19:23.012 +05:00 [WRN] Slow request: GET /api/catalog/products took 515 ms (budget 300 ms) → 200
+2026-09-25 13:19:23.317 +05:00 [WRN] Slow request: GET /api/catalog/products took 842 ms (budget 300 ms) → 200
+2026-09-25 13:21:16.621 +05:00 [WRN] Slow request: GET /api/catalog/products took 539 ms (budget 300 ms) → 200
+2026-09-25 13:21:16.849 +05:00 [WRN] Slow request: GET /api/catalog/products took 772 ms (budget 300 ms) → 200
+2026-09-25 13:21:16.859 +05:00 [WRN] Slow request: GET /api/catalog/products took 789 ms (budget 300 ms) → 200
+2026-09-25 13:21:18.057 +05:00 [WRN] Slow request: GET /api/catalog/products took 317 ms (budget 300 ms) → 200
+2026-09-25 13:21:18.200 +05:00 [WRN] Slow request: GET /api/catalog/products took 469 ms (budget 300 ms) → 200
+2026-09-25 13:21:18.380 +05:00 [WRN] Slow request: GET /api/catalog/products took 647 ms (budget 300 ms) → 200
+2026-09-25 13:22:30.811 +05:00 [INF] A transient exception occurred during execution. The operation will be retried after 0ms.
+Microsoft.Data.SqlClient.SqlException (0x80131904): The request failed to run because the batch is aborted, this can be caused by abort signal sent from client, or another request is running in the same session, which makes the session busy.
+Operation cancelled by user.
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+ClientConnectionId:240e1ed4-b995-41a5-a8ff-e7ade883ec56
+Error Number:3980,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): The request failed to run because the batch is aborted, this can be caused by abort signal sent from client, or another request is running in the same session, which makes the session busy.
+Operation cancelled by user.
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+ClientConnectionId:240e1ed4-b995-41a5-a8ff-e7ade883ec56
+Error Number:3980,State:1,Class:16
+2026-09-25 13:22:30.837 +05:00 [WRN] Slow request: GET /api/cart took 638 ms (budget 300 ms) → 200
+2026-09-25 13:22:32.849 +05:00 [WRN] Slow request: GET /api/catalog/products took 646 ms (budget 300 ms) → 200
+2026-09-25 13:22:32.855 +05:00 [WRN] Slow request: GET /api/catalog/products took 642 ms (budget 300 ms) → 200
+2026-09-25 13:22:32.862 +05:00 [WRN] Slow request: GET /api/catalog/products took 645 ms (budget 300 ms) → 200
+2026-09-25 13:31:22.498 +05:00 [WRN] Slow request: GET /api/cart took 620 ms (budget 300 ms) → 200
+2026-09-25 13:31:24.924 +05:00 [WRN] Slow request: GET /api/cart took 513 ms (budget 300 ms) → 200
+2026-09-25 13:31:25.049 +05:00 [WRN] Slow request: POST /api/auth/refresh took 687 ms (budget 300 ms) → 200
+2026-09-25 13:31:25.053 +05:00 [WRN] Slow request: POST /api/auth/refresh took 690 ms (budget 300 ms) → 200
+2026-09-25 13:31:25.696 +05:00 [WRN] Slow request: GET /api/catalog/products took 912 ms (budget 300 ms) → 200
+2026-09-25 13:31:26.225 +05:00 [WRN] Slow request: GET /api/catalog/products took 1439 ms (budget 300 ms) → 200
+2026-09-25 13:31:26.883 +05:00 [WRN] Slow request: GET /api/catalog/products took 2099 ms (budget 300 ms) → 200
+2026-09-25 13:31:29.894 +05:00 [WRN] Slow request: POST /api/auth/refresh took 693 ms (budget 300 ms) → 200
+2026-09-25 13:31:29.914 +05:00 [WRN] Slow request: POST /api/auth/refresh took 706 ms (budget 300 ms) → 200
+2026-09-25 13:32:49.566 +05:00 [WRN] Slow request: POST /api/auth/refresh took 469 ms (budget 300 ms) → 200
+2026-09-25 13:32:49.698 +05:00 [WRN] Slow request: POST /api/auth/refresh took 604 ms (budget 300 ms) → 200
+2026-09-25 13:32:51.475 +05:00 [WRN] Slow request: GET /api/catalog/products took 726 ms (budget 300 ms) → 200
+2026-09-25 13:32:51.560 +05:00 [WRN] Slow request: GET /api/catalog/products took 814 ms (budget 300 ms) → 200
+2026-09-25 13:32:52.021 +05:00 [WRN] Slow request: GET /api/catalog/products took 1274 ms (budget 300 ms) → 200
+2026-09-25 13:32:52.726 +05:00 [WRN] Slow request: GET /api/admin/products took 362 ms (budget 300 ms) → 200
+2026-09-25 13:32:53.980 +05:00 [WRN] Slow request: GET /api/catalog/products took 349 ms (budget 300 ms) → 200
+2026-09-25 13:32:54.066 +05:00 [WRN] Slow request: GET /api/catalog/products took 477 ms (budget 300 ms) → 200
+2026-09-25 13:35:27.389 +05:00 [WRN] Slow request: GET /api/catalog/products took 378 ms (budget 300 ms) → 200
+2026-09-25 13:35:27.482 +05:00 [WRN] Slow request: GET /api/catalog/products took 466 ms (budget 300 ms) → 200
+2026-09-25 13:57:37.229 +05:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.

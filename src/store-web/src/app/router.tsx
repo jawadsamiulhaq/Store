@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react'
 import { createBrowserRouter, Outlet } from 'react-router-dom'
 import { StoreLayout } from './layouts/StoreLayout'
 import { RouteFallback } from './components/RouteFallback'
-import { RequireAuth, RequireStaff } from './components/RouteGuards'
+import { RequireAuth, RequirePermission, RequireStaff } from './components/RouteGuards'
 
 /*
   Route-level code splitting.
@@ -44,6 +44,9 @@ const WishlistPage = lazy(() => import('../pages/account/WishlistPage'))
 const AdminLayout = lazy(() => import('./layouts/AdminLayout'))
 const DashboardPage = lazy(() => import('../pages/admin/DashboardPage'))
 const AdminProductsPage = lazy(() => import('../pages/admin/AdminProductsPage'))
+const AdminProductFormPage = lazy(() => import('../pages/admin/AdminProductFormPage'))
+const AdminCategoriesPage = lazy(() => import('../pages/admin/AdminCategoriesPage'))
+const AdminBrandsPage = lazy(() => import('../pages/admin/AdminBrandsPage'))
 const AdminOrdersPage = lazy(() => import('../pages/admin/AdminOrdersPage'))
 const AdminInventoryPage = lazy(() => import('../pages/admin/AdminInventoryPage'))
 const AdminCustomersPage = lazy(() => import('../pages/admin/AdminCustomersPage'))
@@ -55,6 +58,11 @@ const AdminSettingsPage = lazy(() => import('../pages/admin/AdminSettingsPage'))
 /** Wraps a lazy element in the shared fallback so each route does not repeat the boilerplate. */
 function withSuspense(element: React.ReactNode) {
   return <Suspense fallback={<RouteFallback />}>{element}</Suspense>
+}
+
+/** An admin route: suspended for its lazy chunk, then gated on the permission it needs. */
+function guarded(permission: string, element: React.ReactNode) {
+  return <RequirePermission permission={permission}>{withSuspense(element)}</RequirePermission>
 }
 
 export const router = createBrowserRouter([
@@ -112,16 +120,33 @@ export const router = createBrowserRouter([
         </Suspense>
       </RequireStaff>
     ),
+    /*
+      Every admin route declares the permission it needs, matching the constant the endpoints
+      behind it are gated on in `Store.Domain/Identity/Permissions.cs`. `RequireStaff` above only
+      establishes that someone belongs in the admin area at all; without the per-route check a
+      staff member holding one permission could open every screen and meet a wall of 403s.
+
+      Where a screen creates as well as reads, the *view* permission gates the route and the
+      create/update buttons inside it are hidden separately — so someone with read-only access
+      still gets a useful page rather than a refusal.
+    */
     children: [
-      { index: true, element: withSuspense(<DashboardPage />) },
-      { path: 'products', element: withSuspense(<AdminProductsPage />) },
-      { path: 'orders', element: withSuspense(<AdminOrdersPage />) },
-      { path: 'inventory', element: withSuspense(<AdminInventoryPage />) },
-      { path: 'customers', element: withSuspense(<AdminCustomersPage />) },
-      { path: 'reviews', element: withSuspense(<AdminReviewsPage />) },
-      { path: 'coupons', element: withSuspense(<AdminCouponsPage />) },
-      { path: 'users', element: withSuspense(<AdminUsersPage />) },
-      { path: 'settings', element: withSuspense(<AdminSettingsPage />) },
+      { index: true, element: guarded('reports.view', <DashboardPage />) },
+      { path: 'products', element: guarded('products.view', <AdminProductsPage />) },
+
+      // 'new' is declared before ':id' so it is never captured as an id.
+      { path: 'products/new', element: guarded('products.create', <AdminProductFormPage />) },
+      { path: 'products/:id/edit', element: guarded('products.view', <AdminProductFormPage />) },
+
+      { path: 'categories', element: guarded('categories.view', <AdminCategoriesPage />) },
+      { path: 'brands', element: guarded('brands.view', <AdminBrandsPage />) },
+      { path: 'orders', element: guarded('orders.view', <AdminOrdersPage />) },
+      { path: 'inventory', element: guarded('inventory.view', <AdminInventoryPage />) },
+      { path: 'customers', element: guarded('customers.view', <AdminCustomersPage />) },
+      { path: 'reviews', element: guarded('reviews.view', <AdminReviewsPage />) },
+      { path: 'coupons', element: guarded('coupons.view', <AdminCouponsPage />) },
+      { path: 'users', element: guarded('users.view', <AdminUsersPage />) },
+      { path: 'settings', element: guarded('settings.view', <AdminSettingsPage />) },
       { path: '*', element: withSuspense(<NotFoundPage />) },
     ],
   },

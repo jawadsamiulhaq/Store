@@ -154,6 +154,16 @@ public sealed class UserAdminService(
             return Result<UserDetailDto>.Forbidden(refusal);
         }
 
+        // Creating an account is `users.create`; deciding it is a staff account is
+        // `users.assign-roles`. Without this, the separation enforced on update could be walked
+        // around by creating a new user with the roles instead of granting them to an existing one.
+        if (request.Roles.Any(role => !string.Equals(role, RoleNames.Customer, StringComparison.Ordinal))
+            && !await currentUser.HasPermissionAsync(Permissions.Users.AssignRoles, ct))
+        {
+            return Result<UserDetailDto>.Forbidden(
+                "Creating a user with a role other than Customer needs the users.assign-roles permission.");
+        }
+
         var user = new AppUser
         {
             UserName = email,
@@ -226,6 +236,19 @@ public sealed class UserAdminService(
 
             var toRemove = currentRoles.Except(request.Roles, StringComparer.Ordinal).ToList();
             var toAdd = request.Roles.Except(currentRoles, StringComparer.Ordinal).ToList();
+
+            // `users.assign-roles` is a separate permission from `users.update` for a reason:
+            // editing someone's phone number and deciding what they may do are different powers,
+            // and roles are how every admin capability is granted. It is checked here rather than
+            // on the endpoint because this one route both updates a profile and sets roles — so
+            // the requirement has to depend on whether the roles actually changed, otherwise
+            // someone with only `users.update` could not correct a typo in a name.
+            if ((toRemove.Count > 0 || toAdd.Count > 0)
+                && !await currentUser.HasPermissionAsync(Permissions.Users.AssignRoles, ct))
+            {
+                return Result<UserDetailDto>.Forbidden(
+                    "Changing someone's roles needs the users.assign-roles permission.");
+            }
 
             if (toRemove.Contains(RoleNames.System, StringComparer.Ordinal)
                 && await IsLastActiveSystemUserAsync(id, ct))

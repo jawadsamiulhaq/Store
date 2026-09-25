@@ -7,6 +7,12 @@ namespace Store.Application.Catalog;
 // Categories
 // ============================================================================================
 
+/// <remarks>
+/// Carries <see cref="MetaTitle"/> and <see cref="MetaDescription"/> even though the storefront
+/// does not render them from this shape. <see cref="UpdateCategoryRequest"/> writes both, so an
+/// admin editor that could not read them back would send empty strings on every save and silently
+/// erase a category's SEO the first time anyone changed its display order.
+/// </remarks>
 public sealed record CategoryDto(
     Guid Id,
     string Name,
@@ -19,7 +25,9 @@ public sealed record CategoryDto(
     int DisplayOrder,
     bool IsActive,
     bool ShowInMenu,
-    int ProductCount);
+    int ProductCount,
+    string? MetaTitle,
+    string? MetaDescription);
 
 /// <summary>A category with its children, for rendering the navigation tree in one pass.</summary>
 public sealed record CategoryTreeDto(
@@ -243,6 +251,144 @@ public sealed record AdminProductListItemDto(
     DateTimeOffset CreatedAt,
     DateTimeOffset? UpdatedAt);
 
+// --------------------------------------------------------------------------------------------
+// Admin editor
+// --------------------------------------------------------------------------------------------
+
+/// <summary>
+/// Everything the product editor needs to load a product for editing.
+/// </summary>
+/// <remarks>
+/// Deliberately separate from <see cref="ProductDetailDto"/>. That shape is the storefront's: it
+/// exposes <c>AvailableQuantity</c> but not <c>StockQuantity</c>, and it carries no cost price, no
+/// status, no per-variant active flag and no merchandising orders — all of which an editor must
+/// round-trip and none of which a shopper may see. Reusing it would have meant either leaking
+/// cost prices to the storefront or an editor that silently wiped the fields it could not read.
+/// </remarks>
+public sealed record AdminProductDetailDto(
+    Guid Id,
+    string Name,
+    string Slug,
+    string? ShortDescription,
+    string? Description,
+    Guid? CategoryId,
+    Guid? BrandId,
+    ProductStatus Status,
+    string? Badge,
+    bool IsFeatured,
+    int FeaturedOrder,
+    bool IsTrending,
+    int TrendingOrder,
+    bool IsHero,
+    int HeroOrder,
+    string? MetaTitle,
+    string? MetaDescription,
+    DateTimeOffset? PublishedAt,
+    IReadOnlyList<string> Tags,
+    IReadOnlyList<AdminProductOptionDto> Options,
+    IReadOnlyList<AdminVariantDto> Variants,
+    IReadOnlyList<ImageDto> Images);
+
+public sealed record AdminProductOptionDto(
+    Guid Id,
+    string Name,
+    int DisplayOrder,
+    IReadOnlyList<AdminProductOptionValueDto> Values);
+
+public sealed record AdminProductOptionValueDto(Guid Id, string Value, string? HexColor, int DisplayOrder);
+
+/// <summary>
+/// A variant as the editor sees it: physical stock rather than sellable stock, plus cost.
+/// </summary>
+/// <remarks>
+/// <see cref="ReservedQuantity"/> is included read-only so the editor can explain the difference
+/// between what is on the shelf and what can still be sold, rather than appearing to disagree with
+/// the storefront.
+/// </remarks>
+public sealed record AdminVariantDto(
+    Guid Id,
+    string? Name,
+    string Sku,
+    string? Barcode,
+    decimal Price,
+    decimal? CompareAtPrice,
+    decimal? CostPrice,
+    int StockQuantity,
+    int ReservedQuantity,
+    int LowStockThreshold,
+    bool TrackInventory,
+    bool AllowBackorder,
+    decimal? WeightGrams,
+    string Unit,
+    decimal? UnitValue,
+    bool IsDefault,
+    bool IsActive,
+    int DisplayOrder,
+    // Whether this variant has ever been ordered or stock-adjusted. Drives whether the editor
+    // offers to remove it, since history makes a hard delete impossible.
+    bool HasHistory,
+    IReadOnlyList<VariantOptionSelection> OptionValues);
+
+/// <summary>
+/// One coordinate of a variant along an option axis, by label rather than by id.
+/// </summary>
+/// <remarks>
+/// Labels, not ids, because the editor builds variants from the option values the user is typing
+/// in the same submission — those values have no id yet. The server resolves each selection
+/// against the options it has just saved, which also means a renamed value carries its variants
+/// with it instead of orphaning them.
+/// </remarks>
+public sealed record VariantOptionSelection(string Option, string Value);
+
+public sealed record SaveProductOptionRequest(
+    Guid? Id,
+    string Name,
+    int DisplayOrder,
+    IReadOnlyList<SaveProductOptionValueRequest> Values);
+
+public sealed record SaveProductOptionValueRequest(Guid? Id, string Value, string? HexColor, int DisplayOrder);
+
+/// <summary>
+/// A variant in a save. <see cref="Id"/> null means "create"; an id means "update that one".
+/// </summary>
+/// <remarks>
+/// <see cref="StockQuantity"/> is honoured only when creating a variant, where it is the opening
+/// balance and is written to the stock ledger. On an existing variant it is ignored: stock moves
+/// through <c>/api/admin/inventory/adjust</c>, which records who changed it and why. Letting the
+/// product form set it directly would silently desynchronise the ledger from the stock column,
+/// and the ledger is the thing that has to be able to explain every unit.
+/// </remarks>
+public sealed record SaveVariantRequest(
+    Guid? Id,
+    string? Name,
+    string? Sku,
+    string? Barcode,
+    decimal Price,
+    decimal? CompareAtPrice,
+    decimal? CostPrice,
+    int StockQuantity,
+    int LowStockThreshold,
+    bool TrackInventory,
+    bool AllowBackorder,
+    decimal? WeightGrams,
+    string Unit,
+    decimal? UnitValue,
+    bool IsDefault,
+    bool IsActive,
+    int DisplayOrder,
+    IReadOnlyList<VariantOptionSelection>? OptionValues);
+
+public sealed record SaveProductImageRequest(
+    Guid? Id,
+    string Url,
+    string? ThumbnailUrl,
+    string? AltText,
+    int Width,
+    int Height,
+    string? BlurHash,
+    bool IsPrimary,
+    int DisplayOrder);
+
 public sealed record CreateProductRequest(
     string Name,
     string? Slug,
@@ -261,6 +407,19 @@ public sealed record CreateProductRequest(
     IReadOnlyList<CreateVariantRequest> Variants,
     IReadOnlyList<CreateProductImageRequest>? Images);
 
+/// <summary>
+/// A full product save from the admin editor.
+/// </summary>
+/// <remarks>
+/// <see cref="Tags"/>, <see cref="Options"/>, <see cref="Variants"/> and <see cref="Images"/> are
+/// each <b>null-means-leave-alone, non-null-means-replace-wholesale</b>. A caller that only
+/// changes the name sends null for all four and touches nothing else; the editor, which always
+/// renders the whole product, sends all four.
+/// <para>
+/// Sending an empty list is therefore meaningfully different from sending null — for variants it
+/// is rejected outright, since a product with no variants has no price and no stock.
+/// </para>
+/// </remarks>
 public sealed record UpdateProductRequest(
     string Name,
     string? Slug,
@@ -278,7 +437,10 @@ public sealed record UpdateProductRequest(
     int HeroOrder,
     string? MetaTitle,
     string? MetaDescription,
-    IReadOnlyList<string>? Tags);
+    IReadOnlyList<string>? Tags,
+    IReadOnlyList<SaveProductOptionRequest>? Options = null,
+    IReadOnlyList<SaveVariantRequest>? Variants = null,
+    IReadOnlyList<SaveProductImageRequest>? Images = null);
 
 public sealed record CreateVariantRequest(
     string? Name,

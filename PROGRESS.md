@@ -560,11 +560,27 @@ cart state lives in TanStack Query instead, see note below).
 (with self-cancel), Addresses, Wishlist
 **Admin:** AdminLayout (**nav generated from the permission set** — staff only see what they can
 use), Dashboard (KPIs + inline-SVG sparkline, no charting dependency), Orders (drawer with
-transition table mirroring the server's), Products, Inventory (target-quantity adjustments +
-append-only ledger drawer), Customers, Reviews (moderation queue), Coupons (full CRUD), Users &
-roles, Settings
-**Shared:** `features/admin/AdminTable.tsx`, `features/orders/OrderStatusPill.tsx`,
-`features/orders/OrderTimeline.tsx`
+transition table mirroring the server's), Products (**list + full editor**), **Categories (tree
+CRUD)**, **Brands (CRUD)**, Inventory (target-quantity adjustments + append-only ledger drawer),
+Customers, Reviews (moderation queue), Coupons (full CRUD), Users & **roles (editable permission
+matrix)**, Settings
+
+The Users tab has a per-user panel (`features/admin/UserEditor.tsx`): profile, **role assignment**,
+and **per-user permission overrides** as an explicit Inherit / Grant / Deny per permission, with
+each row labelled by whether the roles already grant it — otherwise a denied permission looks
+identical to one that was never granted. Creating an account (`NewUserForm`) picks roles in the
+same step.
+
+**Every admin route is gated on its own permission** via `RequirePermission` in
+`app/components/RouteGuards.tsx`, matching the constant its endpoints use. It renders a named
+403 rather than redirecting — bouncing someone off a link a colleague sent them reads as a broken
+link, and naming the missing permission is what lets them ask for the right thing.
+
+**Shared:** `features/admin/AdminTable.tsx`, `features/admin/VariantEditor.tsx` (option axes →
+cartesian → SKU grid), `features/admin/ImageUploader.tsx` (drag-drop → `/admin/media/upload`),
+`features/admin/RolesPanel.tsx`, `features/orders/OrderStatusPill.tsx`,
+`features/orders/OrderTimeline.tsx`, `lib/slug.ts` (client-side slug *preview* only — the server
+still normalises and de-duplicates on write)
 
 #### Build output — code splitting working as designed
 
@@ -610,6 +626,55 @@ roles, Settings
 
 ---
 
+## Product editor — what it needed beyond a form  (2026-09-25)
+
+The gap table below used to claim the product API was "complete and tested". Building the editor
+proved otherwise, and the following had to be added:
+
+- **`GET /api/admin/products/{id}` did not exist.** Create and update both returned
+  `ProductDetailDto` via a private helper, but nothing exposed a read — an editor had nothing to
+  load. Added, returning a new `AdminProductDetailDto`.
+- **`ProductDetailDto` is the wrong shape for an editor** and reusing it would have been a bug in
+  both directions: it exposes `AvailableQuantity` but not `StockQuantity`, and carries no status,
+  no cost price, no per-variant `IsActive` and no merchandising orders. An editor built on it
+  would have wiped every field it could not read; widening it would have leaked cost prices to
+  the storefront.
+- **`UpdateProductRequest` carried no variants, options or images**, so sizes could be created
+  once and never edited. `UpdateVariantRequest` existed and *nothing consumed it*. Update now
+  takes all three, each null-means-leave-alone / non-null-means-replace.
+- **Options were unreachable.** `ProductOption` / `ProductOptionValue` / `VariantOptionValue`
+  existed in the domain and in no admin DTO.
+
+## RBAC hole found while building the Users tab  (2026-09-25)
+
+`Permissions.Users.AssignRoles` (`users.assign-roles`) was in the catalogue, was seeded, was
+referenced in a comment — and **no endpoint enforced it**. `PUT /api/admin/users/{id}` accepts
+`Roles` and is gated on `users.update`, so anyone who could correct a typo in a name could also
+make themselves an Admin.
+
+Fixed in `UserAdminService`, not on the endpoint, because that one route both edits a profile and
+sets roles: the check has to depend on whether the roles actually changed, or someone holding only
+`users.update` could no longer edit a phone number. `CreateAsync` got the matching guard, since
+otherwise the separation could be walked around by creating a new user with the roles instead of
+granting them to an existing one. The existing escalation guards (only a System user may grant the
+System role; the last active System user cannot be demoted or deactivated) were already correct.
+
+## Product editor decisions worth keeping
+
+- **Stock is read-only for an existing variant.** Adjustments go through
+  `/api/admin/inventory/adjust`, which writes a ledger row saying who moved it and why. A product
+  form that set `StockQuantity` directly would leave the ledger unable to account for the
+  difference. A *new* variant's figure is an opening balance and does seed a ledger row.
+- **A dropped variant is deactivated, not deleted, once it has history.** `OrderItem` and
+  `InventoryTransaction` both point at it; a hard delete would fail on a foreign key or take
+  order history with it. The editor hides "Remove" on those and offers the Active toggle instead.
+- **Variants address option values by label, not id** (`VariantOptionSelection`). The editor
+  builds combinations from values the user is typing in the same submission, which have no id
+  yet — and a renamed value then carries its variants with it instead of orphaning them.
+- **`VariantOptionValue → ProductOptionValue` is `Restrict`** (two cascade paths into a join
+  table is not something SQL Server accepts), so deleting an option value has to remove its
+  variant links explicitly first.
+
 ## What's left (feature depth, not scaffolding)
 
 Everything below has a **working backend endpoint already**; these are UI gaps, listed honestly
@@ -617,13 +682,13 @@ rather than described as done.
 
 | Gap | Note |
 |---|---|
-| **Product create/edit UI** | `AdminProductsPage` lists, filters and links to the storefront but has no editor. The API (`POST/PUT /api/admin/products`, variants, options, images) is complete and tested. This is the largest remaining piece. |
-| **Category & brand admin UI** | Full CRUD APIs exist (`/api/admin/categories`, `/api/admin/brands`); no screens yet. |
+| ~~**Product create/edit UI**~~ | ✅ **Built 2026-09-25.** `AdminProductFormPage` + `VariantEditor` + `ImageUploader`. Backend needed real work first, not just a screen — see "Product editor" below. |
+| ~~**Category & brand admin UI**~~ | ✅ **Built 2026-09-25.** `AdminCategoriesPage` (tree-ordered list with indent, parent picker that excludes the node's own subtree, slug preview, menu/active flags, SEO, refresh-counts) and `AdminBrandsPage` (CRUD + client-side filter). Both permission-gated per verb. `CategoryDto` gained `MetaTitle`/`MetaDescription` — it was write-only before, so an editor round-trip would have wiped a category's SEO. |
 | **Media library UI** | Upload/list/delete endpoints exist and produce WebP + thumbnail + blur placeholder; no browser UI. |
 | **Content & banner admin UI** | Endpoints exist; no screens. |
 | **Shipping zones/methods admin UI** | Endpoints exist; no screens. |
 | **Audit log viewer UI** | `/api/admin/audit` exists and is populated; no screen. |
-| **Role permission editor** | `AdminUsersPage` *displays* roles and the permission catalogue read-only. Assigning permissions is System-only and the API is ready (`PUT /api/admin/roles/{id}/permissions`); the matrix UI is not built. |
+| ~~**Role permission editor**~~ | ✅ **Built 2026-09-25.** `features/admin/RolesPanel.tsx` — master-detail role list, create/rename/delete, editable permission matrix with per-module select-all and dirty tracking. The System role renders an explanation instead of an empty matrix, because it bypasses permission evaluation rather than holding every grant. |
 | **Product photography** | The demo seeder references `/images/products/*.webp` which do not exist on disk, so `<Image>` renders its placeholder — correct degradation, but the client needs real photos uploaded via the media API. |
 | **Forgot-password UI** | Backend is complete (token issue + reset, no enumeration oracle). The login page currently tells users to contact the shop. |
 | **Email delivery** | `LoggingEmailSender` writes to the log. Set `Smtp:Host` and the SMTP sender is selected automatically — no code change. |

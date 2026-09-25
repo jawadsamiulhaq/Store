@@ -92,7 +92,8 @@ public sealed class CategoryService(
             .OrderBy(c => c.Depth).ThenBy(c => c.DisplayOrder).ThenBy(c => c.Name)
             .Select(c => new CategoryDto(
                 c.Id, c.Name, c.Slug, c.Description, c.ImageUrl, c.IconName,
-                c.ParentId, c.Depth, c.DisplayOrder, c.IsActive, c.ShowInMenu, c.ProductCount))
+                c.ParentId, c.Depth, c.DisplayOrder, c.IsActive, c.ShowInMenu, c.ProductCount,
+                c.MetaTitle, c.MetaDescription))
             .ToListAsync(ct);
     }
 
@@ -103,7 +104,8 @@ public sealed class CategoryService(
             .Where(c => c.Slug == slug)
             .Select(c => new CategoryDto(
                 c.Id, c.Name, c.Slug, c.Description, c.ImageUrl, c.IconName,
-                c.ParentId, c.Depth, c.DisplayOrder, c.IsActive, c.ShowInMenu, c.ProductCount))
+                c.ParentId, c.Depth, c.DisplayOrder, c.IsActive, c.ShowInMenu, c.ProductCount,
+                c.MetaTitle, c.MetaDescription))
             .FirstOrDefaultAsync(ct);
 
         return category is null
@@ -118,7 +120,8 @@ public sealed class CategoryService(
             .Where(c => c.Id == id)
             .Select(c => new CategoryDto(
                 c.Id, c.Name, c.Slug, c.Description, c.ImageUrl, c.IconName,
-                c.ParentId, c.Depth, c.DisplayOrder, c.IsActive, c.ShowInMenu, c.ProductCount))
+                c.ParentId, c.Depth, c.DisplayOrder, c.IsActive, c.ShowInMenu, c.ProductCount,
+                c.MetaTitle, c.MetaDescription))
             .FirstOrDefaultAsync(ct);
 
         return category is null

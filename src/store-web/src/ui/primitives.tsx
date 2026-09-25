@@ -191,6 +191,37 @@ export function Textarea({
   )
 }
 
+/**
+ * Checkbox with its label, as one control.
+ *
+ * The raw `<input type="checkbox"> + <label>` pairing was being hand-written on every admin form,
+ * each with slightly different classes and none of them wrapping the input in the label — so the
+ * text was not a click target. This wraps it, which also gives the whole row a hover state and
+ * removes the need for a matching `id`/`htmlFor` pair on every call site.
+ */
+export function Checkbox({
+  label,
+  hint,
+  className = '',
+  ...rest
+}: Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> & { label: ReactNode; hint?: string }) {
+  return (
+    <label
+      className={`flex cursor-pointer items-start gap-2.5 rounded-lg px-2 py-1.5 text-sm text-ink-700 transition-colors hover:bg-ink-50 has-disabled:cursor-not-allowed has-disabled:opacity-60 has-disabled:hover:bg-transparent ${className}`}
+    >
+      <input
+        {...rest}
+        type="checkbox"
+        className="mt-0.5 h-4 w-4 shrink-0 rounded border-ink-300 text-saffron-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-saffron-500"
+      />
+      <span className="min-w-0">
+        {label}
+        {hint && <span className="block text-xs text-ink-400">{hint}</span>}
+      </span>
+    </label>
+  )
+}
+
 // ---- Feedback -----------------------------------------------------------------------------------
 
 export function Badge({

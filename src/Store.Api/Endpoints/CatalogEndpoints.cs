@@ -204,6 +204,11 @@ public static class CatalogEndpoints
                     }, ct)))
             .RequirePermission(Permissions.Products.View);
 
+        products.MapGet("/{id:guid}", async (Guid id, IProductService service, CancellationToken ct) =>
+                (await service.GetForEditAsync(id, ct)).ToHttpResult())
+            .RequirePermission(Permissions.Products.View)
+            .WithSummary("A product in the shape the admin editor edits — drafts included.");
+
         products.MapPost("/", async ([FromBody] CreateProductRequest request, IProductService service, CancellationToken ct) =>
                 (await service.CreateAsync(request, ct)).ToCreatedResult(p => $"/api/admin/products/{p.Id}"))
             .RequirePermission(Permissions.Products.Create);
