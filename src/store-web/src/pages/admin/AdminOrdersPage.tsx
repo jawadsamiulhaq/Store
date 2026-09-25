@@ -246,7 +246,7 @@ function OrderDrawer({
         className="animate-fade-in absolute inset-0 bg-ink-900/40"
       />
 
-      <div className="animate-fade-rise relative flex w-full max-w-lg flex-col overflow-y-auto bg-paper shadow-overlay">
+      <div className="animate-slide-in-right relative flex w-full max-w-lg flex-col overflow-y-auto bg-paper shadow-overlay">
         <header className="sticky top-0 flex items-center justify-between border-b border-ink-100 bg-paper-raised px-5 py-4">
           <div>
             <p className="font-mono text-sm font-bold text-ink-900">{order?.orderNumber ?? '…'}</p>

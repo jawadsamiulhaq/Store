@@ -223,6 +223,23 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+
+    /*
+      Delay has to be zeroed too, not just duration.
+
+      The staggered entrances below hold their from-state via `both` fill mode. With the duration
+      collapsed but a 300ms delay intact, a card would sit at opacity 0 for 300ms and then snap in
+      — which is a flash of missing content, and worse for someone who asked for less motion than
+      the animation was.
+    */
+    animation-delay: 0ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  /* The reveal hook's hidden state is inline CSS, so it needs an explicit override. */
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 
@@ -247,6 +264,33 @@
   100% { transform: scale(1); }
 }
 
+/*
+  Directional entrances.
+
+  A panel should arrive from the edge it lives on. Every drawer in this app was using `fade-rise`,
+  which translates *upward* — so a right-hand order drawer and a left-hand navigation sheet both
+  rose from the bottom like a popup. The direction is most of what makes a drawer read as a
+  drawer, and getting it wrong is more noticeable than having no animation at all.
+
+  Percentages, not pixels: the panel travels its own width regardless of breakpoint, so the same
+  keyframe works for an 85%-wide mobile sheet and a max-w-lg desktop drawer.
+*/
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translate3d(100%, 0, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translate3d(-100%, 0, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+/* Popovers and dropdowns: grow from the corner they are anchored to. */
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.96) translate3d(0, -4px, 0); }
+  to   { opacity: 1; transform: scale(1) translate3d(0, 0, 0); }
+}
+
 @utility animate-fade-rise {
   animation: fade-rise 0.32s var(--ease-out-soft) both;
 }
@@ -257,6 +301,62 @@
 
 @utility animate-pop {
   animation: pop 0.3s var(--ease-spring);
+}
+
+/*
+  A drawer is slower than a menu on purpose. It covers most of the screen, and a large surface
+  moving at popover speed reads as a glitch rather than as motion — but past ~300ms it starts to
+  feel like waiting, so that is the ceiling.
+*/
+@utility animate-slide-in-right {
+  animation: slide-in-right 0.28s var(--ease-out-soft) both;
+}
+
+@utility animate-slide-in-left {
+  animation: slide-in-left 0.28s var(--ease-out-soft) both;
+}
+
+@utility animate-scale-in {
+  animation: scale-in 0.16s var(--ease-out-soft) both;
+}
+
+/*
+  Staggered entrance for a grid or a rail.
+
+  The delay comes from a `--i` custom property set per item, so a 24-card grid needs no per-item
+  class, no JS and no re-render — the browser resolves it at paint.
+
+  `min()` caps the ramp at 8 items. Without it a full catalogue page would still be arriving
+  three-quarters of a second after it rendered, and the shopper would be watching an animation
+  instead of reading prices. Everything past the eighth card lands together.
+*/
+@utility stagger-item {
+  /*
+    `backwards`, NOT `both`.
+
+    A filled animation keeps applying its final keyframe at a higher priority than any normal
+    declaration, for as long as the element lives. With `both`, a product card would finish its
+    entrance holding `transform: translate3d(0,0,0)` — and `lift-on-hover`'s `:hover` transform
+    would silently never apply again. The card would look right and stop responding to the mouse.
+
+    `backwards` gives what a staggered entrance actually needs: the from-state is held during the
+    delay so the card is invisible until its turn, and once the animation ends the element goes
+    back to being governed by its own styles.
+  */
+  animation: fade-rise 0.34s var(--ease-out-soft) backwards;
+  animation-delay: calc(min(var(--i, 0), 8) * 40ms);
+}
+
+/*
+  Page entrance. Applied to the routed content with the pathname as its key, so navigating
+  re-triggers it.
+
+  Opacity carries most of it and the 6px rise is barely perceptible on its own — which is the
+  point. A page that visibly slides on every navigation is charming twice and irritating after
+  that, and it delays the moment the content is readable.
+*/
+@utility animate-page-in {
+  animation: fade-rise 0.22s var(--ease-out-soft) backwards;
 }
 
 /*
@@ -344,7 +444,26 @@
 @utility rail {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: minmax(11rem, 1fr);
+
+  /*
+    The track width is defined HERE and nowhere else.
+
+    This used to be `minmax(11rem, 1fr)` while the cards carried `w-44 sm:w-52` — 11rem on mobile
+    but 13rem from `sm` up. Two sources of truth that agreed at one breakpoint and disagreed at
+    every other: above `sm` a 13rem card sat in an 11rem track, and since the next track still
+    began at 11rem + the 1rem gap, every card overlapped the one after it by a full rem. The `1fr`
+    maximum hid it only on a viewport wide enough for the tracks to stretch past 13rem.
+
+    Fixed rather than fractional, because `1fr` also defeats the point of the rail: it distributes
+    the free space so the cards end exactly at the container edge, and the half-visible next card
+    is the entire reason this is a scroller and not a grid row.
+  */
+  grid-auto-columns: 11rem;
+
+  @media (width >= 40rem) {
+    grid-auto-columns: 13rem;
+  }
+
   /* Stretch, so every card in the rail is the height of the tallest one. Without this a card
      whose price wraps to two lines ("HK$42 – HK$193.20") is taller than its neighbours and the
      row looks collapsed and ragged. */

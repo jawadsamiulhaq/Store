@@ -1,8 +1,10 @@
-import { Outlet, ScrollRestoration } from 'react-router-dom'
+import { Outlet, ScrollRestoration, useLocation } from 'react-router-dom'
 import { SiteHeader } from '../components/SiteHeader'
 import { SiteFooter } from '../components/SiteFooter'
 
 export function StoreLayout() {
+  const location = useLocation()
+
   return (
     <div className="flex min-h-dvh flex-col">
       {/* First focusable element on the page — keyboard users should not tab the whole nav. */}
@@ -15,7 +17,12 @@ export function StoreLayout() {
 
       <SiteHeader />
 
-      <main id="main" className="flex-1">
+      {/*
+        Keyed on the path, not the full location: a key that included the query string would
+        replay the entrance every time a catalogue filter changed, which turns adjusting a price
+        slider into a flicker. Filters update in place; navigating to a different page animates.
+      */}
+      <main id="main" key={location.pathname} className="animate-page-in flex-1">
         <Outlet />
       </main>
 

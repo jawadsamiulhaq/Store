@@ -39,6 +39,7 @@ public interface ICheckoutService
 public sealed class CheckoutService(
     StoreDbContext db,
     ICurrentUser currentUser,
+    ICustomerContext customers,
     IDiscountService discounts,
     IShippingService shipping,
     INotificationService notifications,
@@ -153,7 +154,7 @@ public sealed class CheckoutService(
             return Result<OrderDetailDto>.Failure("Your cart is empty.");
         }
 
-        var customerId = await ResolveCustomerIdAsync(ct);
+        var customerId = await customers.GetOrCreateIdAsync(ct);
 
         var guestCheckoutAllowed = await GetSettingBoolAsync("checkout.guest-enabled", true, ct);
 
@@ -500,7 +501,7 @@ public sealed class CheckoutService(
 
     private async Task<Domain.Carts.Cart?> LoadCartAsync(CancellationToken ct)
     {
-        var customerId = await ResolveCustomerIdAsync(ct);
+        var customerId = await customers.GetIdAsync(ct);
         var anonymousId = currentUser.AnonymousId;
 
         if (customerId is null && string.IsNullOrWhiteSpace(anonymousId))
@@ -516,19 +517,6 @@ public sealed class CheckoutService(
                 : c.AnonymousId == anonymousId, ct);
     }
 
-    private async Task<Guid?> ResolveCustomerIdAsync(CancellationToken ct)
-    {
-        if (currentUser.UserId is not { } userId)
-        {
-            return null;
-        }
-
-        return await db.Customers
-            .AsNoTracking()
-            .Where(c => c.UserId == userId)
-            .Select(c => (Guid?)c.Id)
-            .FirstOrDefaultAsync(ct);
-    }
 
     private async Task SaveAddressAsync(Guid customerId, OrderAddressRequest request, CancellationToken ct)
     {

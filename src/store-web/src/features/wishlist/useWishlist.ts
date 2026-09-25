@@ -42,6 +42,14 @@ export function useWishlistIds() {
   }
 }
 
+/** Thrown when a guest taps save. Identified by name, so the caller can send them to sign in. */
+export class SignInRequiredError extends Error {
+  constructor() {
+    super('Sign in to save items.')
+    this.name = 'SignInRequiredError'
+  }
+}
+
 export function useWishlistToggle() {
   const queryClient = useQueryClient()
   const { isAuthenticated } = useAuth()
@@ -49,7 +57,7 @@ export function useWishlistToggle() {
   return useMutation({
     mutationFn: async (productId: string) => {
       if (!isAuthenticated) {
-        throw new Error('SIGN_IN_REQUIRED')
+        throw new SignInRequiredError()
       }
 
       return api.post<boolean>(`/wishlist/${productId}/toggle`)
@@ -78,8 +86,12 @@ export function useWishlistToggle() {
 
     // The full wishlist list is invalidated rather than patched, because its rows carry price and
     // stock the client cannot compute.
+    //
+    // `exact` matters: invalidation matches by prefix, and WISHLIST_IDS_KEY is ['wishlist','ids'].
+    // Without it every toggle also refetched the ids that were just updated optimistically —
+    // a redundant round trip whose only effect was to replace a correct value with the same one.
     onSettled: () => {
-      void queryClient.invalidateQueries({ queryKey: WISHLIST_KEY })
+      void queryClient.invalidateQueries({ queryKey: WISHLIST_KEY, exact: true })
     },
   })
 }

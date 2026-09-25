@@ -5,6 +5,7 @@ import { Image } from '../../ui/Image'
 import { PageHeader } from '../../features/admin/AdminTable'
 import { OrderStatusPill } from '../../features/orders/OrderStatusPill'
 import { formatDate, formatPrice } from '../../lib/format'
+import { useCountUp } from '../../lib/useCountUp'
 
 interface Dashboard {
   revenueToday: number
@@ -68,44 +69,68 @@ export default function DashboardPage() {
       <PageHeader title="Dashboard" description="How the shop is trading right now." />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Stat label="Revenue today" value={formatPrice(data.revenueToday)} sub={`${data.ordersToday} orders`} />
+        <Stat
+          label="Revenue today"
+          count={data.revenueToday}
+          format={formatPrice}
+          sub={`${data.ordersToday} orders`}
+          index={0}
+        />
         <Stat
           label="Revenue this month"
-          value={formatPrice(data.revenueThisMonth)}
+          count={data.revenueThisMonth}
+          format={formatPrice}
           sub={`${data.ordersThisMonth} orders`}
+          index={1}
         />
-        <Stat label="Average order" value={formatPrice(data.averageOrderValue)} sub="All time" />
+        <Stat
+          label="Average order"
+          count={data.averageOrderValue}
+          format={formatPrice}
+          sub="All time"
+          index={2}
+        />
         <Stat
           label="Needs attention"
-          value={String(data.pendingOrders + data.processingOrders)}
+          count={data.pendingOrders + data.processingOrders}
           sub={`${data.pendingOrders} pending · ${data.processingOrders} in progress`}
           tone={data.pendingOrders > 0 ? 'warning' : 'neutral'}
           href="/admin/orders"
+          index={3}
         />
       </div>
 
       <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Stat label="Products" value={String(data.activeProducts)} sub={`${data.totalProducts} total`} href="/admin/products" />
+        <Stat
+          label="Products"
+          count={data.activeProducts}
+          sub={`${data.totalProducts} total`}
+          href="/admin/products"
+          index={4}
+        />
         <Stat
           label="Out of stock"
-          value={String(data.outOfStockCount)}
+          count={data.outOfStockCount}
           sub="Active products"
           tone={data.outOfStockCount > 0 ? 'danger' : 'neutral'}
           href="/admin/inventory?outOfStock=true"
+          index={5}
         />
         <Stat
           label="Low stock"
-          value={String(data.lowStockCount)}
+          count={data.lowStockCount}
           sub="At or below threshold"
           tone={data.lowStockCount > 0 ? 'warning' : 'neutral'}
           href="/admin/inventory?lowStock=true"
+          index={6}
         />
         <Stat
           label="Reviews to moderate"
-          value={String(data.pendingReviews)}
+          count={data.pendingReviews}
           sub={`${data.totalCustomers} customers`}
           tone={data.pendingReviews > 0 ? 'warning' : 'neutral'}
           href="/admin/reviews"
+          index={7}
         />
       </div>
 
@@ -178,16 +203,22 @@ export default function DashboardPage() {
 
 function Stat({
   label,
-  value,
+  count,
+  format = (n) => String(Math.round(n)),
   sub,
   tone = 'neutral',
   href,
+  index = 0,
 }: {
   label: string
-  value: string
+  /** The raw figure. Passed as a number, not a formatted string, so it can be counted up. */
+  count: number
+  /** Applied to every intermediate frame, so a money tile counts in money, not in bare digits. */
+  format?: (value: number) => string
   sub?: string
   tone?: 'neutral' | 'warning' | 'danger'
   href?: string
+  index?: number
 }) {
   const tones = {
     neutral: 'text-ink-900',
@@ -195,10 +226,26 @@ function Stat({
     danger: 'text-chilli-600',
   } as const
 
+  const animated = useCountUp(count)
+
   const body = (
-    <div className="card-surface p-4">
+    <div
+      className="card-surface stagger-item p-4"
+      style={{ '--i': index } as React.CSSProperties}
+    >
       <p className="text-xs font-medium uppercase tracking-wide text-ink-400">{label}</p>
-      <p className={`mt-1.5 text-2xl font-bold tracking-tight ${tones[tone]}`}>{value}</p>
+
+      {/*
+        The final figure is exposed to assistive technology as one value. Without this a screen
+        reader would announce every intermediate frame of the count, which is unusable.
+      */}
+      <p
+        className={`mt-1.5 text-2xl font-bold tracking-tight tabular-nums ${tones[tone]}`}
+        aria-label={format(count)}
+      >
+        <span aria-hidden="true">{format(animated)}</span>
+      </p>
+
       {sub && <p className="mt-0.5 text-xs text-ink-400">{sub}</p>}
     </div>
   )

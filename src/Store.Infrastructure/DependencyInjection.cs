@@ -147,6 +147,10 @@ public static class DependencyInjection
         services.AddScoped<IBrandService, BrandService>();
         services.AddScoped<IProductService, ProductService>();
 
+        // Shared by wishlist, addresses, cart, checkout, orders and reviews — every one of which
+        // used to resolve the customer profile itself and treat "no profile" as "not signed in".
+        services.AddScoped<ICustomerContext, CustomerContext>();
+
         services.AddScoped<ICartService, CartService>();
         services.AddScoped<IWishlistService, WishlistService>();
         services.AddScoped<IDiscountService, DiscountService>();

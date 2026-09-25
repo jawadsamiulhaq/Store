@@ -186,6 +186,8 @@ public sealed class UserAdminService(
         var roles = request.Roles.Count > 0 ? request.Roles : [RoleNames.Customer];
         await userManager.AddToRolesAsync(user, roles);
 
+        await EnsureCustomerProfileAsync(user.Id, roles, ct);
+
         logger.LogInformation("Created user {UserId} with roles {Roles}", user.Id, string.Join(", ", roles));
 
         return await GetAsync(user.Id, ct);
@@ -259,6 +261,11 @@ public sealed class UserAdminService(
 
             if (toRemove.Count > 0) await userManager.RemoveFromRolesAsync(user, toRemove);
             if (toAdd.Count > 0) await userManager.AddToRolesAsync(user, toAdd);
+
+            // Granting the Customer role later has to create the profile too, otherwise promoting
+            // a staff account to also be a shopper produces an account that can browse and add to
+            // a cart but cannot save, check out or keep an address.
+            await EnsureCustomerProfileAsync(id, request.Roles, ct);
         }
 
         await db.SaveChangesAsync(ct);
@@ -357,6 +364,51 @@ public sealed class UserAdminService(
             request.Overrides.Count, id, currentUser.UserId);
 
         return Result.Success();
+    }
+
+    /// <summary>
+    /// Gives a user holding the Customer role a storefront profile, if they do not have one.
+    /// </summary>
+    /// <remarks>
+    /// <see cref="AuthService"/> creates this on registration and notes that it exists so "cart
+    /// merge, wishlist and checkout never have to handle a missing profile as a special case" —
+    /// and the whole commerce layer does rely on that, resolving a customer by <c>UserId</c> and
+    /// treating a miss as "not signed in".
+    /// <para>
+    /// Creating a user through the admin screens skipped it, so an account created there with the
+    /// Customer role could sign in and browse but silently failed to save an item, keep an address
+    /// or check out — and the resulting message read "Sign in to save items" to someone who was
+    /// already signed in.
+    /// </para>
+    /// <para>
+    /// Deliberately keyed on the Customer role rather than given to everyone: a staff-only account
+    /// is not a shopper, and <see cref="Customer"/> exists as a separate entity precisely so that
+    /// staff accounts do not carry commerce columns.
+    /// </para>
+    /// </remarks>
+    private async Task EnsureCustomerProfileAsync(
+        Guid userId, IReadOnlyList<string> roles, CancellationToken ct)
+    {
+        if (!roles.Contains(RoleNames.Customer, StringComparer.Ordinal))
+        {
+            return;
+        }
+
+        if (await db.Customers.AnyAsync(c => c.UserId == userId, ct))
+        {
+            return;
+        }
+
+        db.Customers.Add(new Domain.Customers.Customer
+        {
+            UserId = userId,
+            AcceptsMarketing = false,
+            CreatedAt = clock.UtcNow
+        });
+
+        await db.SaveChangesAsync(ct);
+
+        logger.LogInformation("Created storefront profile for user {UserId}", userId);
     }
 
     /// <summary>

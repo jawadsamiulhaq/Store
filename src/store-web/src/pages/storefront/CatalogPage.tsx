@@ -285,6 +285,10 @@ export default function CatalogPage() {
                     product={product}
                     priority={page === 1 && index < 4}
                     isSaved={savedIds.has(product.id)}
+                    // Not staggered while the previous page is still on screen: the cards are
+                    // already visible, so replaying an entrance on them would read as a flicker
+                    // rather than as an arrival.
+                    index={isPlaceholderData ? undefined : index}
                   />
                 ))}
               </div>

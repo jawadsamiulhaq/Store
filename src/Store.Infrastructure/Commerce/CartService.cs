@@ -33,6 +33,7 @@ public interface ICartService
 public sealed class CartService(
     StoreDbContext db,
     ICurrentUser currentUser,
+    ICustomerContext customers,
     IDiscountService discounts,
     IDateTimeProvider clock,
     ILogger<CartService> logger) : ICartService
@@ -297,7 +298,7 @@ public sealed class CartService(
     /// </summary>
     private async Task<Cart?> LoadAsync(bool createIfMissing, CancellationToken ct)
     {
-        var customerId = await ResolveCustomerIdAsync(ct);
+        var customerId = await (createIfMissing ? customers.GetOrCreateIdAsync(ct) : customers.GetIdAsync(ct));
         var anonymousId = currentUser.AnonymousId;
 
         if (customerId is null && string.IsNullOrWhiteSpace(anonymousId))
@@ -338,19 +339,6 @@ public sealed class CartService(
             .Include(c => c.Coupon)
             .FirstAsync(c => c.Id == cartId, ct);
 
-    private async Task<Guid?> ResolveCustomerIdAsync(CancellationToken ct)
-    {
-        if (currentUser.UserId is not { } userId)
-        {
-            return null;
-        }
-
-        return await db.Customers
-            .AsNoTracking()
-            .Where(c => c.UserId == userId)
-            .Select(c => (Guid?)c.Id)
-            .FirstOrDefaultAsync(ct);
-    }
 
     private async Task<CartDto> BuildDtoAsync(Cart cart, CancellationToken ct)
     {

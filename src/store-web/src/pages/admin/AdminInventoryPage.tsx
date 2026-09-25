@@ -327,9 +327,14 @@ function HistoryDrawer({ row, onClose }: { row: StockRow; onClose: () => void })
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
-      <button type="button" aria-label="Close" onClick={onClose} className="absolute inset-0 bg-ink-900/40" />
+      <button
+        type="button"
+        aria-label="Close"
+        onClick={onClose}
+        className="animate-fade-in absolute inset-0 bg-ink-900/40"
+      />
 
-      <div className="animate-fade-rise relative w-full max-w-md overflow-y-auto bg-paper shadow-overlay">
+      <div className="animate-slide-in-right relative w-full max-w-md overflow-y-auto bg-paper shadow-overlay">
         <header className="sticky top-0 flex items-start justify-between gap-3 border-b border-ink-100 bg-paper-raised px-5 py-4">
           <div className="min-w-0">
             <p className="truncate text-sm font-bold text-ink-900">{row.productName}</p>

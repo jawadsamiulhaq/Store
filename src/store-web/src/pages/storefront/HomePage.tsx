@@ -5,6 +5,7 @@ import { useWishlistIds } from '../../features/wishlist/useWishlist'
 import { useStore } from '../../app/providers/StoreProvider'
 import { ButtonLink } from '../../ui/primitives'
 import { formatPrice } from '../../lib/format'
+import { useReveal } from '../../lib/useReveal'
 import type { ProductCard as ProductCardModel } from '../../lib/types'
 
 /**
@@ -47,6 +48,10 @@ export default function HomePage() {
   const featured = useFeaturedProducts()
   const newArrivals = useNewArrivals()
   const onSale = useOnSaleProducts()
+
+  // Only the editorial block needs one here — the rails own theirs, and the bento and aisle grid
+  // are above the fold on every size, where a scroll-triggered reveal would never fire.
+  const editorial = useReveal<HTMLElement>()
 
   const freeOver = settingNumber('checkout.free-shipping-threshold', 300)
   const offerCount = onSale.data?.products.totalCount ?? 0
@@ -225,7 +230,7 @@ export default function HomePage() {
       />
 
       {/* Editorial break — stops the page reading as an unbroken run of product rows. */}
-      <section className="pt-14">
+      <section ref={editorial.ref} {...editorial.revealProps} className="pt-14">
         <div className="bento bento-wash-indigo grid items-center gap-6 p-7 sm:p-10 lg:grid-cols-2">
           <div>
             <h2 className="text-2xl font-bold tracking-tight text-ink-900 sm:text-3xl">
@@ -324,12 +329,15 @@ function ProductRail({
   savedIds: Set<string>
   priority?: boolean
 }) {
+  // Called before the early return would be a conditional hook, so the reveal is set up first.
+  const { ref, revealProps } = useReveal<HTMLElement>()
+
   if (!isLoading && (!products || products.length === 0)) {
     return null
   }
 
   return (
-    <section className="pt-14">
+    <section ref={ref} {...revealProps} className="pt-14">
       <SectionHeading title={title} subtitle={subtitle} href={href} />
 
       {/*
@@ -340,17 +348,20 @@ function ProductRail({
         <div className="rail no-scrollbar">
           {isLoading
             ? Array.from({ length: 6 }, (_, index) => (
-                <div key={index} className="w-44 sm:w-52">
+                // No width class: the rail's grid track sets it, so the skeleton cannot drift out
+                // of step with the real card.
+                <div key={index}>
                   <ProductCardSkeleton />
                 </div>
               ))
             : products?.map((product, index) => (
                 // h-full passes the stretched row height down to the card itself.
-                <div key={product.id} className="h-full w-44 sm:w-52">
+                <div key={product.id} className="h-full">
                   <ProductCard
                     product={product}
                     priority={priority && index < 4}
                     isSaved={savedIds.has(product.id)}
+                    index={index}
                   />
                 </div>
               ))}

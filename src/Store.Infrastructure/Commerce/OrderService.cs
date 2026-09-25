@@ -38,6 +38,7 @@ public interface IOrderService
 public sealed class OrderService(
     StoreDbContext db,
     ICurrentUser currentUser,
+    ICustomerContext customers,
     INotificationService notifications,
     IDateTimeProvider clock,
     ILogger<OrderService> logger) : IOrderService
@@ -64,7 +65,7 @@ public sealed class OrderService(
     public async Task<PagedResult<OrderSummaryDto>> GetMyOrdersAsync(
         int page, int pageSize, CancellationToken ct = default)
     {
-        var customerId = await ResolveCustomerIdAsync(ct);
+        var customerId = await customers.GetIdAsync(ct);
 
         if (customerId is null)
         {
@@ -89,7 +90,7 @@ public sealed class OrderService(
 
     public async Task<Result<OrderDetailDto>> GetMyOrderAsync(Guid orderId, CancellationToken ct = default)
     {
-        var customerId = await ResolveCustomerIdAsync(ct);
+        var customerId = await customers.GetIdAsync(ct);
 
         if (customerId is null)
         {
@@ -138,7 +139,7 @@ public sealed class OrderService(
 
     public async Task<Result> CancelMyOrderAsync(Guid orderId, string reason, CancellationToken ct = default)
     {
-        var customerId = await ResolveCustomerIdAsync(ct);
+        var customerId = await customers.GetIdAsync(ct);
 
         if (customerId is null)
         {
@@ -465,17 +466,4 @@ public sealed class OrderService(
         }
     }
 
-    private async Task<Guid?> ResolveCustomerIdAsync(CancellationToken ct)
-    {
-        if (currentUser.UserId is not { } userId)
-        {
-            return null;
-        }
-
-        return await db.Customers
-            .AsNoTracking()
-            .Where(c => c.UserId == userId)
-            .Select(c => (Guid?)c.Id)
-            .FirstOrDefaultAsync(ct);
-    }
 }

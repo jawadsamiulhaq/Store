@@ -1,10 +1,10 @@
 import { memo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Image } from '../../ui/Image'
 import { Badge, Rating, Spinner } from '../../ui/primitives'
 import { formatPrice, formatPriceRange } from '../../lib/format'
 import { useCartMutations } from '../cart/useCart'
-import { useWishlistToggle } from '../wishlist/useWishlist'
+import { SignInRequiredError, useWishlistToggle } from '../wishlist/useWishlist'
 import type { ProductCard as ProductCardModel } from '../../lib/types'
 
 interface Props {
@@ -12,6 +12,12 @@ interface Props {
   /** Set true only for the first row above the fold, so the LCP image is not lazy-loaded. */
   priority?: boolean
   isSaved?: boolean
+  /**
+   * Position in its grid or rail, driving the staggered entrance.
+   *
+   * Omit it and the card simply appears — which is what a single card outside a list should do.
+   */
+  index?: number
 }
 
 /**
@@ -20,10 +26,18 @@ interface Props {
  * `memo`'d because a filter change re-renders the grid, and re-rendering 24 cards whose props are
  * unchanged is wasted main-thread work that shows up directly in INP.
  */
-export const ProductCard = memo(function ProductCard({ product, priority = false, isSaved = false }: Props) {
+export const ProductCard = memo(function ProductCard({
+  product,
+  priority = false,
+  isSaved = false,
+  index,
+}: Props) {
+  const navigate = useNavigate()
+  const location = useLocation()
   const { addItem } = useCartMutations()
   const toggleWishlist = useWishlistToggle()
   const [justAdded, setJustAdded] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
 
   const isSingleVariant = product.variantCount <= 1
   const discount = product.discountPercent
@@ -51,14 +65,40 @@ export const ProductCard = memo(function ProductCard({ product, priority = false
   return (
     // h-full so the card fills its grid cell — in a stretched rail that makes every card in the
     // row exactly the same height regardless of how its text wraps.
-    <article className="group card-surface lift-on-hover relative flex h-full flex-col overflow-hidden">
+    <article
+      className={`group card-surface lift-on-hover relative flex h-full flex-col overflow-hidden ${
+        index === undefined ? '' : 'stagger-item'
+      }`}
+      // Read by the `stagger-item` utility, which caps the ramp so a full page does not keep
+      // arriving after the shopper has started reading it.
+      style={index === undefined ? undefined : ({ '--i': index } as React.CSSProperties)}
+    >
       {/* Wishlist sits outside the link so it does not navigate. */}
       <button
         type="button"
         onClick={(event) => {
           event.preventDefault()
-          toggleWishlist.mutate(product.id)
+          toggleWishlist.mutate(product.id, {
+            onError: (error) => {
+              /*
+                Previously this had no error handling at all: the heart filled optimistically, the
+                mutation failed, the optimistic update rolled back, and the shopper saw the heart
+                flicker and nothing else. A control that visibly does nothing reads as broken.
+
+                A guest is sent to sign in and returned here afterwards — saving is the whole
+                reason they would create an account at this moment.
+              */
+              if (error instanceof SignInRequiredError) {
+                navigate('/login', { state: { from: location.pathname + location.search } })
+                return
+              }
+
+              setSaveError(error.message)
+              window.setTimeout(() => setSaveError(null), 4000)
+            },
+          })
         }}
+        title={saveError ?? undefined}
         aria-label={isSaved ? `Remove ${product.name} from saved items` : `Save ${product.name}`}
         aria-pressed={isSaved}
         className="absolute right-2 top-2 z-10 grid h-9 w-9 place-items-center rounded-full bg-paper-raised/90 text-ink-400 shadow-sm backdrop-blur transition-colors hover:text-chilli-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-saffron-500"

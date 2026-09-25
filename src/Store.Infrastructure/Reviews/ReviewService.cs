@@ -4,6 +4,7 @@ using Store.Application.Common;
 using Store.Application.Reviews;
 using Store.Domain.Enums;
 using Store.Domain.Reviews;
+using Store.Infrastructure.Commerce;
 using Store.Infrastructure.Persistence;
 
 namespace Store.Infrastructure.Reviews;
@@ -36,6 +37,7 @@ public interface IReviewService
 public sealed class ReviewService(
     StoreDbContext db,
     ICurrentUser currentUser,
+    ICustomerContext customers,
     ICacheService cache,
     IDateTimeProvider clock,
     ILogger<ReviewService> logger) : IReviewService
@@ -123,7 +125,7 @@ public sealed class ReviewService(
             return Result<ReviewDto>.Failure("Write a few words about the product.");
         }
 
-        if (await ResolveCustomerIdAsync(ct) is not { } customerId)
+        if (await customers.GetOrCreateIdAsync(ct) is not { } customerId)
         {
             return Result<ReviewDto>.Forbidden("Sign in to leave a review.");
         }
@@ -199,7 +201,7 @@ public sealed class ReviewService(
 
     public async Task<Result> MarkHelpfulAsync(Guid reviewId, CancellationToken ct = default)
     {
-        if (await ResolveCustomerIdAsync(ct) is not { } customerId)
+        if (await customers.GetOrCreateIdAsync(ct) is not { } customerId)
         {
             return Result.Forbidden("Sign in to vote on reviews.");
         }
@@ -386,7 +388,7 @@ public sealed class ReviewService(
     private async Task<(bool CanReview, string? Reason)> EvaluateEligibilityAsync(
         Guid productId, CancellationToken ct)
     {
-        if (await ResolveCustomerIdAsync(ct) is not { } customerId)
+        if (await customers.GetIdAsync(ct) is not { } customerId)
         {
             return (false, "Sign in to leave a review.");
         }
@@ -413,19 +415,6 @@ public sealed class ReviewService(
         return (true, null);
     }
 
-    private async Task<Guid?> ResolveCustomerIdAsync(CancellationToken ct)
-    {
-        if (currentUser.UserId is not { } userId)
-        {
-            return null;
-        }
-
-        return await db.Customers
-            .AsNoTracking()
-            .Where(c => c.UserId == userId)
-            .Select(c => (Guid?)c.Id)
-            .FirstOrDefaultAsync(ct);
-    }
 
     private async Task<bool> GetSettingBoolAsync(string key, bool fallback, CancellationToken ct)
     {

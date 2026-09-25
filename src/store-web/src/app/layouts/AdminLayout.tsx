@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, NavLink, Outlet } from 'react-router-dom'
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../providers/AuthProvider'
 import { useStore } from '../providers/StoreProvider'
 
@@ -40,6 +40,7 @@ const ICONS: Record<string, string> = {
 }
 
 export default function AdminLayout() {
+  const location = useLocation()
   const { user, can, logout } = useAuth()
   const { setting } = useStore()
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -153,7 +154,7 @@ export default function AdminLayout() {
           <span className="font-display font-bold text-ink-900">Admin</span>
         </header>
 
-        <main className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8">
+        <main key={location.pathname} className="animate-page-in min-w-0 flex-1 p-4 sm:p-6 lg:p-8">
           <Outlet />
         </main>
       </div>

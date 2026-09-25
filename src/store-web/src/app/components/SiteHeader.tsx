@@ -408,7 +408,7 @@ function AccountMenu({
 
           <div
             role="menu"
-            className="animate-fade-rise absolute right-0 top-full z-50 mt-2 w-48 overflow-hidden rounded-xl border border-ink-100 bg-paper-raised py-1 shadow-overlay"
+            className="animate-scale-in origin-top-right absolute right-0 top-full z-50 mt-2 w-48 overflow-hidden rounded-xl border border-ink-100 bg-paper-raised py-1 shadow-overlay"
           >
             {[
               { to: '/account', label: 'My account' },
@@ -491,7 +491,7 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
         className="animate-fade-in absolute inset-0 bg-ink-900/40 backdrop-blur-sm"
       />
 
-      <div className="animate-fade-rise absolute inset-y-0 left-0 w-[85%] max-w-sm overflow-y-auto bg-paper-raised shadow-overlay">
+      <div className="animate-slide-in-left absolute inset-y-0 left-0 w-[85%] max-w-sm overflow-y-auto bg-paper-raised shadow-overlay">
         <div className="flex h-16 items-center justify-between border-b border-ink-100 px-4">
           <span className="font-display font-bold text-ink-900">Browse</span>
           <button

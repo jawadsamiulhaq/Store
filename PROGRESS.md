@@ -675,6 +675,89 @@ System role; the last active System user cannot be demoted or deactivated) were 
   table is not something SQL Server accepts), so deleting an option value has to remove its
   variant links explicitly first.
 
+## Motion system  (2026-09-25)
+
+CSS-first, **no animation library**. Framer Motion would have cost ~34–50 KB gzip to do what
+keyframes and one IntersectionObserver already do on the compositor, against a documented budget
+of 131.5 KB gzip initial JS. Measured cost of the whole system: **57 bytes** of shared JS, the
+rest is CSS and lazy-chunk hooks.
+
+- `animate-slide-in-right` / `-left`, `animate-scale-in` — directional entrances. Every drawer was
+  using `fade-rise`, which translates *upward*, so a right-hand order drawer and a left-hand nav
+  sheet both rose from the bottom like a popup. Direction is most of what makes a drawer read as
+  a drawer.
+- `stagger-item` — grid/rail entrance, delay from a `--i` custom property, ramp capped at 8 items
+  via `min()` so a full catalogue page is not still arriving after the shopper starts reading.
+  **Fill mode is `backwards`, not `both`**: a filled animation keeps applying its final keyframe
+  above any normal declaration, so `both` would have silently killed `lift-on-hover` on every
+  staggered card.
+- `animate-page-in` — route entrance, keyed on `pathname` only, so changing a catalogue filter
+  does not replay it.
+- `lib/useReveal.ts` — scroll reveal. The hidden state is applied by JS, never by the stylesheet:
+  hidden-in-CSS/revealed-by-JS risks a permanently invisible page if the observer never runs.
+  Disconnects after first intersection; skips entirely under `prefers-reduced-motion`.
+- `lib/useCountUp.ts` — dashboard figures. rAF against a timestamp, so it takes the same
+  wall-clock time at 60Hz and 120Hz; the final frame is assigned the exact target. The tile
+  exposes the settled figure via `aria-label`, because otherwise a screen reader announces every
+  intermediate frame.
+- The reduced-motion block now also zeroes `animation-delay`/`transition-delay` — with duration
+  collapsed but a delay intact, a staggered card holds its from-state and *then* snaps in, which
+  is a flash of missing content.
+
+## Two bugs found while adding motion  (2026-09-25)
+
+**Product rails overlapped from the `sm` breakpoint up.** `rail` declared
+`grid-auto-columns: minmax(11rem, 1fr)` while the cards carried `w-44 sm:w-52` — 11rem on mobile,
+13rem above it. Two sources of truth that agreed at exactly one breakpoint. Above `sm` a 13rem
+card sat in an 11rem track and, since the next track still began at 11rem + the 1rem gap, every
+card overlapped the next by a full rem. The `1fr` maximum hid it only on a viewport wide enough
+for the tracks to stretch past 13rem. Fixed by making the rail own the track width (fixed, not
+fractional — `1fr` also destroys the peek the rail exists for) and removing the width classes.
+
+**Saving a product told a signed-in user to sign in.** Confirmed against the database, not inferred:
+
+```
+admin@gmail.com                  roles=[Customer]  customerProfile=YES
+system@waqasprovisionstore.com   roles=[System]    customerProfile=NO
+```
+
+The whole commerce layer resolves a shopper via the `Customer` row and treats a miss as "not
+signed in". The seeded System account has no such row, so every storefront write refused — with
+a message telling the owner of the shop to do something they had already done.
+
+Resolution: `Commerce/CustomerContext.cs`, one shared `ICustomerContext` replacing the six private
+`ResolveCustomerIdAsync` copies (wishlist, addresses, cart, checkout, orders, reviews). It draws
+the distinction those copies could not:
+
+- `GetIdAsync` — reads. Creates nothing, so browsing never turns a visitor into a customer row.
+- `GetOrCreateIdAsync` — writes. Creates the profile on first save / address / order / review.
+
+`Customer` stays separate from the identity user so staff accounts carry no commerce columns —
+that now holds until a staff member actually *shops*, at which point they really are a customer of
+the shop and belong in the customer list. The insert tolerates a concurrent duplicate (unique
+index on `UserId`) by using the row the other request won with.
+
+**Consequence to know about:** once a staff account saves something, it appears in the admin
+Customers list. That is the deliberate trade for the storefront working when the owner uses it.
+
+Three further layers of the same bug:
+
+1. `AuthService` creates a `Customer` profile on registration and says why: "so cart merge,
+   wishlist and checkout never have to handle a missing profile as a special case". The whole
+   commerce layer resolves a customer by `UserId` and treats a miss as "not signed in".
+   **`UserAdminService.CreateAsync` never created one** — so a Customer created through the admin
+   Users screen could sign in and browse but could not save, keep an address or check out.
+   Fixed there and on role assignment, keyed on the Customer role (a staff-only account is not a
+   shopper; `Customer` is a separate entity precisely so staff carry no commerce columns).
+2. The refusal read **"Sign in to save items" to someone already signed in** — the message a staff
+   account got when browsing the storefront. Now says what is actually true.
+3. The client **never surfaced the error**: the heart filled optimistically, the mutation failed,
+   the optimistic update rolled back, and the shopper saw a flicker. A guest is now sent to sign
+   in and returned to where they were; other failures surface their message.
+
+Also: `onSettled` invalidated `['wishlist']`, which matches `['wishlist','ids']` by prefix — so
+every toggle refetched the ids it had just correctly updated. Now `exact: true`.
+
 ## What's left (feature depth, not scaffolding)
 
 Everything below has a **working backend endpoint already**; these are UI gaps, listed honestly

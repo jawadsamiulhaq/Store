@@ -30,11 +30,12 @@ public interface IWishlistService
 public sealed class WishlistService(
     StoreDbContext db,
     ICurrentUser currentUser,
+    ICustomerContext customers,
     IDateTimeProvider clock) : IWishlistService
 {
     public async Task<IReadOnlyList<WishlistItemDto>> GetAsync(CancellationToken ct = default)
     {
-        if (await ResolveCustomerIdAsync(ct) is not { } customerId)
+        if (await customers.GetIdAsync(ct) is not { } customerId)
         {
             return [];
         }
@@ -68,9 +69,9 @@ public sealed class WishlistService(
 
     public async Task<Result> AddAsync(AddToWishlistRequest request, CancellationToken ct = default)
     {
-        if (await ResolveCustomerIdAsync(ct) is not { } customerId)
+        if (await customers.GetOrCreateIdAsync(ct) is not { } customerId)
         {
-            return Result.Forbidden("Sign in to save items.");
+            return Result.Forbidden(NoProfileMessage("save items"));
         }
 
         var product = await db.Products
@@ -113,9 +114,9 @@ public sealed class WishlistService(
 
     public async Task<Result> RemoveAsync(Guid productId, CancellationToken ct = default)
     {
-        if (await ResolveCustomerIdAsync(ct) is not { } customerId)
+        if (await customers.GetOrCreateIdAsync(ct) is not { } customerId)
         {
-            return Result.Forbidden("Sign in to manage your saved items.");
+            return Result.Forbidden(NoProfileMessage("manage saved items"));
         }
 
         await db.WishlistItems
@@ -127,9 +128,9 @@ public sealed class WishlistService(
 
     public async Task<Result<bool>> ToggleAsync(Guid productId, CancellationToken ct = default)
     {
-        if (await ResolveCustomerIdAsync(ct) is not { } customerId)
+        if (await customers.GetOrCreateIdAsync(ct) is not { } customerId)
         {
-            return Result<bool>.Forbidden("Sign in to save items.");
+            return Result<bool>.Forbidden(NoProfileMessage("save items"));
         }
 
         var existing = await db.WishlistItems
@@ -176,7 +177,7 @@ public sealed class WishlistService(
     /// </remarks>
     public async Task<IReadOnlySet<Guid>> GetProductIdsAsync(CancellationToken ct = default)
     {
-        if (await ResolveCustomerIdAsync(ct) is not { } customerId)
+        if (await customers.GetIdAsync(ct) is not { } customerId)
         {
             return new HashSet<Guid>();
         }
@@ -190,17 +191,19 @@ public sealed class WishlistService(
         return ids.ToHashSet();
     }
 
-    private async Task<Guid?> ResolveCustomerIdAsync(CancellationToken ct)
-    {
-        if (currentUser.UserId is not { } userId)
-        {
-            return null;
-        }
-
-        return await db.Customers
-            .AsNoTracking()
-            .Where(c => c.UserId == userId)
-            .Select(c => (Guid?)c.Id)
-            .FirstOrDefaultAsync(ct);
-    }
+    /// <summary>
+    /// The refusal for a caller with no storefront profile.
+    /// </summary>
+    /// <remarks>
+    /// A missing profile means one of two quite different things, and telling a signed-in staff
+    /// member to "sign in" is the kind of message that sends someone looking for a bug in the
+    /// login form. <see cref="Customer"/> is deliberately separate from the identity user so that
+    /// staff accounts carry no commerce columns — so a staff-only account genuinely has nowhere to
+    /// save an item to, and should be told that rather than told to do something it has already
+    /// done.
+    /// </remarks>
+    private string NoProfileMessage(string action) =>
+        currentUser.IsAuthenticated
+            ? $"This account has no storefront profile, so it cannot {action}. Staff accounts are not shopper accounts — sign in with a customer account instead."
+            : $"Sign in to {action}.";
 }

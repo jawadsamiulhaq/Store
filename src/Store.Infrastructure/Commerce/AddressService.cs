@@ -39,11 +39,11 @@ public interface IAddressService
 /// </remarks>
 public sealed class AddressService(
     StoreDbContext db,
-    ICurrentUser currentUser) : IAddressService
+    ICustomerContext customers) : IAddressService
 {
     public async Task<IReadOnlyList<AddressDto>> GetMineAsync(CancellationToken ct = default)
     {
-        if (await ResolveCustomerIdAsync(ct) is not { } customerId)
+        if (await customers.GetIdAsync(ct) is not { } customerId)
         {
             return [];
         }
@@ -63,7 +63,7 @@ public sealed class AddressService(
     public async Task<Result<AddressDto>> SaveAsync(
         Guid? id, SaveAddressRequest request, CancellationToken ct = default)
     {
-        if (await ResolveCustomerIdAsync(ct) is not { } customerId)
+        if (await customers.GetOrCreateIdAsync(ct) is not { } customerId)
         {
             return Result<AddressDto>.Forbidden("Sign in to manage your addresses.");
         }
@@ -131,7 +131,7 @@ public sealed class AddressService(
 
     public async Task<Result> DeleteAsync(Guid id, CancellationToken ct = default)
     {
-        if (await ResolveCustomerIdAsync(ct) is not { } customerId)
+        if (await customers.GetIdAsync(ct) is not { } customerId)
         {
             return Result.Forbidden("Sign in to manage your addresses.");
         }
@@ -170,7 +170,7 @@ public sealed class AddressService(
 
     public async Task<Result> SetDefaultAsync(Guid id, CancellationToken ct = default)
     {
-        if (await ResolveCustomerIdAsync(ct) is not { } customerId)
+        if (await customers.GetIdAsync(ct) is not { } customerId)
         {
             return Result.Forbidden("Sign in to manage your addresses.");
         }
@@ -200,17 +200,4 @@ public sealed class AddressService(
                 .SetProperty(a => a.IsDefaultShipping, false)
                 .SetProperty(a => a.IsDefaultBilling, false), ct);
 
-    private async Task<Guid?> ResolveCustomerIdAsync(CancellationToken ct)
-    {
-        if (currentUser.UserId is not { } userId)
-        {
-            return null;
-        }
-
-        return await db.Customers
-            .AsNoTracking()
-            .Where(c => c.UserId == userId)
-            .Select(c => (Guid?)c.Id)
-            .FirstOrDefaultAsync(ct);
-    }
 }
