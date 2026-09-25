@@ -27,9 +27,10 @@ function PlaceholderTile({
     hash = (hash * 31 + label.charCodeAt(i)) | 0
   }
 
-  // Warm band only (20°–50°), so tiles sit inside the saffron/paper palette instead of
-  // introducing arbitrary colours that fight the brand.
-  const hue = 20 + (Math.abs(hash) % 30)
+  // Cool band only (205°–240°), so tiles sit inside the indigo/paper palette instead of
+  // introducing arbitrary colours that fight the brand. A grid of these reads as a quiet
+  // placeholder field rather than as a second palette competing with the real photography.
+  const hue = 205 + (Math.abs(hash) % 35)
 
   const initials = label
     .split(/\s+/)

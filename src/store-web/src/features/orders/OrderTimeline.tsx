@@ -73,7 +73,7 @@ export function OrderTimeline({ order }: { order: OrderDetail }) {
             {!isLast && (
               <span
                 className={`absolute left-[11px] top-6 h-full w-0.5 ${
-                  isDone ? 'bg-cardamom-400' : 'bg-ink-200'
+                  isDone ? 'bg-success-500' : 'bg-ink-200'
                 }`}
                 aria-hidden="true"
               />
@@ -82,7 +82,7 @@ export function OrderTimeline({ order }: { order: OrderDetail }) {
             <span
               className={`relative z-10 grid h-6 w-6 shrink-0 place-items-center rounded-full border-2 ${
                 isDone
-                  ? 'border-cardamom-500 bg-cardamom-500 text-white'
+                  ? 'border-success-600 bg-success-600 text-white'
                   : isCurrent
                     ? 'border-saffron-500 bg-saffron-50 text-saffron-600'
                     : 'border-ink-200 bg-paper-raised text-ink-300'

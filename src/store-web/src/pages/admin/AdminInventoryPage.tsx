@@ -383,7 +383,7 @@ function HistoryDrawer({ row, onClose }: { row: StockRow; onClose: () => void })
                     <div className="shrink-0 text-right">
                       <p
                         className={`text-sm font-bold ${
-                          movement.quantityChange > 0 ? 'text-cardamom-600' : 'text-chilli-600'
+                          movement.quantityChange > 0 ? 'text-success-700' : 'text-chilli-600'
                         }`}
                       >
                         {movement.quantityChange > 0 ? '+' : ''}

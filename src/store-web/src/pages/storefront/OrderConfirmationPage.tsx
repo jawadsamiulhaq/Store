@@ -41,7 +41,7 @@ export default function OrderConfirmationPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
       <div className="text-center">
-        <span className="animate-pop mx-auto grid h-16 w-16 place-items-center rounded-full bg-cardamom-100 text-cardamom-600">
+        <span className="animate-pop mx-auto grid h-16 w-16 place-items-center rounded-full bg-success-100 text-success-700">
           <svg className="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" aria-hidden="true">
             <path d="m5 13 4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
           </svg>

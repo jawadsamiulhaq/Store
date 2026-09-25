@@ -525,8 +525,8 @@ cart state lives in TanStack Query instead, see note below).
 | File | What it does |
 |---|---|
 | `vite.config.ts` | Tailwind plugin, `/api`+`/uploads` proxy to :5080, **manual vendor chunks** (react / router / query split so a React patch doesn't bust the router cache), hashed filenames, **250 kB chunk warning ceiling** |
-| `index.html` | SEO meta, saffron theme-colour, **no web-font `<link>`** (see fonts note), real `<noscript>` fallback |
-| `src/styles/theme.css` | **Full design system** — saffron/ink/cardamom/chilli palette, warm paper ground, motion utilities, skeletons, `prefers-reduced-motion` |
+| `index.html` | SEO meta, indigo theme-colour, **no web-font `<link>`** (see fonts note), real `<noscript>` fallback |
+| `src/styles/theme.css` | **Full design system** — indigo/ink/brass/berry palette + a state-only green, cool paper ground, motion utilities, skeletons, `prefers-reduced-motion`. **Token names are historical:** `saffron-*` is indigo, `cardamom-*` is brass, `chilli-*` is berry — see the file's header comment |
 | `src/lib/api.ts` | Fetch client, **access token in memory only**, single-flight silent refresh + one retry, ProblemDetails → `ApiError` |
 | `src/lib/types.ts` | All API contracts |
 | `src/lib/format.ts` | Money/date/unit formatters, `Intl` instances hoisted to module scope |
@@ -587,7 +587,7 @@ roles, Settings
   `react-router` and `@tanstack/react-query` both contain "react", so they match first.
 - `<link rel="preconnect" href="/" />` made the build fail with `EISDIR` — Vite tried to resolve
   `/` as an asset. Removed; the API is same-origin so there was nothing to preconnect to.
-- Added `public/favicon.svg` (inline SVG basket on brand saffron).
+- Added `public/favicon.svg` (inline SVG basket on the brand colour — now indigo `#2f4d8a`).
 - Added a `preview.proxy` block — `vite preview` does **not** inherit `server.proxy`, so without it
   performance testing would have measured a page with a dead API.
 

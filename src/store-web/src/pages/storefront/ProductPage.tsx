@@ -259,13 +259,15 @@ export default function ProductPage() {
                 Out of stock
               </p>
             ) : selectedVariant?.isLowStock ? (
-              <p className="flex items-center gap-1.5 text-sm font-medium text-saffron-700">
-                <span className="h-2 w-2 rounded-full bg-saffron-500" aria-hidden="true" />
+              /* Low stock is a warning, so it takes brass — not the brand colour, which said
+                 nothing about urgency and looked identical to every other link on the page. */
+              <p className="flex items-center gap-1.5 text-sm font-medium text-cardamom-700">
+                <span className="h-2 w-2 rounded-full bg-cardamom-500" aria-hidden="true" />
                 Only {selectedVariant.availableQuantity} left
               </p>
             ) : (
-              <p className="flex items-center gap-1.5 text-sm font-medium text-cardamom-600">
-                <span className="h-2 w-2 rounded-full bg-cardamom-500" aria-hidden="true" />
+              <p className="flex items-center gap-1.5 text-sm font-medium text-success-700">
+                <span className="h-2 w-2 rounded-full bg-success-500" aria-hidden="true" />
                 In stock
               </p>
             )}
@@ -302,7 +304,7 @@ export default function ProductPage() {
               disabled={!isSellable || addItem.isPending}
               loading={addItem.isPending}
               size="lg"
-              className={`flex-1 ${added ? 'bg-cardamom-500 hover:bg-cardamom-600' : ''}`}
+              className={`flex-1 ${added ? 'bg-success-600 hover:bg-success-700' : ''}`}
             >
               {added ? 'Added to cart' : isSellable ? 'Add to cart' : 'Out of stock'}
             </Button>
@@ -405,7 +407,7 @@ export default function ProductPage() {
                       <span className="w-3 text-ink-500">{stars}</span>
                       <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-ink-100">
                         {/* Width is set once from data, not animated — animating width reflows. */}
-                        <div className="h-full rounded-full bg-saffron-400" style={{ width: `${percent}%` }} />
+                        <div className="h-full rounded-full bg-cardamom-500" style={{ width: `${percent}%` }} />
                       </div>
                       <span className="w-7 text-right text-ink-400">{count}</span>
                     </div>

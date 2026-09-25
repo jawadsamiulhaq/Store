@@ -12,7 +12,8 @@ const TONES: Record<number, string> = {
   [OrderStatus.Confirmed]: 'bg-saffron-100 text-saffron-800',
   [OrderStatus.Processing]: 'bg-saffron-100 text-saffron-800',
   [OrderStatus.Shipped]: 'bg-cardamom-100 text-cardamom-700',
-  [OrderStatus.Delivered]: 'bg-cardamom-500 text-white',
+  /* success-600, not -500: white text needs ≥4.5:1 and only 600 clears it. */
+  [OrderStatus.Delivered]: 'bg-success-600 text-white',
   [OrderStatus.Cancelled]: 'bg-chilli-100 text-chilli-700',
   [OrderStatus.Refunded]: 'bg-chilli-100 text-chilli-700',
 }
@@ -43,7 +44,7 @@ export function PaymentStatusPill({ status }: { status: number }) {
   const tones: Record<number, string> = {
     0: 'border-ink-200 text-ink-500',
     1: 'border-saffron-200 text-saffron-700',
-    2: 'border-cardamom-300 text-cardamom-700',
+    2: 'border-success-300 text-success-700',
     3: 'border-chilli-200 text-chilli-600',
     4: 'border-chilli-200 text-chilli-600',
     5: 'border-chilli-300 text-chilli-700',

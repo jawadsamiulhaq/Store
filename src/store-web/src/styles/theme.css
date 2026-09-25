@@ -5,79 +5,103 @@
   =====================================
 
   Deliberately unlike the legacy store, which was Inter on a #5CB349 supermarket green. That
-  palette reads as generic Western supermarket; this shop is a South Asian provision store in
-  Kowloon, and the identity should say so.
+  palette reads as generic Western supermarket, and every grocer in Hong Kong already looks
+  like that.
 
-  The direction here is "spice pantry": a warm paper ground rather than clinical white, a deep
-  saffron/turmeric primary, a grounding ink, and a muted cardamom green used only as a support
-  colour — never as the brand colour, which is precisely what the old site did.
+  The direction here is "modern grocer": a deep indigo primary with a brass accent on a cool
+  off-white ground. Calm and premium rather than food-forward — the products supply the colour,
+  the chrome stays out of their way.
+
+  Token names
+  -----------
+  `saffron-*` / `cardamom-*` / `chilli-*` are historical and no longer describe their colours.
+  Several hundred class usages across ~45 files reference them, and renaming every one for
+  cosmetic tidiness would be a large diff with real regression risk and no user-visible benefit.
+  What each one actually is now:
+
+      saffron-*   → indigo   (primary / brand)
+      cardamom-*  → brass    (accent: value, savings, highlights)
+      chilli-*    → berry    (errors, destructive, sale flashes)
+      success-*   → green    (state only: in stock, paid, delivered, confirmed)
+
+  `success-*` is the one new family. Before this pass the brand colour *was* green, so positive
+  states borrowed it; with an indigo brand there was no green left and stock/delivery states
+  would have gone gold, which reads like a warning rather than an "all good".
 */
 
 @theme {
-  /* ---- Brand -------------------------------------------------------------------------
-     "Fresh market": bright, airy, food-forward.
+  /* PRIMARY — deep indigo. Brand colour, buttons, links, active states.
 
-     The green is a deep jade, NOT the legacy store's #5CB349. That one is a yellow-shifted
-     supermarket green that reads cheap and dated; this sits cooler and darker, closer to herbs
-     and produce than to signage, and it holds white text at accessible contrast (which #5CB349
-     does not).
+     500 is pinned to the brand value and is already dark enough to carry white text at ~8:1,
+     which is why 500 and 600 are both usable as button grounds. The gap between 400 and 500 is
+     wider than the rest of the ramp as a consequence — 400 and below are tints for borders,
+     washes and text-on-dark, not for solid fills behind white. */
+  --color-saffron-50: #f2f5fc;
+  --color-saffron-100: #e1e9f8;
+  --color-saffron-200: #c5d5f0;
+  --color-saffron-300: #9db4e2;   /* light enough for text on ink-900 */
+  --color-saffron-400: #6e8bcd;
+  --color-saffron-500: #2f4d8a;   /* primary */
+  --color-saffron-600: #274177;
+  --color-saffron-700: #203563;
+  --color-saffron-800: #1b2b50;
+  --color-saffron-900: #141f3a;
 
-     Token names are kept as `saffron-*` / `cardamom-*` / `chilli-*` deliberately. Several hundred
-     class usages across ~45 files reference them, and renaming every one for cosmetic tidiness
-     would be a large diff with real regression risk and no user-visible benefit. `saffron` is now
-     the primary green; the comments below say what each one actually is.
-  */
-
-  /* PRIMARY — jade green. Brand colour, buttons, links, active states. */
-  --color-saffron-50: #eefaf4;
-  --color-saffron-100: #d4f2e4;
-  --color-saffron-200: #a9e5cb;
-  --color-saffron-300: #71d0ac;
-  --color-saffron-400: #3db98c;
-  --color-saffron-500: #189b6e;   /* primary */
-  --color-saffron-600: #0f7d58;
-  --color-saffron-700: #0e6347;
-  --color-saffron-800: #0f4e3a;
-  --color-saffron-900: #0c3a2c;
-
-  /* Ink. Green-shifted near-black, so text sits in the same family as the brand rather than
+  /* Ink. Blue-shifted near-black, so text sits in the same family as the brand rather than
      looking like a pure grey pasted on top. */
-  --color-ink-50: #f5f8f6;
-  --color-ink-100: #e6ece9;
-  --color-ink-200: #ccd8d2;
-  --color-ink-300: #a3b5ad;
-  --color-ink-400: #758880;
-  --color-ink-500: #566862;
-  --color-ink-600: #41504b;
-  --color-ink-700: #2f3b37;
-  --color-ink-800: #1f2926;
-  --color-ink-900: #131b19;
+  --color-ink-50: #f6f7fa;
+  --color-ink-100: #e8ebf1;
+  --color-ink-200: #d3d8e3;
+  --color-ink-300: #a8b0c3;
+  --color-ink-400: #79839a;
+  --color-ink-500: #5a6479;
+  --color-ink-600: #454e60;
+  --color-ink-700: #323a49;
+  --color-ink-800: #232937;
+  --color-ink-900: #1a1f2b;
 
-  /* SECONDARY — warm apricot. The counterweight that stops an all-green page feeling clinical:
-     used for highlights, "new" flags and the occasional accent tile. */
-  --color-cardamom-50: #fff7ed;
-  --color-cardamom-100: #ffeacf;
-  --color-cardamom-200: #fed2a0;
-  --color-cardamom-300: #fdb567;
-  --color-cardamom-400: #fb9740;
-  --color-cardamom-500: #ef7a1a;
-  --color-cardamom-600: #d05f0f;
-  --color-cardamom-700: #a34710;
+  /* ACCENT — brass. The warm counterweight that stops an all-indigo page going cold: money
+     saved, coupons, "new" flags, the accent tile. Muted and slightly dusty on purpose; a
+     saturated gold next to indigo reads as a casino rather than a grocer.
 
-  /* Berry. Sale flashes, destructive actions, errors — reads clearly against green. */
-  --color-chilli-50: #fef2f4;
-  --color-chilli-100: #fde3e8;
-  --color-chilli-200: #fbccd6;
-  --color-chilli-300: #f79fb2;
-  --color-chilli-400: #ef6588;
-  --color-chilli-500: #e03a63;
-  --color-chilli-600: #c02551;
-  --color-chilli-700: #9d1c44;
+     600 is the lightest step that holds white text; 500 does not, so solid brass fills behind
+     white use 600. */
+  --color-cardamom-50: #fbf7ef;
+  --color-cardamom-100: #f5ecd8;
+  --color-cardamom-200: #ead8ae;
+  --color-cardamom-300: #dcbe7c;
+  --color-cardamom-400: #caa457;
+  --color-cardamom-500: #b8893b;   /* brass — ≥3:1 on white, so safe for icons and stars */
+  --color-cardamom-600: #9a6f2b;
+  --color-cardamom-700: #7b5722;
 
-  /* Ground. Bright and airy — the "fresh" half of the brief. */
-  --color-paper: #f8faf8;
+  /* Berry. Sale flashes, destructive actions, errors. Deeper and less pink than before so it
+     reads as deliberate against indigo instead of fighting it. */
+  --color-chilli-50: #fdf3f4;
+  --color-chilli-100: #fbe4e7;
+  --color-chilli-200: #f6ccd2;
+  --color-chilli-300: #eda2ad;
+  --color-chilli-400: #dd7083;
+  --color-chilli-500: #c2485a;
+  --color-chilli-600: #a43449;
+  --color-chilli-700: #86283c;
+
+  /* SUCCESS — green, reserved for state. Not a brand colour and never used as one: if it shows
+     up outside "in stock / paid / delivered / confirmed", it is being misused. */
+  --color-success-50: #edf8f1;
+  --color-success-100: #d3efdf;
+  --color-success-200: #a9e0c2;
+  --color-success-300: #7fd0a3;
+  --color-success-400: #4bb87f;
+  --color-success-500: #2a9d63;
+  --color-success-600: #1f7f4f;   /* lightest step that holds white text */
+  --color-success-700: #1a6640;
+
+  /* Ground. Cool off-white rather than the previous warm one — a warm paper under a cool brand
+     is the single quickest way to make a palette look accidental. */
+  --color-paper: #f7f8fb;
   --color-paper-raised: #ffffff;
-  --color-paper-sunken: #eef4f0;
+  --color-paper-sunken: #eceff5;
 
   /* ---- Type ---------------------------------------------------------------------------
      Body text uses the system UI stack: zero font bytes downloaded, zero render-blocking
@@ -101,20 +125,28 @@
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* ---- Elevation ----------------------------------------------------------------------
-     Green-tinted shadows. A neutral black shadow over a tinted ground reads as dirt.
-     Softer and more diffuse than before, which is what makes an airy layout feel light rather
-     than like cards stamped onto a page.
+     Indigo-tinted shadows, keyed to ink-900. A neutral black shadow over a tinted ground reads
+     as dirt.
+
+     Tighter and better-defined than the previous pass. The wide diffuse blurs that made the
+     food-forward layout feel airy read as haze under a cool palette; a premium surface wants a
+     crisp edge and a short drop, so each level is one tight contact shadow plus one restrained
+     ambient one.
   */
-  --shadow-card: 0 1px 2px rgb(19 27 25 / 0.03), 0 2px 10px rgb(19 27 25 / 0.04);
-  --shadow-raised: 0 2px 6px rgb(19 27 25 / 0.04), 0 12px 28px rgb(19 27 25 / 0.07);
-  --shadow-overlay: 0 8px 20px rgb(19 27 25 / 0.08), 0 28px 56px rgb(19 27 25 / 0.14);
+  --shadow-card: 0 1px 2px rgb(26 31 43 / 0.04), 0 1px 3px rgb(26 31 43 / 0.06);
+  --shadow-raised: 0 2px 4px rgb(26 31 43 / 0.05), 0 8px 16px rgb(26 31 43 / 0.08);
+  --shadow-overlay: 0 6px 14px rgb(26 31 43 / 0.10), 0 20px 40px rgb(26 31 43 / 0.16);
 
   /* ---- Radii ---------------------------------------------------------------------------
-     Rounder than the previous pass. "Friendly and food-forward" is carried as much by corner
-     radius as by colour — tight 8px corners read corporate, these read approachable.
+     Tightened from 20px/28px. Those corners carried "friendly and food-forward"; this direction
+     wants architectural rather than approachable.
+
+     These also sit much closer to the hand-written `rounded-xl` (12px) and `rounded-lg` (8px)
+     used on controls throughout the app, so a button inside a tile no longer looks like it came
+     from a different kit — which the 20px-tile-around-12px-button pairing did.
   */
-  --radius-tile: 1.25rem;
-  --radius-panel: 1.75rem;
+  --radius-tile: 0.875rem;
+  --radius-panel: 1.125rem;
 }
 
 /* ==========================================================================================
@@ -282,17 +314,24 @@
   background-color: var(--color-paper-raised);
 }
 
-/* Soft organic blobs used behind bento tiles — produce-like, and free (no image request). */
-@utility bento-wash-leaf {
+/*
+  Soft washes behind bento tiles — free (no image request), and the only place the brand appears
+  as a large field rather than as a control.
+
+  Opacities are lower than the previous produce-blob version: indigo at 16% over a cool ground
+  goes muddy and drags the tile's text contrast down with it, where the old warm green sat almost
+  invisibly. Kept faint enough that ink-900 headlines still clear AA over the densest part.
+*/
+@utility bento-wash-indigo {
   background-image:
-    radial-gradient(28rem 18rem at 12% 0%, rgb(24 155 110 / 0.16), transparent 62%),
-    radial-gradient(22rem 14rem at 95% 100%, rgb(61 185 140 / 0.14), transparent 60%);
+    radial-gradient(28rem 18rem at 12% 0%, rgb(47 77 138 / 0.10), transparent 62%),
+    radial-gradient(22rem 14rem at 95% 100%, rgb(110 139 205 / 0.10), transparent 60%);
 }
 
-@utility bento-wash-apricot {
+@utility bento-wash-brass {
   background-image:
-    radial-gradient(24rem 16rem at 90% 0%, rgb(251 151 64 / 0.20), transparent 62%),
-    radial-gradient(18rem 12rem at 0% 100%, rgb(253 181 103 / 0.16), transparent 60%);
+    radial-gradient(24rem 16rem at 90% 0%, rgb(184 137 59 / 0.14), transparent 62%),
+    radial-gradient(18rem 12rem at 0% 100%, rgb(220 190 124 / 0.14), transparent 60%);
 }
 
 /*

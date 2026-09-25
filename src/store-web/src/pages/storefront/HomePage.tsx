@@ -56,7 +56,7 @@ export default function HomePage() {
       {/* ================= BENTO ================= */}
       <section className="grid gap-3 pt-6 sm:gap-4 lg:grid-cols-12 lg:grid-rows-2">
         {/* Headline tile — spans two rows on desktop so the composition has a clear anchor. */}
-        <div className="bento bento-wash-leaf flex flex-col justify-between p-7 sm:p-9 lg:col-span-7 lg:row-span-2">
+        <div className="bento bento-wash-indigo flex flex-col justify-between p-7 sm:p-9 lg:col-span-7 lg:row-span-2">
           <div>
             <span className="inline-flex items-center gap-2 rounded-full bg-saffron-500/10 px-3 py-1 text-xs font-semibold text-saffron-700">
               <span className="h-1.5 w-1.5 rounded-full bg-saffron-500" aria-hidden="true" />
@@ -128,7 +128,7 @@ export default function HomePage() {
           return (
             <Link
               to={`/category/${aisle.slug}`}
-              className="bento bento-wash-apricot group flex items-end justify-between gap-4 p-5 transition-colors hover:border-cardamom-300 lg:col-span-3"
+              className="bento bento-wash-brass group flex items-end justify-between gap-4 p-5 transition-colors hover:border-cardamom-300 lg:col-span-3"
             >
               <span>
                 <span className="block text-base font-semibold leading-tight text-ink-800">
@@ -226,7 +226,7 @@ export default function HomePage() {
 
       {/* Editorial break — stops the page reading as an unbroken run of product rows. */}
       <section className="pt-14">
-        <div className="bento bento-wash-leaf grid items-center gap-6 p-7 sm:p-10 lg:grid-cols-2">
+        <div className="bento bento-wash-indigo grid items-center gap-6 p-7 sm:p-10 lg:grid-cols-2">
           <div>
             <h2 className="text-2xl font-bold tracking-tight text-ink-900 sm:text-3xl">
               A proper provision store, online.

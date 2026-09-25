@@ -13,3 +13,4 @@ D:\Projects\Store\src\Store.Application\obj\Debug\net10.0\Store.Application.dll
 D:\Projects\Store\src\Store.Application\obj\Debug\net10.0\refint\Store.Application.dll
 D:\Projects\Store\src\Store.Application\obj\Debug\net10.0\Store.Application.pdb
 D:\Projects\Store\src\Store.Application\obj\Debug\net10.0\ref\Store.Application.dll
+D:\Projects\Store\src\Store.Application\obj\Debug\net10.0\Store.Application.sourcelink.json

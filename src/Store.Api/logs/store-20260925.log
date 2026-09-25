@@ -1,0 +1,17 @@
+2026-09-25 13:05:17.860 +05:00 [WRN] Slow request: GET /api/cart took 529 ms (budget 300 ms) → 200
+2026-09-25 13:05:18.288 +05:00 [WRN] Slow request: GET /api/storefront/bootstrap took 960 ms (budget 300 ms) → 200
+2026-09-25 13:05:18.368 +05:00 [WRN] Slow request: POST /api/auth/refresh took 1040 ms (budget 300 ms) → 200
+2026-09-25 13:05:18.371 +05:00 [WRN] Slow request: POST /api/auth/refresh took 1043 ms (budget 300 ms) → 200
+2026-09-25 13:05:18.986 +05:00 [WRN] Slow request: GET /api/catalog/products took 1439 ms (budget 300 ms) → 200
+2026-09-25 13:05:18.986 +05:00 [WRN] Slow request: GET /api/catalog/products took 1008 ms (budget 300 ms) → 200
+2026-09-25 13:05:19.739 +05:00 [WRN] Slow request: GET /api/catalog/products took 2376 ms (budget 300 ms) → 200
+2026-09-25 13:05:29.323 +05:00 [WRN] Slow request: GET /api/admin/reports/dashboard took 863 ms (budget 300 ms) → 200
+2026-09-25 13:05:43.200 +05:00 [INF] [Email not sent — no SMTP configured]
+  To: system@waqasprovisionstore.com
+  Subject: Order updated — WPS-20260924-0004
+  Body:
+<p>Order WPS-20260924-0004 has been updated.</p><p>Waqas Provision Store</p>
+2026-09-25 13:06:06.347 +05:00 [WRN] Slow request: GET /api/admin/products took 497 ms (budget 300 ms) → 200
+2026-09-25 13:06:12.499 +05:00 [WRN] Slow request: GET /api/admin/reports/dashboard took 394 ms (budget 300 ms) → 200
+2026-09-25 13:07:04.022 +05:00 [WRN] Slow request: GET /api/catalog/products took 889 ms (budget 300 ms) → 200
+2026-09-25 13:07:09.996 +05:00 [WRN] Slow request: GET /api/catalog/products took 516 ms (budget 300 ms) → 200

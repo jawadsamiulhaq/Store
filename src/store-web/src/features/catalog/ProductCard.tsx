@@ -163,7 +163,7 @@ export const ProductCard = memo(function ProductCard({ product, priority = false
                 disabled={addItem.isPending}
                 aria-label={isSingleVariant ? `Add ${product.name} to cart` : `Choose options for ${product.name}`}
                 className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-saffron-500 ${
-                  justAdded ? 'animate-pop bg-cardamom-500' : 'bg-saffron-500 hover:bg-saffron-600'
+                  justAdded ? 'animate-pop bg-success-600' : 'bg-saffron-500 hover:bg-saffron-600'
                 }`}
               >
                 {addItem.isPending ? (

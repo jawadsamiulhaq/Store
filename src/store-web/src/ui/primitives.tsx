@@ -204,8 +204,8 @@ export function Badge({
     neutral: 'bg-ink-100 text-ink-700',
     sale: 'bg-chilli-500 text-white',
     new: 'bg-saffron-500 text-white',
-    success: 'bg-cardamom-100 text-cardamom-700',
-    warning: 'bg-saffron-100 text-saffron-800',
+    success: 'bg-success-100 text-success-700',
+    warning: 'bg-cardamom-100 text-cardamom-700',
   } as const
 
   return (
@@ -229,8 +229,8 @@ export function Alert({
   const tones = {
     info: 'border-ink-200 bg-ink-50 text-ink-700',
     error: 'border-chilli-200 bg-chilli-50 text-chilli-700',
-    success: 'border-cardamom-200 bg-cardamom-50 text-cardamom-700',
-    warning: 'border-saffron-200 bg-saffron-50 text-saffron-800',
+    success: 'border-success-200 bg-success-50 text-success-700',
+    warning: 'border-cardamom-200 bg-cardamom-50 text-cardamom-700',
   } as const
 
   return (
@@ -280,7 +280,7 @@ export function Rating({
         {[1, 2, 3, 4, 5].map((star) => (
           <svg
             key={star}
-            className={`${dimension} ${star <= Math.round(value) ? 'text-saffron-400' : 'text-ink-200'}`}
+            className={`${dimension} ${star <= Math.round(value) ? 'text-cardamom-500' : 'text-ink-200'}`}
             viewBox="0 0 20 20"
             fill="currentColor"
           >
